@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.hibernate.annotations.GenericGenerator;
 import sg.edu.nus.comp.cs3219.viz.common.util.Deserializer.AuthorRecordDeserializer;
 
 import javax.persistence.*;
@@ -32,8 +31,7 @@ public class AuthorRecord {
     }
 
     @Id
-    @GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "sg.edu.nus.comp.cs3219.viz.common.entity.UseExistingIdOtherwiseGenerateUsingIdentity")
-    @GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonSerialize(using = ToStringSerializer.class)
     @Column(name = "a_id")
     private Long id;

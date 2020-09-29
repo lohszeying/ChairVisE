@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import sg.edu.nus.comp.cs3219.viz.logic.AnalysisLogic;
@@ -27,8 +26,7 @@ public class PresentationSection {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Id
-    @GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "sg.edu.nus.comp.cs3219.viz.common.entity.UseExistingIdOtherwiseGenerateUsingIdentity")
-    @GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 

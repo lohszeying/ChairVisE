@@ -4,12 +4,12 @@
     <threadsafe>true</threadsafe>
 
     <!-- GAE instance class that determines compute resources available to the application -->
-    <instance-class>B1</instance-class>
+<!--    <instance-class>B1</instance-class>-->
 
     <!-- Application ID of the app -->
     <!-- For dev server testing, this could be anything -->
     <!-- For staging server testing, this should match the project ID of the app your created on GAE -->
-    <application>chairvise-4-283411</application>
+    <application>cs3219-2020-chairviz</application>
     <!--<manual-scaling>
         <instances>5</instances>
     </manual-scaling>-->
