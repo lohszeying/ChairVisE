@@ -1,24 +1,18 @@
 package sg.edu.nus.comp.cs3219.viz.common.entity.record;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import sg.edu.nus.comp.cs3219.viz.common.util.Deserializer.AuthorRecordDeserializer;
 
 import javax.persistence.*;
 
-@JsonDeserialize(using = AuthorRecordDeserializer.class)
 @Exportable(name = "Author Record", nameInDB = "author_record")
 @Entity
 public class AuthorRecord {
 
     public AuthorRecord(){}
 
-    public AuthorRecord(Version v, String submissionId, String firstName, String lastName, String email, String country,
+    public AuthorRecord(String submissionId, String firstName, String lastName, String email, String country,
                         String organisation, String webPage, String personId, String isCorresponding){
         this.id = null;
-        this.version = v;
         this.submissionId = submissionId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -32,20 +26,11 @@ public class AuthorRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonSerialize(using = ToStringSerializer.class)
     @Column(name = "a_id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "data_set", referencedColumnName = "data_set"),
-            @JoinColumn(name = "record_type", referencedColumnName = "record_type"),
-            @JoinColumn(name = "version", referencedColumnName = "version"),
-    })
-    private Version version;
-
-    public Version getVersion(){return version;}
-    public void setVersion(Version version){this.version = version;}
+    @Column(name = "version_id")
+    private Long versionId;
 
     @Exportable(name = "Submission Id", nameInDB = "a_submission_id")
     @Column(name = "a_submission_id")
@@ -94,6 +79,8 @@ public class AuthorRecord {
         this.id = id;
     }
 
+    public Long getVersionId() {return versionId;}
+    public void setVersionId(Long versionId) {this.versionId = versionId;}
 
     public String getSubmissionId() {
         return submissionId;

@@ -8,9 +8,7 @@ import java.util.List;
 
 public interface SubmissionRecordRepository extends JpaRepository<SubmissionRecord, Long> {
 
-    //List<SubmissionRecord> findByDataSetEquals(String dataSet);
-    List<SubmissionRecord> findByVersionEquals(Version version);
+    List<SubmissionRecord> findByVersionId(Long versionId);
 
-    //void deleteAllByDataSetEquals(String dataSet);
-    void deleteAllByVersionEquals(Version version);
+    void deleteAllByVersionId(Long versionId);
 }

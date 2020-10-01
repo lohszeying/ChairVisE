@@ -17,18 +17,16 @@ public class VersionLogic {
     }
 
     public List<Version> findAllForUser(UserInfo userInfo){
-        return versionRepository.findById_DataSetEquals(userInfo.getUserEmail());
+        return versionRepository.findByDataSet(userInfo.getUserEmail());
     }
 
     public List<Version> findAllForUserWithRecordType(UserInfo userInfo, String recordType){
-        return versionRepository.findById_DataSetAndId_RecordType(userInfo.getUserEmail(), recordType);
+        return versionRepository.findByDataSetAndRecordType(userInfo.getUserEmail(), recordType);
     }
 
     public Version saveForUser(Version version, UserInfo userInfo){
-        Version newVersion = new Version();
-        Version.VersionPK newVersionID = version.getId();
-        newVersionID.setDataSet(userInfo.getUserEmail());
-        newVersion.setId(newVersionID);
+
+        Version newVersion = new Version(version.getDataSet(), version.getRecordType());
 
         return versionRepository.save(newVersion);
     }

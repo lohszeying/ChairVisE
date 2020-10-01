@@ -8,11 +8,8 @@ import java.util.List;
 
 public interface AuthorRecordRepository extends JpaRepository<AuthorRecord, Long> {
 
-    //List<AuthorRecord> findByDataSetEquals(String dataSet);
+    List<AuthorRecord> findByVersionId(Long versionId);
 
-    List<AuthorRecord> findByVersionEquals(Version version);
-
-    //void deleteAllByDataSetEquals(String dataSet);
-    void deleteAllByVersionEquals(Version version);
+    void deleteAllByVersionId(Long versionId);
 
 }

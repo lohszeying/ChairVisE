@@ -5,11 +5,11 @@ import sg.edu.nus.comp.cs3219.viz.common.entity.record.Version;
 
 import java.util.List;
 
-public interface VersionRepository extends JpaRepository<Version, Version.VersionPK> {
+public interface VersionRepository extends JpaRepository<Version, Long> {
 
-    List<Version> findById_DataSetEquals(String dataSet);
+    List<Version> findByDataSet(String dataSet);
 
-    List<Version> findById_DataSetAndId_RecordType(String dataSet, String recordType);
+    List<Version> findByDataSetAndRecordType(String dataSet, String recordType);
 
-    void deleteAllById_DataSetEquals(String dataSet);
+    void deleteAllByDataSet(String dataSet);
 }

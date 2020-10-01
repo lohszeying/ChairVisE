@@ -3,26 +3,20 @@ package sg.edu.nus.comp.cs3219.viz.common.entity.record;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import sg.edu.nus.comp.cs3219.viz.common.util.Deserializer.SubmissionRecordDeserializer;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@JsonDeserialize(using = SubmissionRecordDeserializer.class)
 @Exportable(name = "Submission Record", nameInDB = "submission_record")
 @Entity
 public class SubmissionRecord {
     public SubmissionRecord(){}
 
-    public SubmissionRecord(Version v, String submissionId, String trackId, String trackName, String title, List<String> authors,
+    public SubmissionRecord(String submissionId, String trackId, String trackName, String title, List<String> authors,
                             Date submissionTime, Date lastUpdatedTime, String keywords, String isAccepted,
                             String isNotified, String isReviewsSent, String submissionAbstract) {
         this.id = null;
-        this.version = v;
         this.submissionId = submissionId;
         this.trackId = trackId;
         this.trackName = trackName;
@@ -39,24 +33,11 @@ public class SubmissionRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonSerialize(using = ToStringSerializer.class)
     @Column(name = "s_id")
     private Long id;
-    /*
-    // each record will be imported by each user, dataSet is used to distinguished records submitted by different user
-    private String dataSet;
 
-    public String getDataSet() {
-        return dataSet;
-    }
-
-    public void setDataSet(String dataSet) {
-        this.dataSet = dataSet;
-    }
-*/
-
-    public Version getVersion(){return version;}
-    public void setVersion(Version version){this.version = version;}
+    @Column(name = "version_id")
+    private Long versionId;
 
     @Exportable(name = "Submission Id", nameInDB = "s_submission_id")
     @Column(name = "s_submission_id")
@@ -139,14 +120,6 @@ public class SubmissionRecord {
     @Column(name = "s_submission_abstract", columnDefinition = "TEXT")
     private String submissionAbstract;
 
-    @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "data_set", referencedColumnName = "data_set"),
-            @JoinColumn(name = "record_type", referencedColumnName = "record_type"),
-            @JoinColumn(name = "version", referencedColumnName = "version"),
-    })
-    private Version version;
-
     public Long getId() {
         return id;
     }
@@ -155,7 +128,8 @@ public class SubmissionRecord {
         this.id = id;
     }
 
-
+    public Long getVersionId() {return versionId;}
+    public void setVersionId(Long versionId) {this.versionId = versionId;}
 
     public String getSubmissionId() {
         return submissionId;
