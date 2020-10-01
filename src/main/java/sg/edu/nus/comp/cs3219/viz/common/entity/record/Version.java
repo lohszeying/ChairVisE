@@ -1,9 +1,12 @@
 package sg.edu.nus.comp.cs3219.viz.common.entity.record;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Exportable(name = "Version", nameInDB = "version_id")
+@Data
 @Entity
 public class Version {
 
@@ -34,51 +37,4 @@ public class Version {
         this.recordType = recordType;
     }
 
-    public String getDataSet() {
-        return dataSet;
-    }
-
-    public void setDataSet(String dataSet) {
-        this.dataSet = dataSet;
-    }
-
-    public String getRecordType() {
-        return recordType;
-    }
-
-    public void setRecordType(String recordType) {
-        this.recordType = recordType;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public List<AuthorRecord> getAuthorRecordList() {
-        return authorRecordList;
-    }
-
-    public void setAuthorRecordList(List<AuthorRecord> authorRecordList) {
-        this.authorRecordList = authorRecordList;
-    }
-
-    public List<SubmissionRecord> getSubmissionRecordList() {
-        return submissionRecordList;
-    }
-
-    public void setSubmissionRecordList(List<SubmissionRecord> submissionRecordList) {
-        this.submissionRecordList = submissionRecordList;
-    }
-
-    public List<ReviewRecord> getReviewRecordList() {
-        return reviewRecordList;
-    }
-
-    public void setReviewRecordList(List<ReviewRecord> reviewRecordList) {
-        this.reviewRecordList = reviewRecordList;
-    }
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import sg.edu.nus.comp.cs3219.viz.logic.AnalysisLogic;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+@Data
 @Entity
 public class PresentationSection {
 
@@ -50,27 +52,21 @@ public class PresentationSection {
 
     @Column(columnDefinition = "TEXT")
     private String selections;
-    //private List<Selection> selections = new ArrayList<>();
 
     @Column(columnDefinition = "TEXT")
     private String involvedRecords;
-    //private List<Record> involvedRecords = new ArrayList<>();
 
     @Column(columnDefinition = "TEXT")
     private String filters;
-    //private List<Filter> filters = new ArrayList<>();
 
     @Column(columnDefinition = "TEXT")
     private String joiners;
-    //private List<Joiner> joiners = new ArrayList<>();
 
     @Column(columnDefinition = "TEXT")
     private String groupers;
-    //private List<Grouper> joiners = new ArrayList<>();
 
     @Column(columnDefinition = "TEXT")
     private String sorters;
-    //private List<Sorter> joiners = new ArrayList<>();
 
     @Column(columnDefinition = "TEXT")
     private String extraData;
@@ -202,54 +198,6 @@ public class PresentationSection {
         public void setOrder(String order) {
             this.order = order;
         }
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Presentation getPresentation() {
-        return presentation;
-    }
-
-    public void setPresentation(Presentation presentation) {
-        this.presentation = presentation;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getDataSet() {
-        return dataSet;
-    }
-
-    public void setDataSet(String dataSet) {
-        this.dataSet = dataSet;
     }
 
     public List<Selection> getSelections() {

@@ -3,12 +3,14 @@ package sg.edu.nus.comp.cs3219.viz.common.entity.record;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
 @Exportable(name = "Submission Record", nameInDB = "submission_record")
+@Data
 @Entity
 public class SubmissionRecord {
     public SubmissionRecord(){}
@@ -120,118 +122,4 @@ public class SubmissionRecord {
     @Column(name = "s_submission_abstract", columnDefinition = "TEXT")
     private String submissionAbstract;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getVersionId() {return versionId;}
-    public void setVersionId(Long versionId) {this.versionId = versionId;}
-
-    public String getSubmissionId() {
-        return submissionId;
-    }
-
-    public void setSubmissionId(String submissionId) {
-        this.submissionId = submissionId;
-    }
-
-    public String getTrackId() {
-        return trackId;
-    }
-
-    public void setTrackId(String trackId) {
-        this.trackId = trackId;
-    }
-
-    public String getTrackName() {
-        return trackName;
-    }
-
-    public void setTrackName(String trackName) {
-        this.trackName = trackName;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public List<String> getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(List<String> authors) {
-        this.authors = authors;
-    }
-
-    public List<SubmissionAuthorRecord> getAuthorSet() {
-        return authorSet;
-    }
-
-    public void setAuthorSet(List<SubmissionAuthorRecord> authorSet) {
-        this.authorSet = authorSet;
-    }
-
-    public Date getSubmissionTime() {
-        return submissionTime;
-    }
-
-    public void setSubmissionTime(Date submissionTime) {
-        this.submissionTime = submissionTime;
-    }
-
-    public Date getLastUpdatedTime() {
-        return lastUpdatedTime;
-    }
-
-    public void setLastUpdatedTime(Date lastUpdatedTime) {
-        this.lastUpdatedTime = lastUpdatedTime;
-    }
-
-    public String getKeywords() {
-        return keywords;
-    }
-
-    public void setKeywords(String keywords) {
-        this.keywords = keywords;
-    }
-
-    public String getIsAccepted() {
-        return isAccepted;
-    }
-
-    public void setIsAccepted(String isAccepted) {
-        this.isAccepted = isAccepted;
-    }
-
-    public String getIsNotified() {
-        return isNotified;
-    }
-
-    public void setIsNotified(String isNotified) {
-        this.isNotified = isNotified;
-    }
-
-    public String getIsReviewsSent() {
-        return isReviewsSent;
-    }
-
-    public void setIsReviewsSent(String isReviewsSent) {
-        this.isReviewsSent = isReviewsSent;
-    }
-
-    public String getSubmissionAbstract() {
-        return submissionAbstract;
-    }
-
-    public void setSubmissionAbstract(String submissionAbstract) {
-        this.submissionAbstract = submissionAbstract;
-    }
 }

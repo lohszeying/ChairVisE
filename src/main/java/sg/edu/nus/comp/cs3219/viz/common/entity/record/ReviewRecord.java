@@ -1,11 +1,13 @@
 package sg.edu.nus.comp.cs3219.viz.common.entity.record;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Exportable(name = "Review Record", nameInDB = "review_record")
+@Data
 @Entity
 public class ReviewRecord {
     public ReviewRecord(){}
@@ -77,94 +79,4 @@ public class ReviewRecord {
     @Column(name = "r_has_recommended_for_best_paper")
     private String hasRecommendedForBestPaper;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getVersionId() {return versionId;}
-    public void setVersionId(Long versionId) {this.versionId = versionId;}
-
-    public String getSubmissionId() {
-        return submissionId;
-    }
-
-    public void setSubmissionId(String submissionId) {
-        this.submissionId = submissionId;
-    }
-
-    public String getReviewId() {
-        return reviewId;
-    }
-
-    public void setReviewId(String reviewId) {
-        this.reviewId = reviewId;
-    }
-
-    public int getNumReviewAssignment() {
-        return numReviewAssignment;
-    }
-
-    public void setNumReviewAssignment(int numReviewAssignment) {
-        this.numReviewAssignment = numReviewAssignment;
-    }
-
-    public String getReviewerName() {
-        return reviewerName;
-    }
-
-    public void setReviewerName(String reviewerName) {
-        this.reviewerName = reviewerName;
-    }
-
-    public double getExpertiseLevel() {
-        return expertiseLevel;
-    }
-
-    public void setExpertiseLevel(double expertiseLevel) {
-        this.expertiseLevel = expertiseLevel;
-    }
-
-    public double getConfidenceLevel() {
-        return confidenceLevel;
-    }
-
-    public void setConfidenceLevel(double confidenceLevel) {
-        this.confidenceLevel = confidenceLevel;
-    }
-
-    public String getReviewComment() {
-        return reviewComment;
-    }
-
-    public void setReviewComment(String reviewComment) {
-        this.reviewComment = reviewComment;
-    }
-
-    public double getOverallEvaluationScore() {
-        return overallEvaluationScore;
-    }
-
-    public void setOverallEvaluationScore(double overallEvaluationScore) {
-        this.overallEvaluationScore = overallEvaluationScore;
-    }
-
-    public Date getReviewSubmissionTime() {
-        return reviewSubmissionTime;
-    }
-
-    public void setReviewSubmissionTime(Date reviewSubmissionTime) {
-        this.reviewSubmissionTime = reviewSubmissionTime;
-    }
-
-    public String getHasRecommendedForBestPaper() {
-        return hasRecommendedForBestPaper;
-    }
-
-    public void setHasRecommendedForBestPaper(String hasRecommendedForBestPaper) {
-        this.hasRecommendedForBestPaper = hasRecommendedForBestPaper;
-    }
 }
