@@ -1,30 +1,39 @@
-package sg.edu.nus.comp.cs3219.viz.logic;
+package sg.edu.nus.comp.cs3219.viz.service;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sg.edu.nus.comp.cs3219.viz.common.datatransfer.UserInfo;
 import sg.edu.nus.comp.cs3219.viz.common.entity.record.*;
 import sg.edu.nus.comp.cs3219.viz.storage.repository.*;
 
 import java.util.List;
 
-@Component
-public class RecordLogic {
-    private AuthorRecordRepository authorRecordRepository;
+@Service
+public class RecordService {
 
-    private SubmissionRecordRepository submissionRecordRepository;
+    private final AuthorRecordRepository authorRecordRepository;
 
-    private ReviewRecordRepository reviewRecordRepository;
+    private final SubmissionRecordRepository submissionRecordRepository;
 
-    public RecordLogic(AuthorRecordRepository authorRecordRepository,
-                       SubmissionRecordRepository submissionRecordRepository,
-                       ReviewRecordRepository reviewRecordRepository) {
+    private final ReviewRecordRepository reviewRecordRepository;
+
+    private final GateKeeper gateKeeper;
+
+    public RecordService(AuthorRecordRepository authorRecordRepository,
+                         SubmissionRecordRepository submissionRecordRepository,
+                         ReviewRecordRepository reviewRecordRepository,
+                         GateKeeper gateKeeper
+    ) {
         this.authorRecordRepository = authorRecordRepository;
         this.submissionRecordRepository = submissionRecordRepository;
         this.reviewRecordRepository = reviewRecordRepository;
+        this.gateKeeper = gateKeeper;
     }
 
     @Transactional
     public void removeAndPersistAuthorRecordForDataSet(Long versionId, List<AuthorRecord> authorRecordList) {
+        UserInfo userInfo = gateKeeper.verifyLoginAccess();
+
         if (authorRecordList.isEmpty()){
             return;
         }
@@ -40,6 +49,7 @@ public class RecordLogic {
 
     @Transactional
     public void removeAndPersistReviewRecordForDataSet(Long versionId, List<ReviewRecord> reviewRecordList) {
+        UserInfo userInfo = gateKeeper.verifyLoginAccess();
         if (reviewRecordList.isEmpty()){
             return;
         }
@@ -55,6 +65,7 @@ public class RecordLogic {
 
     @Transactional
     public void removeAndPersistSubmissionRecordForDataSet(Long versionId, List<SubmissionRecord> submissionRecordList) {
+        UserInfo userInfo = gateKeeper.verifyLoginAccess();
         if (submissionRecordList.isEmpty()){
             return;
         }

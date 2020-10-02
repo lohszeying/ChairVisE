@@ -6,8 +6,8 @@ import sg.edu.nus.comp.cs3219.viz.common.datatransfer.AccessLevel;
 import sg.edu.nus.comp.cs3219.viz.common.datatransfer.UserInfo;
 import sg.edu.nus.comp.cs3219.viz.common.entity.Presentation;
 import sg.edu.nus.comp.cs3219.viz.common.exception.PresentationNotFoundException;
-import sg.edu.nus.comp.cs3219.viz.logic.GateKeeper;
-import sg.edu.nus.comp.cs3219.viz.logic.PresentationLogic;
+import sg.edu.nus.comp.cs3219.viz.service.GateKeeper;
+import sg.edu.nus.comp.cs3219.viz.service.PresentationService;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,13 +16,13 @@ import java.util.List;
 @RestController
 public class PresentationController extends BaseRestController {
 
-    private final PresentationLogic presentationLogic;
+    private final PresentationService presentationService;
 
     private final GateKeeper gateKeeper;
 
-    public PresentationController(PresentationLogic presentationLogic,
+    public PresentationController(PresentationService presentationService,
                                   GateKeeper gateKeeper) {
-        this.presentationLogic = presentationLogic;
+        this.presentationService = presentationService;
         this.gateKeeper = gateKeeper;
     }
 
@@ -30,14 +30,14 @@ public class PresentationController extends BaseRestController {
     public List<Presentation> all() {
         UserInfo currentUser = gateKeeper.verifyLoginAccess();
 
-        return presentationLogic.findAllForUser(currentUser);
+        return presentationService.findAllForUser(currentUser);
     }
 
     @PostMapping("/presentations")
     public ResponseEntity<?> newPresentation(@RequestBody Presentation presentation) throws URISyntaxException {
         UserInfo currentUser = gateKeeper.verifyLoginAccess();
 
-        Presentation newPresentation = presentationLogic.saveForUser(presentation, currentUser);
+        Presentation newPresentation = presentationService.saveForUser(presentation, currentUser);
 
         return ResponseEntity
                 .created(new URI("/presentations/" + newPresentation.getId()))
@@ -46,7 +46,7 @@ public class PresentationController extends BaseRestController {
 
     @GetMapping("/presentations/{id}")
     public Presentation one(@PathVariable Long id) {
-        Presentation presentation = presentationLogic.findById(id)
+        Presentation presentation = presentationService.findById(id)
                 .orElseThrow(() -> new PresentationNotFoundException(id));
 
         gateKeeper.verifyAccessForPresentation(presentation, AccessLevel.CAN_READ);
@@ -57,11 +57,11 @@ public class PresentationController extends BaseRestController {
     @PutMapping("/presentations/{id}")
     public ResponseEntity<?> updatePresentation(@RequestBody Presentation newPresentation, @PathVariable Long id) throws URISyntaxException {
 
-        Presentation oldPresentation = presentationLogic.findById(id)
+        Presentation oldPresentation = presentationService.findById(id)
                 .orElseThrow(() -> new PresentationNotFoundException(id));
         gateKeeper.verifyAccessForPresentation(oldPresentation, AccessLevel.CAN_WRITE);
 
-        Presentation updatedPresentation = presentationLogic.updatePresentation(oldPresentation, newPresentation);
+        Presentation updatedPresentation = presentationService.updatePresentation(oldPresentation, newPresentation);
         return ResponseEntity
                 .created(new URI("/presentations/" + newPresentation.getId()))
                 .body(updatedPresentation);
@@ -69,11 +69,11 @@ public class PresentationController extends BaseRestController {
 
     @DeleteMapping("/presentations/{id}")
     public ResponseEntity<?> deletePresentation(@PathVariable Long id) {
-        Presentation oldPresentation = presentationLogic.findById(id)
+        Presentation oldPresentation = presentationService.findById(id)
                 .orElseThrow(() -> new PresentationNotFoundException(id));
         gateKeeper.verifyDeletionAccessForPresentation(oldPresentation);
 
-        presentationLogic.deleteById(id);
+        presentationService.deleteById(id);
 
         return ResponseEntity.noContent().build();
     }

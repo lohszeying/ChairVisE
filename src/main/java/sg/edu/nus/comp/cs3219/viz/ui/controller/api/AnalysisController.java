@@ -8,9 +8,9 @@ import sg.edu.nus.comp.cs3219.viz.common.datatransfer.AccessLevel;
 import sg.edu.nus.comp.cs3219.viz.common.datatransfer.AnalysisRequest;
 import sg.edu.nus.comp.cs3219.viz.common.entity.Presentation;
 import sg.edu.nus.comp.cs3219.viz.common.exception.PresentationNotFoundException;
-import sg.edu.nus.comp.cs3219.viz.logic.AnalysisLogic;
-import sg.edu.nus.comp.cs3219.viz.logic.GateKeeper;
-import sg.edu.nus.comp.cs3219.viz.logic.PresentationLogic;
+import sg.edu.nus.comp.cs3219.viz.service.AnalysisService;
+import sg.edu.nus.comp.cs3219.viz.service.GateKeeper;
+import sg.edu.nus.comp.cs3219.viz.service.PresentationService;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -22,28 +22,28 @@ import java.util.stream.Collectors;
 @RestController
 public class AnalysisController extends BaseRestController {
 
-    private GateKeeper gateKeeper;
+    private final GateKeeper gateKeeper;
 
-    private AnalysisLogic analysisLogic;
+    private final AnalysisService analysisService;
 
-    private PresentationLogic presentationLogic;
+    private final PresentationService presentationService;
 
-    private static final Logger log = Logger.getLogger(AnalysisLogic.class.getSimpleName());
+    private static final Logger log = Logger.getLogger(AnalysisService.class.getSimpleName());
 
-    public AnalysisController(GateKeeper gateKeeper, PresentationLogic presentationLogic, AnalysisLogic analysisLogic) {
-        this.analysisLogic = analysisLogic;
-        this.presentationLogic = presentationLogic;
+    public AnalysisController(GateKeeper gateKeeper, PresentationService presentationService, AnalysisService analysisService) {
+        this.analysisService = analysisService;
+        this.presentationService = presentationService;
         this.gateKeeper = gateKeeper;
     }
 
     @PostMapping("/presentations/{id}/analysis")
     public List<Map<String, Object>> analysis(@PathVariable Long id, @Valid @RequestBody AnalysisRequest analysisRequest) {
         // verify access level
-        Presentation presentation = presentationLogic.findById(id)
+        Presentation presentation = presentationService.findById(id)
                 .orElseThrow(() -> new PresentationNotFoundException(id));
         gateKeeper.verifyAccessForPresentation(presentation, AccessLevel.CAN_READ);
 
-        List<Map<String, Object>> result = analysisLogic.analyse(analysisRequest);
+        List<Map<String, Object>> result = analysisService.analyse(analysisRequest);
         log.info("Analysis Result from query: " + result);
         // convert to map with key all in lower case
         return result.stream().map(m -> {

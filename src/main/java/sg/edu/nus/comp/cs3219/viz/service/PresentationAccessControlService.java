@@ -1,6 +1,6 @@
-package sg.edu.nus.comp.cs3219.viz.logic;
+package sg.edu.nus.comp.cs3219.viz.service;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import sg.edu.nus.comp.cs3219.viz.common.entity.Presentation;
 import sg.edu.nus.comp.cs3219.viz.common.entity.PresentationAccessControl;
 import sg.edu.nus.comp.cs3219.viz.storage.repository.PresentationAccessControlRepository;
@@ -8,12 +8,12 @@ import sg.edu.nus.comp.cs3219.viz.storage.repository.PresentationAccessControlRe
 import java.util.List;
 import java.util.Optional;
 
-@Component
-public class PresentationAccessControlLogic {
+@Service
+public class PresentationAccessControlService {
 
-    private PresentationAccessControlRepository presentationAccessControlRepository;
+    private final PresentationAccessControlRepository presentationAccessControlRepository;
 
-    public PresentationAccessControlLogic(PresentationAccessControlRepository presentationAccessControlRepository) {
+    public PresentationAccessControlService(PresentationAccessControlRepository presentationAccessControlRepository) {
         this.presentationAccessControlRepository = presentationAccessControlRepository;
     }
 

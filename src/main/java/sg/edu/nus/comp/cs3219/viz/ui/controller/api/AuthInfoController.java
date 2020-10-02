@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import sg.edu.nus.comp.cs3219.viz.common.datatransfer.UserInfo;
 import sg.edu.nus.comp.cs3219.viz.common.util.Config;
-import sg.edu.nus.comp.cs3219.viz.logic.GateKeeper;
+import sg.edu.nus.comp.cs3219.viz.service.GateKeeper;
 import sg.edu.nus.comp.cs3219.viz.ui.controller.data.AuthInfo;
 
 @RestController
 public class AuthInfoController extends BaseRestController {
 
-    private GateKeeper gateKeeper;
+    private final GateKeeper gateKeeper;
 
     public AuthInfoController(GateKeeper gateKeeper) {
         this.gateKeeper = gateKeeper;

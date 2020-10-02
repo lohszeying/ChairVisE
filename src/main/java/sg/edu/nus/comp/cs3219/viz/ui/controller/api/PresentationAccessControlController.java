@@ -7,9 +7,9 @@ import sg.edu.nus.comp.cs3219.viz.common.entity.Presentation;
 import sg.edu.nus.comp.cs3219.viz.common.entity.PresentationAccessControl;
 import sg.edu.nus.comp.cs3219.viz.common.exception.PresentationAccessControlNotFoundException;
 import sg.edu.nus.comp.cs3219.viz.common.exception.PresentationNotFoundException;
-import sg.edu.nus.comp.cs3219.viz.logic.GateKeeper;
-import sg.edu.nus.comp.cs3219.viz.logic.PresentationAccessControlLogic;
-import sg.edu.nus.comp.cs3219.viz.logic.PresentationLogic;
+import sg.edu.nus.comp.cs3219.viz.service.GateKeeper;
+import sg.edu.nus.comp.cs3219.viz.service.PresentationAccessControlService;
+import sg.edu.nus.comp.cs3219.viz.service.PresentationService;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -17,36 +17,36 @@ import java.util.List;
 
 @RestController
 public class PresentationAccessControlController extends BaseRestController {
-    private final PresentationLogic presentationLogic;
+    private final PresentationService presentationService;
 
     private final GateKeeper gateKeeper;
 
-    private PresentationAccessControlLogic presentationAccessControlLogic;
+    private final PresentationAccessControlService presentationAccessControlService;
 
-    public PresentationAccessControlController(PresentationLogic presentationLogic,
+    public PresentationAccessControlController(PresentationService presentationService,
                                                GateKeeper gateKeeper,
-                                               PresentationAccessControlLogic presentationAccessControlLogic) {
-        this.presentationAccessControlLogic = presentationAccessControlLogic;
-        this.presentationLogic = presentationLogic;
+                                               PresentationAccessControlService presentationAccessControlService) {
+        this.presentationAccessControlService = presentationAccessControlService;
+        this.presentationService = presentationService;
         this.gateKeeper = gateKeeper;
     }
 
     @GetMapping("/presentations/{presentationId}/accessControl")
     public List<PresentationAccessControl> all(@PathVariable Long presentationId) {
-        Presentation presentation = presentationLogic.findById(presentationId)
+        Presentation presentation = presentationService.findById(presentationId)
                 .orElseThrow(() -> new PresentationNotFoundException(presentationId));
         gateKeeper.verifyAccessForPresentation(presentation, AccessLevel.CAN_READ);
 
-        return presentationAccessControlLogic.findAllByPresentation(presentation);
+        return presentationAccessControlService.findAllByPresentation(presentation);
     }
 
     @PostMapping("/presentations/{presentationId}/accessControl")
     public ResponseEntity<?> addPermission(@RequestBody PresentationAccessControl presentationAccessControl, @PathVariable Long presentationId) throws URISyntaxException {
-        Presentation presentation = presentationLogic.findById(presentationId)
+        Presentation presentation = presentationService.findById(presentationId)
                 .orElseThrow(() -> new PresentationNotFoundException(presentationId));
         gateKeeper.verifyAccessForPresentation(presentation, AccessLevel.CAN_WRITE);
 
-        PresentationAccessControl newAccessControl = presentationAccessControlLogic.saveForPresentation(presentation, presentationAccessControl);
+        PresentationAccessControl newAccessControl = presentationAccessControlService.saveForPresentation(presentation, presentationAccessControl);
         return ResponseEntity
                 .created(new URI("/presentations/" + presentation.getId() + "/accessControl/" + newAccessControl.getId()))
                 .body(newAccessControl);
@@ -54,15 +54,15 @@ public class PresentationAccessControlController extends BaseRestController {
 
     @PutMapping("/presentations/{presentationId}/accessControl/{accessControlId}")
     public ResponseEntity<?> updatePermission(@RequestBody PresentationAccessControl presentationAccessControl, @PathVariable Long presentationId, @PathVariable Long accessControlId) throws URISyntaxException {
-        Presentation presentation = presentationLogic.findById(presentationId)
+        Presentation presentation = presentationService.findById(presentationId)
                 .orElseThrow(() -> new PresentationNotFoundException(presentationId));
         gateKeeper.verifyAccessForPresentation(presentation, AccessLevel.CAN_WRITE);
 
-        PresentationAccessControl oldPresentationAccessControl = presentationAccessControlLogic.findById(accessControlId)
+        PresentationAccessControl oldPresentationAccessControl = presentationAccessControlService.findById(accessControlId)
                 .orElseThrow(() -> new PresentationAccessControlNotFoundException(presentationId, accessControlId));
 
         PresentationAccessControl updatedPresentationAccessControl =
-                presentationAccessControlLogic.updatePresentationAccessControl(oldPresentationAccessControl, presentationAccessControl);
+                presentationAccessControlService.updatePresentationAccessControl(oldPresentationAccessControl, presentationAccessControl);
 
         return ResponseEntity
                 .created(new URI("/presentations/" + presentationId + "/accessControl/" + accessControlId))
@@ -71,11 +71,11 @@ public class PresentationAccessControlController extends BaseRestController {
 
     @DeleteMapping("/presentations/{presentationId}/accessControl/{accessControlId}")
     public ResponseEntity<?> removePermission(@PathVariable Long presentationId, @PathVariable Long accessControlId) {
-        Presentation presentation = presentationLogic.findById(presentationId)
+        Presentation presentation = presentationService.findById(presentationId)
                 .orElseThrow(() -> new PresentationNotFoundException(presentationId));
         gateKeeper.verifyAccessForPresentation(presentation, AccessLevel.CAN_WRITE);
 
-        presentationAccessControlLogic.deleteById(accessControlId);
+        presentationAccessControlService.deleteById(accessControlId);
 
         return ResponseEntity.noContent().build();
     }

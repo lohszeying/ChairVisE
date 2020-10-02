@@ -1,6 +1,6 @@
-package sg.edu.nus.comp.cs3219.viz.logic;
+package sg.edu.nus.comp.cs3219.viz.service;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import sg.edu.nus.comp.cs3219.viz.common.datatransfer.UserInfo;
 import sg.edu.nus.comp.cs3219.viz.common.entity.Presentation;
 import sg.edu.nus.comp.cs3219.viz.storage.repository.PresentationRepository;
@@ -8,12 +8,12 @@ import sg.edu.nus.comp.cs3219.viz.storage.repository.PresentationRepository;
 import java.util.List;
 import java.util.Optional;
 
-@Component
-public class PresentationLogic {
+@Service
+public class PresentationService {
 
     private final PresentationRepository presentationRepository;
 
-    public PresentationLogic(PresentationRepository presentationRepository) {
+    public PresentationService(PresentationRepository presentationRepository) {
         this.presentationRepository = presentationRepository;
     }
 

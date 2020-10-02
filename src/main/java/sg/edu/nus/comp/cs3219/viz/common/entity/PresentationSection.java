@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import sg.edu.nus.comp.cs3219.viz.logic.AnalysisLogic;
+import sg.edu.nus.comp.cs3219.viz.service.AnalysisService;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 @Entity
 public class PresentationSection {
 
-    private static final Logger log = Logger.getLogger(AnalysisLogic.class.getSimpleName());
+    private static final Logger log = Logger.getLogger(AnalysisService.class.getSimpleName());
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 

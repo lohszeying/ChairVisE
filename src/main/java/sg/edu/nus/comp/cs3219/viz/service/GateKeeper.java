@@ -1,9 +1,9 @@
-package sg.edu.nus.comp.cs3219.viz.logic;
+package sg.edu.nus.comp.cs3219.viz.service;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import sg.edu.nus.comp.cs3219.viz.common.datatransfer.AccessLevel;
 import sg.edu.nus.comp.cs3219.viz.common.datatransfer.UserInfo;
 import sg.edu.nus.comp.cs3219.viz.common.entity.Conference;
@@ -14,16 +14,16 @@ import sg.edu.nus.comp.cs3219.viz.storage.repository.PresentationAccessControlRe
 
 import java.util.Optional;
 
-@Component
+@Service
 public class GateKeeper {
 
-    private PresentationAccessControlRepository presentationAccessControlRepository;
+    private final PresentationAccessControlRepository presentationAccessControlRepository;
 
     public GateKeeper(PresentationAccessControlRepository presentationAccessControlRepository) {
         this.presentationAccessControlRepository = presentationAccessControlRepository;
     }
 
-    private static UserService userService = UserServiceFactory.getUserService();
+    private static final UserService userService = UserServiceFactory.getUserService();
 
     public Optional<UserInfo> getCurrentLoginUser() {
         User user = userService.getCurrentUser();

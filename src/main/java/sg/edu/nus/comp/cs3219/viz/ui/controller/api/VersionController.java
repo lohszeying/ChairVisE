@@ -2,10 +2,8 @@ package sg.edu.nus.comp.cs3219.viz.ui.controller.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sg.edu.nus.comp.cs3219.viz.common.datatransfer.UserInfo;
 import sg.edu.nus.comp.cs3219.viz.common.entity.record.Version;
-import sg.edu.nus.comp.cs3219.viz.logic.GateKeeper;
-import sg.edu.nus.comp.cs3219.viz.logic.VersionLogic;
+import sg.edu.nus.comp.cs3219.viz.service.VersionService;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,30 +12,25 @@ import java.util.List;
 @RestController
 public class VersionController extends BaseRestController{
 
-    private GateKeeper gateKeeper;
-    private VersionLogic versionLogic;
+    private final VersionService versionService;
 
-    public VersionController(GateKeeper gateKeeper, VersionLogic versionLogic){
-        this.gateKeeper = gateKeeper;
-        this.versionLogic = versionLogic;
+    public VersionController(VersionService versionService) {
+        this.versionService = versionService;
     }
 
     @GetMapping("/version")
     public List<Version> all(){
-        UserInfo currentUser = gateKeeper.verifyLoginAccess();
-        return versionLogic.findAllForUser(currentUser);
+        return versionService.findAllForUser();
     }
 
     @GetMapping("/version/{recordType}")
     public List<Version> allVersionByRecordType(@PathVariable String recordType){
-        UserInfo currentUser = gateKeeper.verifyLoginAccess();
-        return versionLogic.findAllForUserWithRecordType(currentUser, recordType);
+        return versionService.findAllForUserWithRecordType(recordType);
     }
 
     @PostMapping("/version")
     public ResponseEntity<?> newVersion(@RequestBody Version version) throws URISyntaxException {
-        UserInfo currentUser = gateKeeper.verifyLoginAccess();
-        Version newVersion = versionLogic.saveForUser(version, currentUser);
+        Version newVersion = versionService.saveForUser(version);
 
         return ResponseEntity
                 // TODO: might change what URI is returned
