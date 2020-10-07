@@ -32,7 +32,8 @@ public class RecordService {
 
     @Transactional
     public void removeAndPersistAuthorRecordForDataSet(Long versionId, List<AuthorRecord> authorRecordList) {
-        UserInfo userInfo = gateKeeper.verifyLoginAccess();
+//        gateKeeper.verifyLoginAccess();
+        UserInfo userInfo = gateKeeper.getCurrentLoginUser();
 
         if (authorRecordList.isEmpty()){
             return;
@@ -49,7 +50,9 @@ public class RecordService {
 
     @Transactional
     public void removeAndPersistReviewRecordForDataSet(Long versionId, List<ReviewRecord> reviewRecordList) {
-        UserInfo userInfo = gateKeeper.verifyLoginAccess();
+//        gateKeeper.verifyLoginAccess();
+        UserInfo userInfo = gateKeeper.getCurrentLoginUser();
+
         if (reviewRecordList.isEmpty()){
             return;
         }
@@ -65,7 +68,9 @@ public class RecordService {
 
     @Transactional
     public void removeAndPersistSubmissionRecordForDataSet(Long versionId, List<SubmissionRecord> submissionRecordList) {
-        UserInfo userInfo = gateKeeper.verifyLoginAccess();
+//        gateKeeper.verifyLoginAccess();
+        UserInfo userInfo = gateKeeper.getCurrentLoginUser();
+
         if (submissionRecordList.isEmpty()){
             return;
         }

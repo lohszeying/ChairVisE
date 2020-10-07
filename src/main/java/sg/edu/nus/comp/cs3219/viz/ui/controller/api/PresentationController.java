@@ -2,11 +2,8 @@ package sg.edu.nus.comp.cs3219.viz.ui.controller.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sg.edu.nus.comp.cs3219.viz.common.datatransfer.AccessLevel;
-import sg.edu.nus.comp.cs3219.viz.common.datatransfer.UserInfo;
 import sg.edu.nus.comp.cs3219.viz.common.entity.Presentation;
 import sg.edu.nus.comp.cs3219.viz.common.exception.PresentationNotFoundException;
-import sg.edu.nus.comp.cs3219.viz.service.GateKeeper;
 import sg.edu.nus.comp.cs3219.viz.service.PresentationService;
 
 import java.net.URI;
@@ -18,26 +15,18 @@ public class PresentationController extends BaseRestController {
 
     private final PresentationService presentationService;
 
-    private final GateKeeper gateKeeper;
-
-    public PresentationController(PresentationService presentationService,
-                                  GateKeeper gateKeeper) {
+    public PresentationController(PresentationService presentationService) {
         this.presentationService = presentationService;
-        this.gateKeeper = gateKeeper;
     }
 
     @GetMapping("/presentations")
     public List<Presentation> all() {
-        UserInfo currentUser = gateKeeper.verifyLoginAccess();
-
-        return presentationService.findAllForUser(currentUser);
+        return presentationService.findAllForUser();
     }
 
     @PostMapping("/presentations")
     public ResponseEntity<?> newPresentation(@RequestBody Presentation presentation) throws URISyntaxException {
-        UserInfo currentUser = gateKeeper.verifyLoginAccess();
-
-        Presentation newPresentation = presentationService.saveForUser(presentation, currentUser);
+        Presentation newPresentation = presentationService.saveForUser(presentation);
 
         return ResponseEntity
                 .created(new URI("/presentations/" + newPresentation.getId()))
@@ -46,22 +35,14 @@ public class PresentationController extends BaseRestController {
 
     @GetMapping("/presentations/{id}")
     public Presentation one(@PathVariable Long id) {
-        Presentation presentation = presentationService.findById(id)
+        return presentationService.findById(id)
                 .orElseThrow(() -> new PresentationNotFoundException(id));
-
-        gateKeeper.verifyAccessForPresentation(presentation, AccessLevel.CAN_READ);
-
-        return presentation;
     }
 
     @PutMapping("/presentations/{id}")
     public ResponseEntity<?> updatePresentation(@RequestBody Presentation newPresentation, @PathVariable Long id) throws URISyntaxException {
+        Presentation updatedPresentation = presentationService.updatePresentation(id, newPresentation);
 
-        Presentation oldPresentation = presentationService.findById(id)
-                .orElseThrow(() -> new PresentationNotFoundException(id));
-        gateKeeper.verifyAccessForPresentation(oldPresentation, AccessLevel.CAN_WRITE);
-
-        Presentation updatedPresentation = presentationService.updatePresentation(oldPresentation, newPresentation);
         return ResponseEntity
                 .created(new URI("/presentations/" + newPresentation.getId()))
                 .body(updatedPresentation);
@@ -69,10 +50,6 @@ public class PresentationController extends BaseRestController {
 
     @DeleteMapping("/presentations/{id}")
     public ResponseEntity<?> deletePresentation(@PathVariable Long id) {
-        Presentation oldPresentation = presentationService.findById(id)
-                .orElseThrow(() -> new PresentationNotFoundException(id));
-        gateKeeper.verifyDeletionAccessForPresentation(oldPresentation);
-
         presentationService.deleteById(id);
 
         return ResponseEntity.noContent().build();

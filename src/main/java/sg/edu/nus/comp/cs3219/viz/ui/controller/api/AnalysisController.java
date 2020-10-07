@@ -22,27 +22,16 @@ import java.util.stream.Collectors;
 @RestController
 public class AnalysisController extends BaseRestController {
 
-    private final GateKeeper gateKeeper;
-
     private final AnalysisService analysisService;
-
-    private final PresentationService presentationService;
 
     private static final Logger log = Logger.getLogger(AnalysisService.class.getSimpleName());
 
-    public AnalysisController(GateKeeper gateKeeper, PresentationService presentationService, AnalysisService analysisService) {
+    public AnalysisController(AnalysisService analysisService) {
         this.analysisService = analysisService;
-        this.presentationService = presentationService;
-        this.gateKeeper = gateKeeper;
     }
 
     @PostMapping("/presentations/{id}/analysis")
     public List<Map<String, Object>> analysis(@PathVariable Long id, @Valid @RequestBody AnalysisRequest analysisRequest) {
-        // verify access level
-        Presentation presentation = presentationService.findById(id)
-                .orElseThrow(() -> new PresentationNotFoundException(id));
-        gateKeeper.verifyAccessForPresentation(presentation, AccessLevel.CAN_READ);
-
         List<Map<String, Object>> result = analysisService.analyse(analysisRequest);
         log.info("Analysis Result from query: " + result);
         // convert to map with key all in lower case

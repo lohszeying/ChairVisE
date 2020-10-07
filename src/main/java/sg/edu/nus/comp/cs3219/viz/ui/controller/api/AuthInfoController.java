@@ -20,7 +20,10 @@ public class AuthInfoController extends BaseRestController {
     @GetMapping("/auth")
     public AuthInfo getAuthInfo(@RequestParam(value = "redirectUrl", required = false) String redirectUrl) {
         String redirect = redirectUrl == null ? Config.APP_URL : redirectUrl;
-        UserInfo userInfo = gateKeeper.getCurrentLoginUser().orElse(null);
+
+        UserInfo userInfo = null;
+        if (gateKeeper.isLoggedIn())
+            userInfo = gateKeeper.getCurrentLoginUser();
 
         AuthInfo authInfo = new AuthInfo();
         authInfo.setLogin(userInfo != null);

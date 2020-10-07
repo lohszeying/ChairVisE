@@ -17,47 +17,32 @@ import java.util.List;
 
 @RestController
 public class PresentationAccessControlController extends BaseRestController {
-    private final PresentationService presentationService;
-
-    private final GateKeeper gateKeeper;
 
     private final PresentationAccessControlService presentationAccessControlService;
 
-    public PresentationAccessControlController(PresentationService presentationService,
-                                               GateKeeper gateKeeper,
-                                               PresentationAccessControlService presentationAccessControlService) {
+    public PresentationAccessControlController(PresentationAccessControlService presentationAccessControlService) {
         this.presentationAccessControlService = presentationAccessControlService;
-        this.presentationService = presentationService;
-        this.gateKeeper = gateKeeper;
     }
 
     @GetMapping("/presentations/{presentationId}/accessControl")
     public List<PresentationAccessControl> all(@PathVariable Long presentationId) {
-        Presentation presentation = presentationService.findById(presentationId)
-                .orElseThrow(() -> new PresentationNotFoundException(presentationId));
-        gateKeeper.verifyAccessForPresentation(presentation, AccessLevel.CAN_READ);
-
-        return presentationAccessControlService.findAllByPresentation(presentation);
+        return presentationAccessControlService.findAllByPresentation(presentationId);
     }
 
     @PostMapping("/presentations/{presentationId}/accessControl")
     public ResponseEntity<?> addPermission(@RequestBody PresentationAccessControl presentationAccessControl, @PathVariable Long presentationId) throws URISyntaxException {
-        Presentation presentation = presentationService.findById(presentationId)
-                .orElseThrow(() -> new PresentationNotFoundException(presentationId));
-        gateKeeper.verifyAccessForPresentation(presentation, AccessLevel.CAN_WRITE);
-
-        PresentationAccessControl newAccessControl = presentationAccessControlService.saveForPresentation(presentation, presentationAccessControl);
+        PresentationAccessControl newAccessControl = presentationAccessControlService.saveForPresentation(presentationId, presentationAccessControl);
         return ResponseEntity
-                .created(new URI("/presentations/" + presentation.getId() + "/accessControl/" + newAccessControl.getId()))
+                .created(new URI("/presentations/" + presentationId + "/accessControl/" + newAccessControl.getId()))
                 .body(newAccessControl);
     }
 
     @PutMapping("/presentations/{presentationId}/accessControl/{accessControlId}")
-    public ResponseEntity<?> updatePermission(@RequestBody PresentationAccessControl presentationAccessControl, @PathVariable Long presentationId, @PathVariable Long accessControlId) throws URISyntaxException {
-        Presentation presentation = presentationService.findById(presentationId)
-                .orElseThrow(() -> new PresentationNotFoundException(presentationId));
-        gateKeeper.verifyAccessForPresentation(presentation, AccessLevel.CAN_WRITE);
-
+    public ResponseEntity<?> updatePermission(
+            @RequestBody PresentationAccessControl presentationAccessControl,
+            @PathVariable Long presentationId,
+            @PathVariable Long accessControlId
+    ) throws URISyntaxException {
         PresentationAccessControl oldPresentationAccessControl = presentationAccessControlService.findById(accessControlId)
                 .orElseThrow(() -> new PresentationAccessControlNotFoundException(presentationId, accessControlId));
 
@@ -71,10 +56,6 @@ public class PresentationAccessControlController extends BaseRestController {
 
     @DeleteMapping("/presentations/{presentationId}/accessControl/{accessControlId}")
     public ResponseEntity<?> removePermission(@PathVariable Long presentationId, @PathVariable Long accessControlId) {
-        Presentation presentation = presentationService.findById(presentationId)
-                .orElseThrow(() -> new PresentationNotFoundException(presentationId));
-        gateKeeper.verifyAccessForPresentation(presentation, AccessLevel.CAN_WRITE);
-
         presentationAccessControlService.deleteById(accessControlId);
 
         return ResponseEntity.noContent().build();

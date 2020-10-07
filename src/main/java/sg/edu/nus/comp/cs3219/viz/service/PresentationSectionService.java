@@ -3,6 +3,9 @@ package sg.edu.nus.comp.cs3219.viz.service;
 import org.springframework.stereotype.Service;
 import sg.edu.nus.comp.cs3219.viz.common.entity.Presentation;
 import sg.edu.nus.comp.cs3219.viz.common.entity.PresentationSection;
+import sg.edu.nus.comp.cs3219.viz.common.exception.PresentationNotFoundException;
+import sg.edu.nus.comp.cs3219.viz.common.exception.PresentationSectionNotFoundException;
+import sg.edu.nus.comp.cs3219.viz.storage.repository.PresentationRepository;
 import sg.edu.nus.comp.cs3219.viz.storage.repository.PresentationSectionRepository;
 
 import java.util.List;
@@ -11,19 +14,27 @@ import java.util.Optional;
 @Service
 public class PresentationSectionService {
 
+    private final PresentationRepository presentationRepository;
     private final PresentationSectionRepository presentationSectionRepository;
 
-    public PresentationSectionService(PresentationSectionRepository presentationSectionRepository) {
+    public PresentationSectionService(PresentationRepository presentationRepository,
+                                      PresentationSectionRepository presentationSectionRepository) {
+        this.presentationRepository = presentationRepository;
         this.presentationSectionRepository = presentationSectionRepository;
     }
 
-    public List<PresentationSection> findAllByPresentation(Presentation presentation) {
+    public List<PresentationSection> findAllByPresentation(Long presentationId) {
+        Presentation presentation = presentationRepository.findById(presentationId)
+                .orElseThrow(() -> new PresentationNotFoundException(presentationId));
+
         return presentationSectionRepository.findAllByPresentation(presentation);
     }
 
-    public PresentationSection saveForPresentation(Presentation presentation, PresentationSection presentationSection) {
-        PresentationSection newPresentationSection = new PresentationSection();
+    public PresentationSection saveForPresentation(Long presentationId, PresentationSection presentationSection) {
+        Presentation presentation = presentationRepository.findById(presentationId)
+                .orElseThrow(() -> new PresentationNotFoundException(presentationId));
 
+        PresentationSection newPresentationSection = new PresentationSection();
         newPresentationSection.setPresentation(presentation);
         newPresentationSection.setTitle(presentationSection.getTitle());
         newPresentationSection.setDescription(presentationSection.getDescription());
@@ -44,7 +55,10 @@ public class PresentationSectionService {
         return presentationSectionRepository.findById(id);
     }
 
-    public PresentationSection updatePresentation(PresentationSection oldPresentationSection, PresentationSection newPresentationSection) {
+    public PresentationSection updatePresentation(Long presentationId, Long sectionId, PresentationSection newPresentationSection) {
+        PresentationSection oldPresentationSection = this.findById(sectionId)
+                .orElseThrow(() -> new PresentationSectionNotFoundException(presentationId, sectionId));
+
         oldPresentationSection.setTitle(newPresentationSection.getTitle());
         oldPresentationSection.setDescription(newPresentationSection.getDescription());
         oldPresentationSection.setDataSet(newPresentationSection.getDataSet());
@@ -59,7 +73,12 @@ public class PresentationSectionService {
         return presentationSectionRepository.save(oldPresentationSection);
     }
 
-    public void deleteById(Long id) {
-        presentationSectionRepository.deleteById(id);
+    public void deleteById(Long presentationId, Long sectionId) {
+        PresentationSection presentationSection = this.findById(sectionId)
+                .orElseThrow(() -> new PresentationSectionNotFoundException(presentationId, sectionId));
+
+        Presentation presentation = presentationSection.getPresentation();
+
+        presentationSectionRepository.deleteById(sectionId);
     }
 }

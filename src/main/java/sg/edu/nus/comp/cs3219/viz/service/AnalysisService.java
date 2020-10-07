@@ -46,6 +46,8 @@ public class AnalysisService {
     }
 
     public List<Map<String, Object>> analyse(AnalysisRequest analysisRequest) {
+        // Check that analysis is done for current user only
+
         String sql = generateSQL(analysisRequest);
 
         log.info("Analysis Query: " + sql);

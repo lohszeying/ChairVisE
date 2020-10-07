@@ -19,17 +19,20 @@ public class VersionService {
     }
 
     public List<Version> findAllForUser(){
-        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+//        gateKeeper.verifyLoginAccess();
+        UserInfo currentUser = gateKeeper.getCurrentLoginUser();
         return versionRepository.findByDataSet(currentUser.getUserEmail());
     }
 
     public List<Version> findAllForUserWithRecordType(String recordType) {
-        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+//        gateKeeper.verifyLoginAccess();
+        UserInfo currentUser = gateKeeper.getCurrentLoginUser();
         return versionRepository.findByDataSetAndRecordType(currentUser.getUserEmail(), recordType);
     }
 
     public Version saveForUser(Version version){
-        UserInfo currentUser = gateKeeper.verifyLoginAccess();
+//        gateKeeper.verifyLoginAccess();
+        UserInfo currentUser = gateKeeper.getCurrentLoginUser();
         Version newVersion = new Version(version.getDataSet(), version.getRecordType());
 
         return versionRepository.save(newVersion);

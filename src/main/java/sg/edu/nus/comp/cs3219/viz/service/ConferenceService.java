@@ -3,43 +3,49 @@ package sg.edu.nus.comp.cs3219.viz.service;
 import org.springframework.stereotype.Service;
 import sg.edu.nus.comp.cs3219.viz.common.datatransfer.UserInfo;
 import sg.edu.nus.comp.cs3219.viz.common.entity.Conference;
+import sg.edu.nus.comp.cs3219.viz.common.exception.ConferenceNotFoundException;
 import sg.edu.nus.comp.cs3219.viz.storage.repository.ConferenceRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ConferenceService {
 
+    private final GateKeeper gateKeeper;
     private final ConferenceRepository conferenceRepository;
 
-    public ConferenceService(ConferenceRepository conferenceRepository) {
+    public ConferenceService(ConferenceRepository conferenceRepository, GateKeeper gateKeeper) {
         this.conferenceRepository = conferenceRepository;
+        this.gateKeeper = gateKeeper;
     }
 
-    public List<Conference> findAllForUser(UserInfo userInfo) {
+    public List<Conference> findAllForUser() {
+        UserInfo userInfo = gateKeeper.getCurrentLoginUser();
         return conferenceRepository.findByCreatorIdentifier(userInfo.getUserEmail());
     }
 
-    public Optional<Conference> findById(Long id) {
-        return conferenceRepository.findById(id);
+    public Conference findById(Long id) {
+        return conferenceRepository.findById(id)
+                .orElseThrow(() -> new ConferenceNotFoundException(id));
     }
 
-    public Conference saveForUser(Conference conference, UserInfo userInfo) {
-        Conference newConference = new Conference();
-        newConference.setName(conference.getName());
-        newConference.setDescription(conference.getDescription());
-        newConference.setDate(conference.getDate());
-        newConference.setCreatorIdentifier(userInfo.getUserEmail());
+    public Conference saveForUser(Conference conference) {
+        UserInfo userInfo = gateKeeper.getCurrentLoginUser();
 
-        return conferenceRepository.save(newConference);
+        conference.setCreatorIdentifier(userInfo.getUserEmail());
+
+        return conferenceRepository.save(conference);
     }
 
-    public Conference updateConference(Conference oldConference, Conference newConference) {
-        oldConference.setName(newConference.getName());
-        oldConference.setDescription(newConference.getDescription());
-        oldConference.setDate(newConference.getDate());
-        return conferenceRepository.save(oldConference);
+    public Conference updateConference(Conference newConference, Long id) {
+        return conferenceRepository.findById(id)
+                .map(conference -> {
+                    conference.setName(newConference.getName());
+                    conference.setDescription(newConference.getDescription());
+                    conference.setDate(newConference.getDate());
+                    return conferenceRepository.save(conference);
+                })
+                .orElseThrow(() -> new ConferenceNotFoundException(id));
     }
 
     public void deleteById(Long id) {

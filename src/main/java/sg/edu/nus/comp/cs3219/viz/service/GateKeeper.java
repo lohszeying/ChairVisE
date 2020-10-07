@@ -25,17 +25,17 @@ public class GateKeeper {
 
     private static final UserService userService = UserServiceFactory.getUserService();
 
-    public Optional<UserInfo> getCurrentLoginUser() {
+    public UserInfo getCurrentLoginUser() {
         User user = userService.getCurrentUser();
 
         if (user == null) {
-            return Optional.empty();
+            throw new UnauthorisedException();
         }
 
         UserInfo userInfo = new UserInfo();
         userInfo.setUserEmail(user.getEmail());
         userInfo.setUserNickname(user.getNickname());
-        return Optional.of(userInfo);
+        return userInfo;
     }
 
     public String getLoginUrl(String redirectPage) {
@@ -51,8 +51,15 @@ public class GateKeeper {
         return userService.createLogoutURL(redirectPage);
     }
 
-    public UserInfo verifyLoginAccess() {
-        return getCurrentLoginUser().orElseThrow(UnauthorisedException::new);
+    public boolean isLoggedIn() {
+        User user = userService.getCurrentUser();
+        return user != null;
+    }
+
+    public void verifyLoginAccess() {
+        if (!isLoggedIn()) {
+            throw new UnauthorisedException();
+        }
     }
 
     public void verifyDeletionAccessForConference(Conference conference) {
@@ -60,8 +67,7 @@ public class GateKeeper {
             throw new UnauthorisedException();
         }
 
-        UserInfo currentUser = getCurrentLoginUser()
-                .orElseThrow(UnauthorisedException::new);
+        UserInfo currentUser = getCurrentLoginUser();
 
         if (!currentUser.getUserEmail().equals(conference.getCreatorIdentifier())) {
             throw new UnauthorisedException();
@@ -73,8 +79,7 @@ public class GateKeeper {
             throw new UnauthorisedException();
         }
 
-        UserInfo currentUser = getCurrentLoginUser()
-                .orElseThrow(UnauthorisedException::new);
+        UserInfo currentUser = getCurrentLoginUser();
 
         if (!currentUser.getUserEmail().equals(presentation.getCreatorIdentifier())) {
             throw new UnauthorisedException();
@@ -96,8 +101,7 @@ public class GateKeeper {
             return;
         }
 
-        UserInfo currentUser = getCurrentLoginUser()
-                .orElseThrow(UnauthorisedException::new);
+        UserInfo currentUser = getCurrentLoginUser();
 
         // creator can always access their own presentation
         if (presentation.getCreatorIdentifier().equals(currentUser.getUserEmail())) {
