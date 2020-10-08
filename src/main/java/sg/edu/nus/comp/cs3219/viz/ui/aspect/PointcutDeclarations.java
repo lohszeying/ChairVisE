@@ -18,7 +18,7 @@ public class PointcutDeclarations {
     @Pointcut("execution(* sg.edu.nus.comp.cs3219.viz.ui.controller.api.PresentationController.*(*))")
     public void forPresentationMethods() {}
 
-    @Pointcut("execution(* sg.edu.nus.comp.cs3219.viz.ui.controller.api.PresentationAccessControlController.*(*))")
+    @Pointcut("execution(* sg.edu.nus.comp.cs3219.viz.ui.controller.api.PresentationPermissionController.*(*))")
     public void forPresentationAccessControlMethods() {}
 
     @Pointcut("execution(* sg.edu.nus.comp.cs3219.viz.ui.controller.api.PresentationSectionController.*(*))")

@@ -10,14 +10,15 @@ import java.util.List;
 @Entity
 public class Version {
 
-    @Column(name = "data_set")
-    private String dataSet;
-    @Column(name = "record_type")
-    private String recordType;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "version_id")
     private Long id;
+
+    @Column("ver_date")
+    private String date;
+
+    @Column("conference_id")
+    private Long conferenceId;
 
     @OneToMany
     @JoinColumn(name = "version_id")
@@ -29,12 +30,6 @@ public class Version {
     @JoinColumn(name = "version_id")
     private List<ReviewRecord> reviewRecordList;
 
-    public Version() {
-    }
-
-    public Version(String dataSet, String recordType) {
-        this.dataSet = dataSet;
-        this.recordType = recordType;
-    }
+    public Version() {}
 
 }

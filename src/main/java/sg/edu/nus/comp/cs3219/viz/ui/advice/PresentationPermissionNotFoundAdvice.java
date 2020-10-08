@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import sg.edu.nus.comp.cs3219.viz.common.exception.PresentationSectionNotFoundException;
 
 @ControllerAdvice
-class PresentationAccessControlNotFoundAdvice {
+class PresentationPermissionNotFoundAdvice {
 
     @ResponseBody
     @ExceptionHandler(PresentationSectionNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String presentationAccessControlNotFoundHandler(PresentationSectionNotFoundException ex) {
+    String presentationPermissionNotFoundHandler(PresentationSectionNotFoundException ex) {
         return ex.getMessage();
     }
 }

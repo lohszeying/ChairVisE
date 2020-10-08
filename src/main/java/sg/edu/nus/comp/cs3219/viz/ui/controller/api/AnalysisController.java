@@ -4,13 +4,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import sg.edu.nus.comp.cs3219.viz.common.datatransfer.AccessLevel;
 import sg.edu.nus.comp.cs3219.viz.common.datatransfer.AnalysisRequest;
-import sg.edu.nus.comp.cs3219.viz.common.entity.Presentation;
-import sg.edu.nus.comp.cs3219.viz.common.exception.PresentationNotFoundException;
 import sg.edu.nus.comp.cs3219.viz.service.AnalysisService;
-import sg.edu.nus.comp.cs3219.viz.service.GateKeeper;
-import sg.edu.nus.comp.cs3219.viz.service.PresentationService;
 
 import javax.validation.Valid;
 import java.util.HashMap;

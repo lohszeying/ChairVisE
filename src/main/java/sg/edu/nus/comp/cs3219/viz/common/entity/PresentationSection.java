@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -29,7 +27,6 @@ public class PresentationSection {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,8 +41,6 @@ public class PresentationSection {
     private String description;
 
     private String type;
-
-    private String dataSet;
 
     // The following field does not worth to be stored as relation in RDBMS
     // we store them as serialized json string
@@ -71,247 +66,93 @@ public class PresentationSection {
     @Column(columnDefinition = "TEXT")
     private String extraData;
 
+    @Data
     public static class Selection {
         private String expression;
-
         private String rename;
-
-        public String getExpression() {
-            return expression;
-        }
-
-        public void setExpression(String expression) {
-            this.expression = expression;
-        }
-
-        public String getRename() {
-            return rename;
-        }
-
-        public void setRename(String rename) {
-            this.rename = rename;
-        }
     }
 
+    @Data
     public static class Record {
         private String name;
-
         private boolean isCustomized;
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public boolean isCustomized() {
-            return isCustomized;
-        }
-
-        public void setCustomized(boolean customized) {
-            isCustomized = customized;
-        }
     }
 
+    @Data
     public static class Filter {
         private String field;
         private String comparator;
         private String value;
-
-        public String getField() {
-            return field;
-        }
-
-        public void setField(String field) {
-            this.field = field;
-        }
-
-        public String getComparator() {
-            return comparator;
-        }
-
-        public void setComparator(String comparator) {
-            this.comparator = comparator;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
     }
 
+    @Data
     public static class Joiner {
         private String left;
         private String right;
-
-        public String getLeft() {
-            return left;
-        }
-
-        public void setLeft(String left) {
-            this.left = left;
-        }
-
-        public String getRight() {
-            return right;
-        }
-
-        public void setRight(String right) {
-            this.right = right;
-        }
     }
 
+    @Data
     public static class Grouper {
         private String field;
-
-        public String getField() {
-            return field;
-        }
-
-        public void setField(String field) {
-            this.field = field;
-        }
     }
 
+    @Data
     public static class Sorter {
         private String field;
-
         private String order;
-
-        public String getField() {
-            return field;
-        }
-
-        public void setField(String field) {
-            this.field = field;
-        }
-
-        public String getOrder() {
-            return order;
-        }
-
-        public void setOrder(String order) {
-            this.order = order;
-        }
     }
 
     public List<Selection> getSelections() {
-        try {
-            return objectMapper.readValue(selections, new TypeReference<List<Selection>>() {
-            });
-        } catch (IOException e) {
-            log.severe(e.getMessage());
-            return new ArrayList<>();
-        }
+        return get(groupers, Selection.class);
     }
 
     public void setSelections(List<Selection> selections) {
-        try {
-            this.selections = objectMapper.writeValueAsString(selections);
-        } catch (JsonProcessingException e) {
-            log.severe(e.getMessage());
-        }
+        this.selections = set(selections);
     }
 
     public List<Record> getInvolvedRecords() {
-        try {
-            return objectMapper.readValue(involvedRecords, new TypeReference<List<Record>>() {
-            });
-        } catch (IOException e) {
-            log.severe(e.getMessage());
-            return new ArrayList<>();
-        }
+        return get(groupers, Record.class);
     }
 
     public void setInvolvedRecords(List<Record> involvedRecords) {
-        try {
-            this.involvedRecords = objectMapper.writeValueAsString(involvedRecords);
-        } catch (JsonProcessingException e) {
-            log.severe(e.getMessage());
-        }
+        this.involvedRecords = set(involvedRecords);
     }
 
     public List<Filter> getFilters() {
-        try {
-            return objectMapper.readValue(filters, new TypeReference<List<Filter>>() {
-            });
-        } catch (IOException e) {
-            log.severe(e.getMessage());
-            return new ArrayList<>();
-        }
+        return get(groupers, Filter.class);
     }
 
     public void setFilters(List<Filter> filters) {
-        try {
-            this.filters = objectMapper.writeValueAsString(filters);
-        } catch (JsonProcessingException e) {
-            log.severe(e.getMessage());
-        }
+        this.filters = set(filters);
     }
 
     public List<Joiner> getJoiners() {
-        try {
-            return objectMapper.readValue(joiners, new TypeReference<List<Joiner>>() {
-            });
-        } catch (IOException e) {
-            log.severe(e.getMessage());
-            return new ArrayList<>();
-        }
+        return get(groupers, Joiner.class);
     }
 
     public void setJoiners(List<Joiner> joiners) {
-        try {
-            this.joiners = objectMapper.writeValueAsString(joiners);
-        } catch (JsonProcessingException e) {
-            log.severe(e.getMessage());
-        }
+        this.joiners = set(joiners);
     }
 
     public List<Grouper> getGroupers() {
-        try {
-            return objectMapper.readValue(groupers, new TypeReference<List<Grouper>>() {
-            });
-        } catch (IOException e) {
-            log.severe(e.getMessage());
-            return new ArrayList<>();
-        }
+        return get(groupers, Grouper.class);
     }
 
     public void setGroupers(List<Grouper> groupers) {
-        try {
-            this.groupers = objectMapper.writeValueAsString(groupers);
-        } catch (JsonProcessingException e) {
-            log.severe(e.getMessage());
-        }
+        this.groupers = set(groupers);
     }
 
     public List<Sorter> getSorters() {
-        try {
-            return objectMapper.readValue(sorters, new TypeReference<List<Sorter>>() {
-            });
-        } catch (IOException e) {
-            log.severe(e.getMessage());
-            return new ArrayList<>();
-        }
+        return get(sorters, Sorter.class);
     }
 
     public void setSorters(List<Sorter> sorters) {
-        try {
-            this.sorters = objectMapper.writeValueAsString(sorters);
-        } catch (JsonProcessingException e) {
-            log.severe(e.getMessage());
-        }
+        this.sorters = set(sorters);
     }
 
     public Map<String, Object> getExtraData() {
         try {
-            return objectMapper.readValue(extraData, new TypeReference<Map<String, Object>>() {
-            });
+            return objectMapper.readValue(extraData, new TypeReference<Map<String, Object>>() {});
         } catch (IOException e) {
             log.severe(e.getMessage());
             return new HashMap<>();
@@ -323,6 +164,24 @@ public class PresentationSection {
             this.extraData = objectMapper.writeValueAsString(extraData);
         } catch (JsonProcessingException e) {
             log.severe(e.getMessage());
+        }
+    }
+
+    private String set(List<?> data) {
+        try {
+            return objectMapper.writeValueAsString(extraData);
+        } catch (JsonProcessingException e) {
+            log.severe(e.getMessage());
+            return "";
+        }
+    }
+
+    private <T> List<T> get(String data, Class<T> type) {
+        try {
+            return objectMapper.readValue(data, new TypeReference<T>() {});
+        } catch (IOException e) {
+            log.severe(e.getMessage());
+            return new ArrayList<T>();
         }
     }
 }

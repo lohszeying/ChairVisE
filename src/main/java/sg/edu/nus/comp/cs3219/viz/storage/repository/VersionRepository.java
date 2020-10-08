@@ -4,12 +4,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import sg.edu.nus.comp.cs3219.viz.common.entity.record.Version;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface VersionRepository extends JpaRepository<Version, Long> {
 
-    List<Version> findByDataSet(String dataSet);
+    List<Version> findAllByConferenceId(Long conferenceId);
 
-    List<Version> findByDataSetAndRecordType(String dataSet, String recordType);
+    Optional<Version> findByConferenceIdAndId(Long conferenceId, Long versionId);
 
-    void deleteAllByDataSet(String dataSet);
+    boolean existsByConferenceIdAndId(Long conferenceId, Long versionId);
+
+    boolean deleteByConferenceIdAndId(Long conferenceId, Long versionId);
 }

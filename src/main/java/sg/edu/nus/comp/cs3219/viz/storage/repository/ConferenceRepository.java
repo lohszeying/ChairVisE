@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ConferenceRepository extends JpaRepository<Conference, Long> {
 
-    List<Conference> findByCreatorIdentifier(String creatorIdentifier);
+    List<Conference> findByUserEmail(String userEmail);
 }

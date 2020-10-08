@@ -10,73 +10,64 @@ import java.util.Date;
 @Data
 @Entity
 public class ReviewRecord {
-    public ReviewRecord(){}
-
-    public ReviewRecord(String submissionId, String reviewId, int numReviewAssignment, String reviewerName, double expertiseLevel,
-                        double confidenceLevel, String reviewComment, double overallEvaluationScore, Date reviewSubmissionTime, String hasRecommendedForBestPaper){
-        this.id = null;
-        this.submissionId = submissionId;
-        this.reviewId = reviewId;
-        this.numReviewAssignment = numReviewAssignment;
-        this.reviewerName = reviewerName;
-        this.expertiseLevel = expertiseLevel;
-        this.confidenceLevel = confidenceLevel;
-        this.reviewComment = reviewComment;
-        this.overallEvaluationScore = overallEvaluationScore;
-        this.reviewSubmissionTime = reviewSubmissionTime;
-        this.hasRecommendedForBestPaper = hasRecommendedForBestPaper;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "r_id")
     private Long id;
 
-    @Column(name = "version_id")
-    private Long versionId;
+    @Exportable(name = "Review Id", nameInDB = "review_id")
+    private String review_id;
 
-    @Exportable(name = "Submission Id", nameInDB = "r_submission_id")
-    @Column(name = "r_submission_id")
-    private String submissionId;
-
-    @Exportable(name = "Review Id", nameInDB = "r_review_id")
-    @Column(name = "r_review_id")
-    private String reviewId;
+    @Exportable(name = "Submission Id", nameInDB = "submission_id")
+    private String submission_id;
 
     // (Each reviewer is given a number for each track he/she is reviewing.
     // For example Animesh reviewed 2 different tracks but 3 papers in total- one from Track 1 and two papers from Track 2. He therefore has 2 uniques numbers assigned
-    @Exportable(name = "Num Review Assignment", nameInDB = "r_num_review_assignment", description = "Each reviewer is given a number for each track he/she is reviewing")
-    @Column(name = "r_num_review_assignment")
-    private int numReviewAssignment;
+    @Exportable(name = "Num Review Assignment", nameInDB = "num_review_assignment", description = "Each reviewer is given a number for each track he/she is reviewing")
+    private int num_review_assignment;
 
-    @Exportable(name = "Reviewer Name", nameInDB = "r_reviewer_name")
-    @Column(name = "r_reviewer_name")
-    private String reviewerName;
+    @Exportable(name = "Reviewer Name", nameInDB = "reviewer_name")
+    private String reviewer_name;
 
     // Reviewer selects a field 1-5 to indicate expertise while submitting the review. For example 5: expert, 1: passing knowledge
-    @Exportable(name = "Expertise Level", nameInDB = "r_expertise_level", description = "Reviewer selects a field 1-5 to indicate expertise when submitting the review.")
-    @Column(name = "r_expertise_level")
-    private double expertiseLevel;
+    @Exportable(name = "Expertise Level", nameInDB = "expertise_level", description = "Reviewer selects a field 1-5 to indicate expertise when submitting the review.")
+    private double expertise_level;
 
-    @Exportable(name = "Confidence Level", nameInDB = "r_confidence_level", description = "Reviewer selects a field 1-5 to indicate confidence level for the review.")
-    @Column(name = "r_confidence_level")
-    private double confidenceLevel;
+    @Exportable(name = "Confidence Level", nameInDB = "confidence_level", description = "Reviewer selects a field 1-5 to indicate confidence level for the review.")
+    private double confidence_level;
 
-    @Exportable(name = "Review Comment", nameInDB = "r_review_comment")
-    @Column(name = "r_review_comment", columnDefinition = "TEXT")
-    private String reviewComment;
+    @Exportable(name = "Review Comment", nameInDB = "review_comment")
+    private String review_comment;
 
-    @Exportable(name = "Overall Evaluation Score", nameInDB = "r_overall_evaluation_score")
-    @Column(name = "r_overall_evaluation_score")
-    private double overallEvaluationScore;
+    @Exportable(name = "Overall Evaluation Score", nameInDB = "overall_evaluation_score")
+    private double overall_evaluation_score;
 
-    @Exportable(name = "Review Submission Time", nameInDB = "r_review_submission_time")
+    @Exportable(name = "Review Submission Time", nameInDB = "review_submission_time")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
-    @Column(name = "r_review_submission_time")
-    private Date reviewSubmissionTime;
+    private Date review_submission_time;
 
-    @Exportable(name = "Has Recommended for the Best Paper", nameInDB = "r_has_recommended_for_best_paper")
-    @Column(name = "r_has_recommended_for_best_paper")
-    private String hasRecommendedForBestPaper;
+    @Exportable(name = "Has Recommended for the Best Paper", nameInDB = "has_recommended_for_best_paper")
+    private String has_recommended_for_best_paper;
+
+    @Column("version_id")
+    private Long versionId;
+
+    public ReviewRecord() {}
+
+    public ReviewRecord(String review_id, String submissionId, int num_review_assignment, String reviewer_name,
+                        double expertise_level, double confidence_level, String review_comment,
+                        double overall_evaluation_score, Date review_submission_time,
+                        String has_recommended_for_best_paper) {
+        this.review_id = review_id;
+        this.submission_id = submissionId;
+        this.num_review_assignment = num_review_assignment;
+        this.reviewer_name = reviewer_name;
+        this.expertise_level = expertise_level;
+        this.confidence_level = confidence_level;
+        this.review_comment = review_comment;
+        this.overall_evaluation_score = overall_evaluation_score;
+        this.review_submission_time = review_submission_time;
+        this.has_recommended_for_best_paper = has_recommended_for_best_paper;
+    }
 
 }

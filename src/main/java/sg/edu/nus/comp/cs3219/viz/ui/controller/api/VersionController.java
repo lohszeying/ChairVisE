@@ -10,7 +10,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
-public class VersionController extends BaseRestController{
+@RequestMapping("/conference/{conferenceId}/versions")
+public class VersionController extends BaseRestController {
 
     private final VersionService versionService;
 
@@ -18,23 +19,45 @@ public class VersionController extends BaseRestController{
         this.versionService = versionService;
     }
 
-    @GetMapping("/version")
-    public List<Version> all(){
-        return versionService.findAllForUser();
+    @GetMapping
+    public List<Version> all(@PathVariable Long conferenceId){
+        return versionService.findAllByConferenceId(conferenceId);
     }
 
-    @GetMapping("/version/{recordType}")
-    public List<Version> allVersionByRecordType(@PathVariable String recordType){
-        return versionService.findAllForUserWithRecordType(recordType);
-    }
+    @PostMapping
+    public ResponseEntity<?> newVersion(
+            @PathVariable Long conferenceId,
+            @RequestBody Version version
+    ) throws URISyntaxException {
 
-    @PostMapping("/version")
-    public ResponseEntity<?> newVersion(@RequestBody Version version) throws URISyntaxException {
-        Version newVersion = versionService.saveForUser(version);
+        Version newVersion = versionService.saveVersion(conferenceId, version);
 
         return ResponseEntity
                 // TODO: might change what URI is returned
                 .created(new URI("/version/" + newVersion.getId()))
                 .body(newVersion);
+    }
+
+    @GetMapping("/{versionId}")
+    public Version one(@PathVariable Long conferenceId, @PathVariable Long versionId) {
+        return versionService.findOne(conferenceId, versionId);
+    }
+
+    @PutMapping("/{versionId}")
+    public Version updateVersion(
+            @PathVariable Long conferenceId,
+            @PathVariable Long versionId,
+            @RequestBody Version version
+    ) {
+        return versionService.updateVersion(conferenceId, versionId, version);
+    }
+
+    @DeleteMapping("/{versionId}")
+    public ResponseEntity<?> deleteVersion(
+            @PathVariable Long conferenceId,
+            @PathVariable Long versionId
+    ) {
+        versionService.deleteVersion(conferenceId, versionId);
+        return ResponseEntity.noContent().build();
     }
 }

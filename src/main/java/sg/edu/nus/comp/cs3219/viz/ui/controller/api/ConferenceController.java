@@ -10,6 +10,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/conferences")
 public class ConferenceController extends BaseRestController {
 
     private final ConferenceService conferenceService;
@@ -18,12 +19,12 @@ public class ConferenceController extends BaseRestController {
         this.conferenceService = conferenceService;
     }
 
-    @GetMapping("/conferences")
+    @GetMapping
     public List<Conference> all() {
         return conferenceService.findAllForUser();
     }
 
-    @PostMapping("/conferences")
+    @PostMapping
     public ResponseEntity<?> newConference(@RequestBody Conference conference) throws URISyntaxException {
         Conference newConference = conferenceService.saveForUser(conference);
 
@@ -32,12 +33,12 @@ public class ConferenceController extends BaseRestController {
                 .body(newConference);
     }
 
-    @GetMapping("/conferences/{id}")
+    @GetMapping("/{id}")
     public Conference one(@PathVariable Long id) {
         return conferenceService.findById(id);
     }
 
-    @PutMapping("/conferences/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateConference(@RequestBody Conference newConference, @PathVariable Long id) throws URISyntaxException {
         Conference updatedConference = conferenceService.updateConference(newConference, id);
 
@@ -46,7 +47,7 @@ public class ConferenceController extends BaseRestController {
                 .body(updatedConference);
     }
 
-    @DeleteMapping("/conferences/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteConference(@PathVariable Long id) {
         conferenceService.deleteById(id);
 

@@ -2,7 +2,6 @@ package sg.edu.nus.comp.cs3219.viz.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sg.edu.nus.comp.cs3219.viz.common.datatransfer.UserInfo;
 import sg.edu.nus.comp.cs3219.viz.common.entity.record.*;
 import sg.edu.nus.comp.cs3219.viz.storage.repository.*;
 
@@ -17,70 +16,75 @@ public class RecordService {
 
     private final ReviewRecordRepository reviewRecordRepository;
 
-    private final GateKeeper gateKeeper;
-
     public RecordService(AuthorRecordRepository authorRecordRepository,
                          SubmissionRecordRepository submissionRecordRepository,
-                         ReviewRecordRepository reviewRecordRepository,
-                         GateKeeper gateKeeper
+                         ReviewRecordRepository reviewRecordRepository
     ) {
         this.authorRecordRepository = authorRecordRepository;
         this.submissionRecordRepository = submissionRecordRepository;
         this.reviewRecordRepository = reviewRecordRepository;
-        this.gateKeeper = gateKeeper;
     }
 
     @Transactional
-    public void removeAndPersistAuthorRecordForDataSet(Long versionId, List<AuthorRecord> authorRecordList) {
-//        gateKeeper.verifyLoginAccess();
-        UserInfo userInfo = gateKeeper.getCurrentLoginUser();
+    public List<AuthorRecord> saveAuthorRecordList(Long versionId, List<AuthorRecord> authorRecordList) {
+        authorRecordList.forEach(record -> record.setVersionId(versionId));
 
-        if (authorRecordList.isEmpty()){
-            return;
-        }
+        return authorRecordRepository.saveAll(authorRecordList);
+    }
 
+    @Transactional
+    public List<SubmissionRecord> saveSubmissionRecordList(Long versionId, List<SubmissionRecord> submissionRecordList) {
+        submissionRecordList.forEach(record -> record.setVersionId(versionId));
+
+        return submissionRecordRepository.saveAll(submissionRecordList);
+    }
+
+    @Transactional
+    public List<ReviewRecord> saveReviewRecordList(Long versionId, List<ReviewRecord> reviewRecordList) {
+        reviewRecordList.forEach(record -> record.setVersionId(versionId));
+
+        return reviewRecordRepository.saveAll(reviewRecordList);
+    }
+
+    @Transactional
+    public List<AuthorRecord> replaceAuthorRecordList(Long versionId, List<AuthorRecord> authorRecordList) {
         authorRecordRepository.deleteAllByVersionId(versionId);
 
-        authorRecordList.forEach(record -> {
-            record.setVersionId(versionId);
-        });
+        authorRecordList.forEach(record -> record.setVersionId(versionId));
 
-        authorRecordRepository.saveAll(authorRecordList);
+        return authorRecordRepository.saveAll(authorRecordList);
     }
 
     @Transactional
-    public void removeAndPersistReviewRecordForDataSet(Long versionId, List<ReviewRecord> reviewRecordList) {
-//        gateKeeper.verifyLoginAccess();
-        UserInfo userInfo = gateKeeper.getCurrentLoginUser();
-
-        if (reviewRecordList.isEmpty()){
-            return;
-        }
-
-        reviewRecordRepository.deleteAllByVersionId(versionId);
-
-        reviewRecordList.forEach(record -> {
-            record.setVersionId(versionId);
-        });
-
-        reviewRecordRepository.saveAll(reviewRecordList);
-    }
-
-    @Transactional
-    public void removeAndPersistSubmissionRecordForDataSet(Long versionId, List<SubmissionRecord> submissionRecordList) {
-//        gateKeeper.verifyLoginAccess();
-        UserInfo userInfo = gateKeeper.getCurrentLoginUser();
-
-        if (submissionRecordList.isEmpty()){
-            return;
-        }
-
+    public List<SubmissionRecord> replaceSubmissionRecordList(Long versionId, List<SubmissionRecord> submissionRecordList) {
         submissionRecordRepository.deleteAllByVersionId(versionId);
 
-        submissionRecordList.forEach(record -> {
-            record.setVersionId(versionId);
-        });
+        submissionRecordList.forEach(record -> record.setVersionId(versionId));
 
-        submissionRecordRepository.saveAll(submissionRecordList);
+        return submissionRecordRepository.saveAll(submissionRecordList);
+    }
+
+    @Transactional
+    public List<ReviewRecord> replaceReviewRecordList(Long versionId, List<ReviewRecord> reviewRecordList) {
+        reviewRecordRepository.deleteAllByVersionId(versionId);
+
+        reviewRecordList.forEach(record -> record.setVersionId(versionId));
+
+        return reviewRecordRepository.saveAll(reviewRecordList);
+    }
+
+    @Transactional
+    public void deleteAuthorRecordList(Long versionId) {
+        authorRecordRepository.deleteAllByVersionId(versionId);
+    }
+
+    @Transactional
+    public void deleteSubmissionRecordList(Long versionId) {
+        submissionRecordRepository.deleteAllByVersionId(versionId);
+    }
+
+    @Transactional
+    public void deleteReviewRecordList(Long versionId) {
+        reviewRecordRepository.deleteAllByVersionId(versionId);
     }
 }

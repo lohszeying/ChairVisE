@@ -3,7 +3,6 @@ package sg.edu.nus.comp.cs3219.viz.ui.controller.api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sg.edu.nus.comp.cs3219.viz.common.entity.Presentation;
-import sg.edu.nus.comp.cs3219.viz.common.exception.PresentationNotFoundException;
 import sg.edu.nus.comp.cs3219.viz.service.PresentationService;
 
 import java.net.URI;
@@ -11,6 +10,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/presentations")
 public class PresentationController extends BaseRestController {
 
     private final PresentationService presentationService;
@@ -19,12 +19,12 @@ public class PresentationController extends BaseRestController {
         this.presentationService = presentationService;
     }
 
-    @GetMapping("/presentations")
+    @GetMapping
     public List<Presentation> all() {
         return presentationService.findAllForUser();
     }
 
-    @PostMapping("/presentations")
+    @PostMapping
     public ResponseEntity<?> newPresentation(@RequestBody Presentation presentation) throws URISyntaxException {
         Presentation newPresentation = presentationService.saveForUser(presentation);
 
@@ -33,14 +33,17 @@ public class PresentationController extends BaseRestController {
                 .body(newPresentation);
     }
 
-    @GetMapping("/presentations/{id}")
+    @GetMapping("/{id}")
     public Presentation one(@PathVariable Long id) {
-        return presentationService.findById(id)
-                .orElseThrow(() -> new PresentationNotFoundException(id));
+        return presentationService.findById(id);
     }
 
-    @PutMapping("/presentations/{id}")
-    public ResponseEntity<?> updatePresentation(@RequestBody Presentation newPresentation, @PathVariable Long id) throws URISyntaxException {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePresentation(
+            @RequestBody Presentation newPresentation,
+            @PathVariable Long id
+    ) throws URISyntaxException {
+
         Presentation updatedPresentation = presentationService.updatePresentation(id, newPresentation);
 
         return ResponseEntity
@@ -48,7 +51,7 @@ public class PresentationController extends BaseRestController {
                 .body(updatedPresentation);
     }
 
-    @DeleteMapping("/presentations/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePresentation(@PathVariable Long id) {
         presentationService.deleteById(id);
 
