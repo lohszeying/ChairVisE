@@ -117,7 +117,7 @@
 
     <!-- Newly added, Will tell user to only upload .csv file -->
     <el-dialog
-        title="Failure"
+        title="Upload failed"
         :visible.sync="isFailure"
         width="30%" center>
       <span>Please only submit .csv file.</span>
