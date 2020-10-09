@@ -47,8 +47,8 @@
             <el-col :sm="24" :md="8" :lg="8" :xl="8" v-show="show">
               <el-card shadow="hover" class="feature-card">
                 <img src="@/assets/stadistics.png"/>
-                <el-button type="primary" class="button" @click="analyze">
-                  Analyse Data 
+                <el-button type="primary" class="button" @click="manage">
+                  Manage Data
                 </el-button>
               </el-card>
             </el-col>
@@ -89,8 +89,8 @@
       this.loadFeatures();
     },
     methods: {
-      analyze() {
-        this.$router.push("/analyze");
+      manage() {
+        this.$router.push("/manage");
       },
       importData() {
         this.$router.push("/importData");
