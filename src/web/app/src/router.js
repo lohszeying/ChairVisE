@@ -53,7 +53,7 @@ export default new Router({
       props: true
     },
     {
-      path: '/conference/add',
+      path: '/calendar/add',
       meta: {
         title: 'Add Conference Page',
       },
@@ -61,7 +61,7 @@ export default new Router({
       props: true
     },
     {
-      path: '/conference',
+      path: '/calendar',
       name: 'conference',
       meta: {
         title: 'My Conferences',
@@ -70,7 +70,7 @@ export default new Router({
       props: true
     },
     {
-      path: '/conference/:id',
+      path: '/calendar/:id',
       name: 'details',
       meta: {
         title: 'Conference Details Page',

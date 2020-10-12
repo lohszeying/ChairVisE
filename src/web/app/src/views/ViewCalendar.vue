@@ -82,13 +82,13 @@
         },
         methods: {
             createConference() {
-                this.$router.push("/conference/add");
+                this.$router.push("/calendar/add");
             },
             loadConferences() {
                 this.show = true;
             },
             viewConference(id) {
-                this.$router.push("/conference/" + id);
+                this.$router.push("/calendar/" + id);
             },
             eventSelected(event) {
                 this.viewConference(event.id);
