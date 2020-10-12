@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface PresentationRepository extends JpaRepository<Presentation, Long> {
 
-    List<Presentation> findByUserEmail(String userEmail);
+    List<Presentation> findAllByVersionId(Long versionId);
 }

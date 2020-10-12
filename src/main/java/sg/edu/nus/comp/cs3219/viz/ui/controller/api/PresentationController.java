@@ -10,8 +10,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/presentations")
-public class PresentationController extends BaseRestController {
+@RequestMapping("/api/versions/{versionId}/presentations")
+public class PresentationController {
 
     private final PresentationService presentationService;
 
@@ -20,40 +20,43 @@ public class PresentationController extends BaseRestController {
     }
 
     @GetMapping
-    public List<Presentation> all() {
-        return presentationService.findAllForUser();
+    public List<Presentation> all(@PathVariable Long versionId) {
+        return presentationService.findAllByVersionId(versionId);
     }
 
     @PostMapping
-    public ResponseEntity<?> newPresentation(@RequestBody Presentation presentation) throws URISyntaxException {
-        Presentation newPresentation = presentationService.saveForUser(presentation);
+    public ResponseEntity<?> newPresentation(
+            @PathVariable Long versionId,
+            @RequestBody Presentation presentation
+    ) throws URISyntaxException {
+        Presentation newPresentation = presentationService.saveForUser(versionId, presentation);
 
         return ResponseEntity
                 .created(new URI("/presentations/" + newPresentation.getId()))
                 .body(newPresentation);
     }
 
-    @GetMapping("/{id}")
-    public Presentation one(@PathVariable Long id) {
-        return presentationService.findById(id);
+    @GetMapping("/{presentationId}")
+    public Presentation one(@PathVariable Long presentationId) {
+        return presentationService.findById(presentationId);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{presentationId}")
     public ResponseEntity<?> updatePresentation(
-            @RequestBody Presentation newPresentation,
-            @PathVariable Long id
+            @PathVariable Long presentationId,
+            @RequestBody Presentation newPresentation
     ) throws URISyntaxException {
 
-        Presentation updatedPresentation = presentationService.updatePresentation(id, newPresentation);
+        Presentation updatedPresentation = presentationService.updatePresentation(presentationId, newPresentation);
 
         return ResponseEntity
-                .created(new URI("/presentations/" + newPresentation.getId()))
+                .created(new URI("/presentations/" + presentationId))
                 .body(updatedPresentation);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePresentation(@PathVariable Long id) {
-        presentationService.deleteById(id);
+    @DeleteMapping("/{presentationId}")
+    public ResponseEntity<?> deletePresentation(@PathVariable Long presentationId) {
+        presentationService.deleteById(presentationId);
 
         return ResponseEntity.noContent().build();
     }

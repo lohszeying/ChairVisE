@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Exportable(name = "Review Record", nameInDB = "review_record")
 @Data
@@ -16,10 +16,10 @@ public class ReviewRecord {
     private Long id;
 
     @Exportable(name = "Review Id", nameInDB = "review_id")
-    private String review_id;
+    private int review_id;
 
     @Exportable(name = "Submission Id", nameInDB = "submission_id")
-    private String submission_id;
+    private int submission_id;
 
     // (Each reviewer is given a number for each track he/she is reviewing.
     // For example Animesh reviewed 2 different tracks but 3 papers in total- one from Track 1 and two papers from Track 2. He therefore has 2 uniques numbers assigned
@@ -44,30 +44,12 @@ public class ReviewRecord {
 
     @Exportable(name = "Review Submission Time", nameInDB = "review_submission_time")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
-    private Date review_submission_time;
+    private Timestamp review_submission_time;
 
     @Exportable(name = "Has Recommended for the Best Paper", nameInDB = "has_recommended_for_best_paper")
     private String has_recommended_for_best_paper;
 
-    @Column("version_id")
+    @Column(name = "version_id")
     private Long versionId;
-
-    public ReviewRecord() {}
-
-    public ReviewRecord(String review_id, String submissionId, int num_review_assignment, String reviewer_name,
-                        double expertise_level, double confidence_level, String review_comment,
-                        double overall_evaluation_score, Date review_submission_time,
-                        String has_recommended_for_best_paper) {
-        this.review_id = review_id;
-        this.submission_id = submissionId;
-        this.num_review_assignment = num_review_assignment;
-        this.reviewer_name = reviewer_name;
-        this.expertise_level = expertise_level;
-        this.confidence_level = confidence_level;
-        this.review_comment = review_comment;
-        this.overall_evaluation_score = overall_evaluation_score;
-        this.review_submission_time = review_submission_time;
-        this.has_recommended_for_best_paper = has_recommended_for_best_paper;
-    }
 
 }

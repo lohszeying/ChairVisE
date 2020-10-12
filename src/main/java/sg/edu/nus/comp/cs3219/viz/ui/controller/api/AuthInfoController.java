@@ -1,6 +1,7 @@
 package sg.edu.nus.comp.cs3219.viz.ui.controller.api;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import sg.edu.nus.comp.cs3219.viz.common.datatransfer.UserInfo;
@@ -9,7 +10,8 @@ import sg.edu.nus.comp.cs3219.viz.service.AuthService;
 import sg.edu.nus.comp.cs3219.viz.ui.controller.data.AuthInfo;
 
 @RestController
-public class AuthInfoController extends BaseRestController {
+@RequestMapping("/api")
+public class AuthInfoController {
 
     private final AuthService authService;
 

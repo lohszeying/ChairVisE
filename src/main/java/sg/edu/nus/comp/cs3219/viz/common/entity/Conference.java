@@ -16,7 +16,7 @@ public class Conference {
 
     private String description;
 
-    @Column("user_email")
+    @Column(name = "user_email")
     private String userEmail;
 
 }

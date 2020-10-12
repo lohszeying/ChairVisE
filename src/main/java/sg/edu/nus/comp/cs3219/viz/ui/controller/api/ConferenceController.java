@@ -10,8 +10,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/conferences")
-public class ConferenceController extends BaseRestController {
+@RequestMapping("/api/conferences")
+public class ConferenceController {
 
     private final ConferenceService conferenceService;
 

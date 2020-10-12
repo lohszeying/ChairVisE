@@ -1,5 +1,5 @@
-drop table if exists authorrecord, submissionrecord, reviewrecord, presentation,
-    presentationaccesscontrol, presentationsection, version, conference;
+drop table if exists author_record, submission_record, review_record, presentation_permission,
+    presentation_section, presentation, version, conference;
 
 CREATE TABLE Conference (
     id int NOT NULL AUTO_INCREMENT,
@@ -26,10 +26,10 @@ CREATE TABLE Author_Record (
     full_name varchar(255),
     email varchar(255),
     country varchar(255),
-    organization varchar(255),
+    organisation varchar(255),
     web_page text,
     person_id int,
-    is_corresponding boolean,
+    is_corresponding varchar(3),
     version_id int,
     PRIMARY KEY (id),
     FOREIGN KEY (version_id) REFERENCES Version (id)
@@ -44,9 +44,9 @@ CREATE TABLE Submission_Record (
     submission_time timestamp,
     last_updated_time timestamp,
     keywords varchar(255),
-    decision varchar(6),
-    is_notified boolean,
-    is_reviews_sent boolean,
+    is_accepted varchar(6),
+    is_notified varchar(3),
+    is_reviews_sent varchar(3),
     submission_abstract text,
     version_id int,
     PRIMARY KEY (id),
@@ -59,13 +59,12 @@ CREATE TABLE Review_Record (
     submission_id int,
     num_review_assignment int,
     reviewer_name varchar(255),
-    expertiseLevel double,
-    confidenceLevel double,
+    expertise_level double,
+    confidence_level double,
     review_comment text,
-    overall_eval_score int,
-    review_submission_date date,
-    review_submission_time time,
-    best_paper_recommendation boolean,
+    overall_evaluation_score int,
+    review_submission_time timestamp,
+    has_recommended_for_best_paper varchar(3),
     version_id int,
     PRIMARY KEY (id),
     FOREIGN KEY (version_id) REFERENCES Version (id)
@@ -74,10 +73,9 @@ CREATE TABLE Review_Record (
 CREATE TABLE Presentation (
     id int NOT NULL AUTO_INCREMENT,
     user_email varchar(255),
-    name varchar(255),
-    version int,
-    description varchar(255),
-    PRIMARY KEY (id)
+    version_id int,
+    PRIMARY KEY (id),
+    FOREIGN KEY (version_id) REFERENCES Version (id)
 );
 
 CREATE TABLE Presentation_Permission (
@@ -106,3 +104,7 @@ CREATE TABLE Presentation_Section (
     PRIMARY KEY (id),
     FOREIGN KEY (presentation_id) REFERENCES Presentation (id)
 );
+
+
+insert into Conference (title, description, user_email) VALUES ('asfdsfew', 'asfd', 'test@example.com');
+insert into Version (ver_date, conference_id) VALUES ('2010-10-10', 1);

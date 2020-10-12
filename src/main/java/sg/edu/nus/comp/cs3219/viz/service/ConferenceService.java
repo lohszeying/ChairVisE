@@ -23,13 +23,13 @@ public class ConferenceService {
     @Transactional
     public List<Conference> findAllForUser() {
         UserInfo userInfo = authService.getCurrentLoginUser();
-        return conferenceRepository.findByUserEmail(userInfo.getUserEmail());
+        return conferenceRepository.findAllByUserEmail(userInfo.getUserEmail());
     }
 
     @Transactional
-    public Conference findById(Long id) {
-        return conferenceRepository.findById(id)
-                .orElseThrow(() -> new ConferenceNotFoundException(id));
+    public Conference findById(Long conferenceId) {
+        return conferenceRepository.findById(conferenceId)
+                .orElseThrow(() -> new ConferenceNotFoundException(conferenceId));
     }
 
     @Transactional
@@ -42,18 +42,21 @@ public class ConferenceService {
     }
 
     @Transactional
-    public Conference updateConference(Conference newConference, Long id) {
-        return conferenceRepository.findById(id)
+    public Conference updateConference(Conference newConference, Long conferenceId) {
+        return conferenceRepository.findById(conferenceId)
                 .map(conference -> {
                     conference.setTitle(newConference.getTitle());
                     conference.setDescription(newConference.getDescription());
                     return conferenceRepository.save(conference);
                 })
-                .orElseThrow(() -> new ConferenceNotFoundException(id));
+                .orElseThrow(() -> new ConferenceNotFoundException(conferenceId));
     }
 
     @Transactional
-    public void deleteById(Long id) {
-        conferenceRepository.deleteById(id);
+    public void deleteById(Long conferenceId) {
+        conferenceRepository.findById(conferenceId)
+                .orElseThrow(() -> new ConferenceNotFoundException(conferenceId));
+
+        conferenceRepository.deleteById(conferenceId);
     }
 }

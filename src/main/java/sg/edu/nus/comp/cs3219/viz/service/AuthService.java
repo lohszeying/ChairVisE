@@ -88,12 +88,12 @@ public class AuthService {
         }
 
         // check public access
-        if (presentationPermissionRepository.existsByPresentationAndAccessLevelEquals(presentation, permission)) {
+        if (presentationPermissionRepository.existsByPresentationAndPermissionEquals(presentation, permission)) {
             return;
         }
         // can_write means can_read
         if (permission == Permission.CAN_READ &&
-                presentationPermissionRepository.existsByPresentationAndAccessLevelEquals(presentation, Permission.CAN_WRITE)) {
+                presentationPermissionRepository.existsByPresentationAndPermissionEquals(presentation, Permission.CAN_WRITE)) {
             return;
         }
 
@@ -104,13 +104,13 @@ public class AuthService {
             return;
         }
 
-        if (presentationPermissionRepository.existsByPresentationAndAccessLevelEquals(presentation, permission)) {
+        if (presentationPermissionRepository.existsByPresentationAndPermissionEquals(presentation, permission)) {
             return;
         }
 
         // can_write means can_read
         if (permission == Permission.CAN_READ &&
-                presentationPermissionRepository.existsByPresentationAndAccessLevelEquals(presentation, Permission.CAN_WRITE)) {
+                presentationPermissionRepository.existsByPresentationAndPermissionEquals(presentation, Permission.CAN_WRITE)) {
             return;
         }
 

@@ -5,7 +5,9 @@ import org.springframework.transaction.annotation.Transactional;
 import sg.edu.nus.comp.cs3219.viz.common.entity.record.*;
 import sg.edu.nus.comp.cs3219.viz.storage.repository.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class RecordService {
@@ -26,24 +28,15 @@ public class RecordService {
     }
 
     @Transactional
-    public List<AuthorRecord> saveAuthorRecordList(Long versionId, List<AuthorRecord> authorRecordList) {
-        authorRecordList.forEach(record -> record.setVersionId(versionId));
-
-        return authorRecordRepository.saveAll(authorRecordList);
-    }
-
-    @Transactional
-    public List<SubmissionRecord> saveSubmissionRecordList(Long versionId, List<SubmissionRecord> submissionRecordList) {
-        submissionRecordList.forEach(record -> record.setVersionId(versionId));
-
-        return submissionRecordRepository.saveAll(submissionRecordList);
-    }
-
-    @Transactional
-    public List<ReviewRecord> saveReviewRecordList(Long versionId, List<ReviewRecord> reviewRecordList) {
-        reviewRecordList.forEach(record -> record.setVersionId(versionId));
-
-        return reviewRecordRepository.saveAll(reviewRecordList);
+    public Map<String, Boolean> checkRecords(Long versionId) {
+        boolean hasAuthorRecord = authorRecordRepository.existsById(versionId);
+        boolean hasSubmissionRecord = submissionRecordRepository.existsById(versionId);
+        boolean hasReviewRecord = reviewRecordRepository.existsById(versionId);
+        HashMap<String, Boolean> map = new HashMap<>();
+        map.put("authorRecord", hasAuthorRecord);
+        map.put("submissionRecord", hasSubmissionRecord);
+        map.put("reviewRecord", hasReviewRecord);
+        return map;
     }
 
     @Transactional
@@ -73,18 +66,4 @@ public class RecordService {
         return reviewRecordRepository.saveAll(reviewRecordList);
     }
 
-    @Transactional
-    public void deleteAuthorRecordList(Long versionId) {
-        authorRecordRepository.deleteAllByVersionId(versionId);
-    }
-
-    @Transactional
-    public void deleteSubmissionRecordList(Long versionId) {
-        submissionRecordRepository.deleteAllByVersionId(versionId);
-    }
-
-    @Transactional
-    public void deleteReviewRecordList(Long versionId) {
-        reviewRecordRepository.deleteAllByVersionId(versionId);
-    }
 }

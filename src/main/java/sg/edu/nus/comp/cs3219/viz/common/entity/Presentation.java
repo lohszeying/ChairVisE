@@ -12,13 +12,10 @@ public class Presentation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
-    private String version;
-
-    private String description;
-
-    @Column("user_email")
+    @Column(name = "user_email")
     private String userEmail;
+
+    @Column(name = "version_id")
+    private Long versionId;
 
 }

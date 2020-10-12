@@ -1,6 +1,7 @@
 package sg.edu.nus.comp.cs3219.viz.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sg.edu.nus.comp.cs3219.viz.common.datatransfer.UserInfo;
 import sg.edu.nus.comp.cs3219.viz.common.entity.Presentation;
 import sg.edu.nus.comp.cs3219.viz.common.exception.PresentationNotFoundException;
@@ -19,34 +20,41 @@ public class PresentationService {
         this.authService = authService;
     }
 
-    public List<Presentation> findAllForUser() {
-        UserInfo userInfo = authService.getCurrentLoginUser();
-        return presentationRepository.findByUserEmail(userInfo.getUserEmail());
+    @Transactional
+    public List<Presentation> findAllByVersionId(Long versionId) {
+        return presentationRepository.findAllByVersionId(versionId);
     }
 
+    @Transactional
     public Presentation findById(Long id) {
         return presentationRepository.findById(id)
                 .orElseThrow(() -> new PresentationNotFoundException(id));
     }
 
-    public Presentation saveForUser(Presentation newPresentation) {
+    @Transactional
+    public Presentation saveForUser(Long versionId, Presentation newPresentation) {
         UserInfo userInfo = authService.getCurrentLoginUser();
         newPresentation.setUserEmail(userInfo.getUserEmail());
+        newPresentation.setVersionId(versionId);
         return presentationRepository.save(newPresentation);
     }
 
-    public Presentation updatePresentation(Long id, Presentation newPresentation) {
-        return presentationRepository.findById(id)
+    @Transactional
+    public Presentation updatePresentation(Long presentationId, Presentation newPresentation) {
+        return presentationRepository.findById(presentationId)
                 .map(presentation -> {
-                    presentation.setName(newPresentation.getName());
-                    presentation.setVersion(newPresentation.getVersion());
-                    presentation.setDescription(newPresentation.getDescription());
+                    presentation.setUserEmail(newPresentation.getUserEmail());
+                    presentation.setVersionId(newPresentation.getVersionId());
                     return presentationRepository.save(presentation);
                 })
-                .orElseThrow(() -> new PresentationNotFoundException(id));
+                .orElseThrow(() -> new PresentationNotFoundException(presentationId));
     }
 
-    public void deleteById(Long id) {
-        presentationRepository.deleteById(id);
+    @Transactional
+    public void deleteById(Long presentationId) {
+        presentationRepository.findById(presentationId)
+                .orElseThrow(() -> new PresentationNotFoundException(presentationId));
+
+        presentationRepository.deleteById(presentationId);
     }
 }

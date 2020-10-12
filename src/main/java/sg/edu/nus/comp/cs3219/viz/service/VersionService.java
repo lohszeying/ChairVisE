@@ -24,8 +24,8 @@ public class VersionService {
 
     @Transactional
     public Version findOne(Long conferenceId, Long versionId) {
-        return versionRepository.findByConferenceIdAndId(conferenceId, versionId)
-                .orElseThrow(() -> new VersionNotFoundException(versionId));
+        return versionRepository.findById(versionId)
+                .orElseThrow(() -> new VersionNotFoundException(conferenceId, versionId));
     }
 
     @Transactional
@@ -36,17 +36,19 @@ public class VersionService {
 
     @Transactional
     public Version updateVersion(Long conferenceId, Long versionId, Version newVersion) {
-        return versionRepository.findByConferenceIdAndId(conferenceId, versionId)
+        return versionRepository.findById(versionId)
                 .map(version -> {
                     version.setDate(newVersion.getDate());
                     return versionRepository.save(version);
-                }).orElseThrow(() -> new VersionNotFoundException(versionId));
+                }).orElseThrow(() -> new VersionNotFoundException(conferenceId, versionId));
     }
 
     @Transactional
     public void deleteVersion(Long conferenceId, Long versionId) {
-        boolean success = versionRepository.deleteByConferenceIdAndId(conferenceId, versionId);
-        if (!success) throw new VersionNotFoundException(versionId);
+        versionRepository.findById(versionId)
+                .orElseThrow(() -> new VersionNotFoundException(conferenceId, versionId));
+
+        versionRepository.deleteById(versionId);
     }
 
 }

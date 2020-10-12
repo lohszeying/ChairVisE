@@ -1,45 +1,40 @@
 package sg.edu.nus.comp.cs3219.viz.service;
 
 import org.springframework.stereotype.Service;
-import sg.edu.nus.comp.cs3219.viz.common.entity.Presentation;
+import org.springframework.transaction.annotation.Transactional;
 import sg.edu.nus.comp.cs3219.viz.common.entity.PresentationPermission;
-import sg.edu.nus.comp.cs3219.viz.common.exception.PresentationNotFoundException;
 import sg.edu.nus.comp.cs3219.viz.common.exception.PresentationPermissionNotFoundException;
 import sg.edu.nus.comp.cs3219.viz.storage.repository.PresentationPermissionRepository;
-import sg.edu.nus.comp.cs3219.viz.storage.repository.PresentationRepository;
 
 import java.util.List;
 
 @Service
 public class PresentationPermissionService {
 
-    private final PresentationRepository presentationRepository;
     private final PresentationPermissionRepository presentationPermissionRepository;
 
-    public PresentationPermissionService(PresentationRepository presentationRepository,
-                                         PresentationPermissionRepository presentationPermissionRepository) {
-        this.presentationRepository = presentationRepository;
+    public PresentationPermissionService(PresentationPermissionRepository presentationPermissionRepository) {
         this.presentationPermissionRepository = presentationPermissionRepository;
     }
 
+    @Transactional
     public List<PresentationPermission> findAllByPresentation(Long presentationId) {
-        Presentation presentation = presentationRepository.findById(presentationId)
-                .orElseThrow(() -> new PresentationNotFoundException(presentationId));
 
-        return presentationPermissionRepository.findAllByPresentation(presentation);
+        return presentationPermissionRepository.findAllByPresentationId(presentationId);
     }
 
-    public PresentationPermission saveForPresentation(Long presentationId, PresentationPermission presentationPermission) {
+    @Transactional
+    public PresentationPermission savePresentationPermission(
+            Long presentationId,
+            PresentationPermission presentationPermission
+    ) {
 
-        return presentationRepository.findById(presentationId)
-                .map(presentation -> {
-                    presentationPermission.setPresentation(presentation);
-                    return presentationPermissionRepository.save(presentationPermission);
-                })
-                .orElseThrow(() -> new PresentationNotFoundException(presentationId));
+        presentationPermission.setPresentationId(presentationId);
+        return presentationPermissionRepository.save(presentationPermission);
     }
 
-    public PresentationPermission updatePresentationAccessControl(
+    @Transactional
+    public PresentationPermission updatePresentationPermission(
             Long presentationId,
             Long permissionId,
             PresentationPermission newPresentationPermission
@@ -47,7 +42,6 @@ public class PresentationPermissionService {
 
         return presentationPermissionRepository.findById(permissionId)
                 .map(permission -> {
-                    permission.setPresentation(newPresentationPermission.getPresentation());
                     permission.setPermission(newPresentationPermission.getPermission());
                     permission.setUserEmail(newPresentationPermission.getUserEmail());
                     return presentationPermissionRepository.save(permission);
@@ -55,11 +49,11 @@ public class PresentationPermissionService {
                 .orElseThrow(() -> new PresentationPermissionNotFoundException(presentationId, permissionId));
     }
 
-    public void deleteById(Long presentationId, Long permissionId) {
-        if (presentationPermissionRepository.existsById(permissionId)) {
-            presentationPermissionRepository.deleteById(permissionId);
-        } else {
-            throw new PresentationPermissionNotFoundException(presentationId, permissionId);
-        }
+    @Transactional
+    public void deletePresentationPermission(Long presentationId, Long permissionId) {
+        presentationPermissionRepository.findById(permissionId)
+                .orElseThrow(() -> new PresentationPermissionNotFoundException(presentationId, permissionId));
+
+        presentationPermissionRepository.deleteById(permissionId);
     }
 }

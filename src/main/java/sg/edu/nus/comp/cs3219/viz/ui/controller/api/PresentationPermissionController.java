@@ -10,8 +10,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/presentations/{presentationId}/permission")
-public class PresentationPermissionController extends BaseRestController {
+@RequestMapping("/api/presentations/{presentationId}/permissions")
+public class PresentationPermissionController {
 
     private final PresentationPermissionService presentationPermissionService;
 
@@ -25,13 +25,13 @@ public class PresentationPermissionController extends BaseRestController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addPermission(
-            @RequestBody PresentationPermission presentationPermission,
-            @PathVariable Long presentationId
+    public ResponseEntity<?> newPermission(
+            @PathVariable Long presentationId,
+            @RequestBody PresentationPermission presentationPermission
     ) throws URISyntaxException {
 
         PresentationPermission newPermission =
-                presentationPermissionService.saveForPresentation(presentationId, presentationPermission);
+                presentationPermissionService.savePresentationPermission(presentationId, presentationPermission);
 
         return ResponseEntity
                 .created(new URI("/presentations/" + presentationId))
@@ -40,22 +40,22 @@ public class PresentationPermissionController extends BaseRestController {
 
     @PutMapping("/{permissionId}")
     public ResponseEntity<?> updatePermission(
-            @RequestBody PresentationPermission presentationPermission,
             @PathVariable Long presentationId,
-            @PathVariable Long permissionId
+            @PathVariable Long permissionId,
+            @RequestBody PresentationPermission presentationPermission
     ) throws URISyntaxException {
 
         PresentationPermission updatedPresentationPermission =
-                presentationPermissionService.updatePresentationAccessControl(presentationId, permissionId, presentationPermission);
+                presentationPermissionService.updatePresentationPermission(presentationId, permissionId, presentationPermission);
 
         return ResponseEntity
-                .created(new URI("/presentations/" + presentationId + "/permission/" + permissionId))
+                .created(new URI("/presentations/" + presentationId + "/permissions/" + permissionId))
                 .body(updatedPresentationPermission);
     }
 
     @DeleteMapping("/{permissionId}")
-    public ResponseEntity<?> removePermission(@PathVariable Long presentationId, @PathVariable Long permissionId) {
-        presentationPermissionService.deleteById(presentationId, permissionId);
+    public ResponseEntity<?> deletePermission(@PathVariable Long presentationId, @PathVariable Long permissionId) {
+        presentationPermissionService.deletePresentationPermission(presentationId, permissionId);
 
         return ResponseEntity.noContent().build();
     }
