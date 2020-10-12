@@ -1,6 +1,6 @@
 <template>
     <el-main>
-        <h1 class="alignLeft">My Conferences </h1>
+        <h1 class="alignLeft">Calendar </h1>
         <el-button class="alignRight" type="primary" icon="el-icon-plus" @click="createConference">Add New Conference</el-button>
         <br/>
         <el-divider></el-divider>
