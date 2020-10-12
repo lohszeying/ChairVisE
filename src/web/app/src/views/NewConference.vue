@@ -2,7 +2,7 @@
     <el-main>
         <el-card>
             <div slot="header" class="clearfix">
-                <span> Add New Conference  </span>
+                <span> Add New Calendar  </span>
             </div>
             <el-alert v-if="isNewConference && !isLogin" title="Please login to create new conference" type="error" show-icon
                       class="errorMsg"/>
