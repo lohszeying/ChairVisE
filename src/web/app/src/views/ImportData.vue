@@ -114,6 +114,18 @@
 
       </el-card>
     </div>
+
+    <!-- Newly added, Will tell user to only upload .csv file -->
+    <el-dialog
+        title="Upload failed"
+        :visible.sync="isFailure"
+        width="30%" center>
+      <span>Please only submit .csv file.</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" v-on:click="isFailure = false">Go Back</el-button>
+      </span>
+    </el-dialog>
+
   </el-main>
 </template>
 
@@ -129,7 +141,8 @@
     name: "ImportData",
     data() {
       return {
-        predefinedMappings: PredefinedMappings
+        predefinedMappings: PredefinedMappings,
+        isFailure: false
       };
     },
     beforeCreate() {
@@ -242,6 +255,20 @@
         this.$router.replace("/home");
       },
       fileUploadHandler: function (file) {
+        //If file extension is not .csv, do not allow user to proceed
+        if(file.name.split(".").pop() != 'csv'){
+          // eslint-disable-next-line no-console
+          //console.log('file is not .csv, prompt will show to tell user to upload .csv file');
+          this.isFailure = true;
+          return;
+        } else {
+          //Can proceed
+
+          // eslint-disable-next-line no-console
+          //console.log('file is .csv');
+          this.isFailure = false;
+        }
+
         // show loading and go parsing
         this.$store.commit("setPageLoadingStatus", true);
 

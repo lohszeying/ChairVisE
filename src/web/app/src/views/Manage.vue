@@ -87,7 +87,7 @@
     },
     methods: {
       createPresentation() {
-        this.$router.push("/analyze/create");
+        this.$router.push("/manage/create");
       },
       loadPresentations() {
         this.show = true;
@@ -96,7 +96,7 @@
         this.count += 5
       },
       viewPresentation(id) {
-        this.$router.push("/analyze/" + id);
+        this.$router.push("/manage/" + id);
       }
     },
     mounted() {
