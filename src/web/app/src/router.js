@@ -66,7 +66,7 @@ export default new Router({
       meta: {
         title: 'My Conferences',
       },
-      component: () => import(/* webpackChunkName: "analyze" */ './views/ViewConferences.vue'),
+      component: () => import(/* webpackChunkName: "analyze" */ './views/ViewCalendar.vue'),
       props: true
     },
     {
