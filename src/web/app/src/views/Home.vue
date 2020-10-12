@@ -17,7 +17,7 @@
   // @ is an alias to /src
   import BannerDetail from '@/components/homePageDetail/BannerDetail.vue'
   import FeatureListDetail from '@/components/homePageDetail/FeatureListDetail.vue'
-  import Analyze from "@/views/Analyze";
+  import Analyze from "@/views/Manage.vue";
 
   export default {
     name: 'home',

@@ -5,7 +5,7 @@
       <span> Chairvise </span>
     </el-menu-item>
 
-    <el-menu-item index="/analyze" v-if="isLogin" :disabled="!isLogin">
+    <el-menu-item index="/manage" v-if="isLogin" :disabled="!isLogin">
       <i class="el-icon-data-analysis"></i>
       My Conferences
     </el-menu-item>
