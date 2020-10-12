@@ -104,7 +104,3 @@ CREATE TABLE Presentation_Section (
     PRIMARY KEY (id),
     FOREIGN KEY (presentation_id) REFERENCES Presentation (id)
 );
-
-
-insert into Conference (title, description, user_email) VALUES ('asfdsfew', 'asfd', 'test@example.com');
-insert into Version (ver_date, conference_id) VALUES ('2010-10-10', 1);
