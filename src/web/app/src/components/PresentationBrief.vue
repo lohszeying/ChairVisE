@@ -198,7 +198,7 @@
                       }
                       // redirect to the newly added presentation
                       this.$router.push({
-                        name: 'analyze',
+                        name: 'manage',
                         params: {
                           id: this.$store.state.presentation.presentationForm.id
                         }
@@ -223,7 +223,7 @@
                     return
                   }
                   this.$router.replace({
-                    name: 'analyze',
+                    name: 'manage',
                     params: {
                       id: ID_NEW_PRESENTATION
                     }
