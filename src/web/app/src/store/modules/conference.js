@@ -27,83 +27,83 @@ export default {
     isPresentationEditable: false
   },
   mutations: {
-    setConferenceListLoading(state, payload) {
-      /*if (payload) {
+    /*setConferenceListLoading(state, payload) {
+      if (payload) {
         state.presentationListStatus.isApiError = false;
       }
-      state.presentationListStatus.isLoading = payload;*/
+      state.presentationListStatus.isLoading = payload;
     },
 
     setConferenceListApiError(state, payload) {
-      /*state.presentationListStatus.isApiError = true;
-      state.presentationListStatus.apiErrorMsg = payload;*/
+      state.presentationListStatus.isApiError = true;
+      state.presentationListStatus.apiErrorMsg = payload;
     },
 
     setConferenceList(state, payload) {
-      //state.presentationList = payload;
+      state.presentationList = payload;
     },
 
     setVersionList(state, payload) {
-      //state.versionList = payload;
+      state.versionList = payload;
     },
 
     addToConferenceList(state, payload) {
-      /*state.presentationList.push(payload);*/
+      state.presentationList.push(payload);
     },
 
     deleteFromConferenceList(state, payload) {
-      /*const index = state.presentationList.findIndex(presentation => presentation.id === payload);
-      state.presentationList.splice(index, 1)*/
+      const index = state.presentationList.findIndex(presentation => presentation.id === payload);
+      state.presentationList.splice(index, 1)
     },
 
     updateConferenceListWith(state, payload) {
-      /*state.presentationList = state.presentationList.map(presentation => {
+      state.presentationList = state.presentationList.map(presentation => {
         if (presentation.id === payload.id) {
           return payload
         }
         return presentation
-      });*/
+      });
     },
 
     setConferenceFormLoading(state, isLoading) {
-      //state.presentationFormStatus.isLoading = isLoading;
+      state.presentationFormStatus.isLoading = isLoading;
     },
 
     setConferenceFormApiError(state, msg) {
-      //state.presentationFormStatus.isApiError = true;
-      //state.presentationFormStatus.apiErrorMsg = msg;
+      state.presentationFormStatus.isApiError = true;
+      state.presentationFormStatus.apiErrorMsg = msg;
     },
 
     setConferenceForm(state, payload) {
-      //state.presentationForm = payload;
+      state.presentationForm = payload;
     },
 
     resetConferenceForm(state) {
-      /*state.presentationForm.id = '';
+      state.presentationForm.id = '';
       state.presentationForm.name = '';
       state.presentationForm.version = '';
       state.presentationForm.description = '';
       state.presentationForm.creatorIdentifier = '';
       state.presentationFormStatus.isLoading = false;
       state.presentationFormStatus.isApiError = false;
-      state.presentationFormStatus.apiErrorMsg = '';*/
+      state.presentationFormStatus.apiErrorMsg = '';
     },
 
     setConferenceFormField(state, {field, value}) {
-      //state.presentationForm[field] = value
+      state.presentationForm[field] = value
     },
 
     setSaveSuccess(state, success) {
-      //state.isSaveSuccess = success;
+      state.isSaveSuccess = success;
     },
     setIsConferenceEditable(state, isPresentationEditable) {
       //May not need to use this
-      //state.isPresentationEditable = isPresentationEditable;
-    }
+      state.isPresentationEditable = isPresentationEditable;
+    } */
   },
   actions: {
-    async getConferenceList({commit}) {
-      /*commit('setPresentationListLoading', true);
+    /*async getConferenceList({commit}) {
+      commit('setPresentationListLoading', true);
       axios.get('/api/presentations')
         .then(response => {
           commit('setPresentationList', response.data)
@@ -113,13 +113,13 @@ export default {
         })
         .finally(() => {
           commit('setPresentationListLoading', false);
-        })*/
+        })
     },
 
     async getVersionList({commit}) {
       //May or may not need to use this
 
-      /*commit('setPresentationListLoading', true);
+      commit('setPresentationListLoading', true);
       axios.get('/api/version')
           .then(response => {
             commit('setVersionList', response.data)
@@ -129,12 +129,12 @@ export default {
           })
           .finally(() => {
             commit('setPresentationListLoading', false);
-          })*/
+          })
     },
 
     async getConference({commit}, presentationId) {
 
-      /*commit('setPresentationFormLoading', true);
+      commit('setPresentationFormLoading', true);
       await axios.get(`/api/presentations/${presentationId}`)
           .then(response => {
             commit('setPresentationForm', response.data)
@@ -144,11 +144,11 @@ export default {
           })
           .finally(() => {
             commit('setPresentationFormLoading', false);
-          });*/
+          });
     },
 
     async saveConference({commit, state}) {
-      /*commit('setPresentationFormLoading', true);
+      commit('setPresentationFormLoading', true);
       await axios.post('/api/presentations', state.presentationForm)
           .then(response => {
             commit('addToPresentationList', deepCopy(response.data));
@@ -161,11 +161,11 @@ export default {
           })
           .finally(() => {
             commit('setPresentationFormLoading', false);
-          })*/
+          })
     },
 
     async updateConference({commit, state}) {
-      /*commit('setPresentationFormLoading', true);
+      commit('setPresentationFormLoading', true);
       await axios.put('/api/presentations/' + state.presentationForm.id, state.presentationForm)
           .then(response => {
             commit('updatePresentationListWith', response.data)
@@ -175,11 +175,11 @@ export default {
           })
           .finally(() => {
             commit('setPresentationFormLoading', false);
-          })*/
+          })
     },
 
     async deleteConference({commit}, payload) {
-      /*commit('setPresentationFormLoading', true);
+      commit('setPresentationFormLoading', true);
       await axios.delete('/api/presentations/' + payload)
           .then(() => {
             commit('deleteFromPresentationList', payload);
@@ -190,7 +190,7 @@ export default {
           })
           .finally(() => {
             commit('setPresentationFormLoading', false);
-          })*/
-    }
+          })
+    }*/
   }
 };
