@@ -184,7 +184,7 @@
             closeSuccess() {
                 this.$store.commit("setSaveSuccess", false);
                 this.$router.push({
-                    name: 'analyze'
+                    name: 'manage'
                 });
             }
         },
