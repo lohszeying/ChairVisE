@@ -57,7 +57,7 @@ export default new Router({
       meta: {
         title: 'Add Conference Page',
       },
-      component: () => import(/* webpackChunkName: "conference" */ './views/NewConference.vue'),
+      component: () => import(/* webpackChunkName: "conference" */ './views/NewCalendar.vue'),
       props: true
     },
     {
@@ -75,7 +75,7 @@ export default new Router({
       meta: {
         title: 'Conference Details Page',
       },
-      component: () => import(/* webpackChunkName: "analyze" */ './views/ConferenceSection.vue'),
+      component: () => import(/* webpackChunkName: "analyze" */ './views/CalendarSection.vue'),
       props: true
     },
     {
