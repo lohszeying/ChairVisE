@@ -1,5 +1,5 @@
-import axios from 'axios'
-import {deepCopy} from "@/common/utility"
+/*import axios from 'axios'
+import {deepCopy} from "@/common/utility"*/
 
 export default {
   state: {
