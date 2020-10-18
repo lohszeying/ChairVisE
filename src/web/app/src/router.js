@@ -53,15 +53,15 @@ export default new Router({
       props: true
     },
     {
-      path: '/conference/add',
+      path: '/calendar/add',
       meta: {
         title: 'Add Conference Page',
       },
-      component: () => import(/* webpackChunkName: "conference" */ './views/NewConference.vue'),
+      component: () => import(/* webpackChunkName: "conference" */ './views/NewCalendar.vue'),
       props: true
     },
     {
-      path: '/conference',
+      path: '/calendar',
       name: 'conference',
       meta: {
         title: 'My Conferences',
@@ -70,12 +70,12 @@ export default new Router({
       props: true
     },
     {
-      path: '/conference/:id',
+      path: '/calendar/:id',
       name: 'details',
       meta: {
         title: 'Conference Details Page',
       },
-      component: () => import(/* webpackChunkName: "analyze" */ './views/ConferenceSection.vue'),
+      component: () => import(/* webpackChunkName: "analyze" */ './views/CalendarSection.vue'),
       props: true
     },
     {

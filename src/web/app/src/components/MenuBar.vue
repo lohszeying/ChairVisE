@@ -10,10 +10,12 @@
       My Conferences
     </el-menu-item>
 
-    <el-menu-item index="/conference" v-if="isLogin" :disabled="!isLogin">
+    <!-- Removing calendar from ChairVisE
+    <el-menu-item index="/calendar" v-if="isLogin" :disabled="!isLogin">
       <i class="el-icon-data-line"></i>
       Calendar
     </el-menu-item>
+    --->
 
     <el-menu-item index="/userGuide" v-if="isLogin" :disabled="!isLogin">
       <i class="el-icon-info"></i>
