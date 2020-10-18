@@ -26,7 +26,7 @@
       <el-table-column
         label="Access Level">
         <template slot-scope="scope">
-          <el-select :value="scope.row.accessLevel" placeholder="Select the permission"
+          <el-select :value="scope.row.permission" placeholder="Select the permission"
                      @change="updateAccessControl(scope.row, $event)">
             <el-option label="View" value="CAN_READ"></el-option>
             <el-option label="Edit" value="CAN_WRITE"></el-option>
@@ -45,7 +45,7 @@
       <el-form-item label="Email address" prop="userIdentifier">
         <el-input v-model="accessControlFormUserIdentifier" placeholder="Email of the user to share"></el-input>
       </el-form-item>
-      <el-form-item label="Permissions" prop="accessLevel">
+      <el-form-item label="Permissions" prop="permission">
         <el-select v-model="accessControlFormAccessLevel" placeholder="Permission the user will have"
                    style="width: 100%">
           <el-option label="View" value="CAN_READ"></el-option>
@@ -96,7 +96,7 @@
               trigger: 'blur'
             }
           ],
-          accessLevel: [
+          permission: [
             {required: true, message: 'Please give an access level', trigger: 'blur'},
           ]
         },
@@ -144,13 +144,13 @@
         if (publicAccessLevelControl === undefined) {
           return 'OFF'
         }
-        return publicAccessLevelControl.accessLevel
+        return publicAccessLevelControl.permission
       },
 
       accessControlForm() {
         return {
           userIdentifier: this.accessControlFormUserIdentifier,
-          accessLevel: this.accessControlFormAccessLevel,
+          permission: this.accessControlFormAccessLevel,
         }
       },
 
@@ -167,11 +167,11 @@
       },
       accessControlFormAccessLevel: {
         get() {
-          return this.$store.state.accessControl.accessControlForm.accessLevel
+          return this.$store.state.accessControl.accessControlForm.permission
         },
         set(value) {
           this.$store.commit('setAccessControlFormField', {
-            field: 'accessLevel',
+            field: 'permission',
             value
           })
         },
@@ -179,12 +179,12 @@
     },
 
     methods: {
-      modifyPublicAccessControl(accessLevel) {
+      modifyPublicAccessControl(permission) {
         let publicAccessControl =
           this.$store.state.accessControl.accessControlList.find(ac => ac.userIdentifier === SPECIAL_IDENTIFIER_PUBLIC);
 
         // delete
-        if (accessLevel === 'OFF' && publicAccessControl !== undefined) {
+        if (permission === 'OFF' && publicAccessControl !== undefined) {
           this.$store.dispatch('deleteAccessControl',
             {
               presentationId: this.presentationId,
@@ -199,7 +199,7 @@
           this.$store.dispatch('addAccessControl', {
             presentationId: this.presentationId,
             userIdentifier: SPECIAL_IDENTIFIER_PUBLIC,
-            accessLevel
+            permission
           })
         } else {
           // update if exist
@@ -207,7 +207,7 @@
             {
               presentationId: this.presentationId,
               id: publicAccessControl.id,
-              accessLevel
+              permission
             }
           );
         }
@@ -225,7 +225,7 @@
           {
             presentationId: this.presentationId,
             id,
-            accessLevel: $event
+            permission: $event
           }
         );
       },
@@ -245,7 +245,7 @@
           this.$store.dispatch('addAccessControl', {
             presentationId: this.presentationId,
             userIdentifier: this.accessControlFormUserIdentifier,
-            accessLevel: this.accessControlFormAccessLevel
+            permission: this.accessControlFormAccessLevel
           })
             .then(() => {
               this.accessControlFormUserIdentifier = '';

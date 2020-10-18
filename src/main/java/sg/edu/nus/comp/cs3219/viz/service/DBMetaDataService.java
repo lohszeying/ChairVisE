@@ -1,6 +1,6 @@
-package sg.edu.nus.comp.cs3219.viz.logic;
+package sg.edu.nus.comp.cs3219.viz.service;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import sg.edu.nus.comp.cs3219.viz.common.datatransfer.DBEntityMetaData;
 import sg.edu.nus.comp.cs3219.viz.common.datatransfer.DBFieldMetaData;
 import sg.edu.nus.comp.cs3219.viz.common.entity.record.AuthorRecord;
@@ -13,8 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
-public class DBMetaDataLogic {
+@Service
+public class DBMetaDataService {
 
     private static final List<DBEntityMetaData> entityMetaDataList = new ArrayList<>();
 

@@ -1,7 +1,7 @@
-package sg.edu.nus.comp.cs3219.viz.logic;
+package sg.edu.nus.comp.cs3219.viz.service;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import sg.edu.nus.comp.cs3219.viz.common.datatransfer.AnalysisRequest;
 import sg.edu.nus.comp.cs3219.viz.common.entity.PresentationSection;
 import sg.edu.nus.comp.cs3219.viz.common.entity.record.AuthorRecord;
@@ -16,10 +16,10 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-@Component
-public class AnalysisLogic {
+@Service
+public class AnalysisService {
 
-    private static final Logger log = Logger.getLogger(AnalysisLogic.class.getSimpleName());
+    private static final Logger log = Logger.getLogger(AnalysisService.class.getSimpleName());
 
     private static final Map<String, Class> DATABASE_FIELD_NAME_TO_TYPE_MAP = new HashMap<>();
 
@@ -39,13 +39,15 @@ public class AnalysisLogic {
                         DATABASE_FIELD_NAME_TO_TYPE_MAP.put(field.getAnnotation(Exportable.class).nameInDB(), field.getType()));
     }
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
-    public AnalysisLogic(JdbcTemplate jdbcTemplate) {
+    public AnalysisService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     public List<Map<String, Object>> analyse(AnalysisRequest analysisRequest) {
+        // Check that analysis is done for current user only
+
         String sql = generateSQL(analysisRequest);
 
         log.info("Analysis Query: " + sql);

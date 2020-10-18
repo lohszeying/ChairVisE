@@ -27,7 +27,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "userGuide" */ './views/UserGuide.vue')
     },
     {
-      path: '/analyze/create',
+      path: '/manage/create',
       meta: {
         title: 'Create Presentation Page',
       },
@@ -35,16 +35,16 @@ export default new Router({
       props: true
     },
     {
-      path: '/analyze',
-      name: 'analyze',
+      path: '/manage',
+      name: 'manage',
       meta: {
         title: 'My Created Presentations',
       },
-      component: () => import(/* webpackChunkName: "analyze" */ './views/Analyze.vue'),
+      component: () => import(/* webpackChunkName: "analyze" */ './views/Manage.vue'),
       props: true
     },
     {
-      path: '/analyze/:id',
+      path: '/manage/:id',
       name: 'section',
       meta: {
         title: 'Section Page',
