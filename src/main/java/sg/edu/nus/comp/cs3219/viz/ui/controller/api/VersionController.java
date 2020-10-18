@@ -2,46 +2,62 @@ package sg.edu.nus.comp.cs3219.viz.ui.controller.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sg.edu.nus.comp.cs3219.viz.common.datatransfer.UserInfo;
 import sg.edu.nus.comp.cs3219.viz.common.entity.record.Version;
-import sg.edu.nus.comp.cs3219.viz.logic.GateKeeper;
-import sg.edu.nus.comp.cs3219.viz.logic.VersionLogic;
+import sg.edu.nus.comp.cs3219.viz.service.VersionService;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
-public class VersionController extends BaseRestController{
+@RequestMapping("/api/conferences/{conferenceId}/versions")
+public class VersionController {
 
-    private GateKeeper gateKeeper;
-    private VersionLogic versionLogic;
+    private final VersionService versionService;
 
-    public VersionController(GateKeeper gateKeeper, VersionLogic versionLogic){
-        this.gateKeeper = gateKeeper;
-        this.versionLogic = versionLogic;
+    public VersionController(VersionService versionService) {
+        this.versionService = versionService;
     }
 
-    @GetMapping("/version")
-    public List<Version> all(){
-        UserInfo currentUser = gateKeeper.verifyLoginAccess();
-        return versionLogic.findAllForUser(currentUser);
+    @GetMapping
+    public List<Version> all(@PathVariable Long conferenceId){
+        return versionService.findAllByConferenceId(conferenceId);
     }
 
-    @GetMapping("/version/{recordType}")
-    public List<Version> allVersionByRecordType(@PathVariable String recordType){
-        UserInfo currentUser = gateKeeper.verifyLoginAccess();
-        return versionLogic.findAllForUserWithRecordType(currentUser, recordType);
-    }
+    @PostMapping
+    public ResponseEntity<?> newVersion(
+            @PathVariable Long conferenceId,
+            @RequestBody Version version
+    ) throws URISyntaxException {
 
-    @PostMapping("/version")
-    public ResponseEntity<?> newVersion(@RequestBody Version version) throws URISyntaxException {
-        UserInfo currentUser = gateKeeper.verifyLoginAccess();
-        Version newVersion = versionLogic.saveForUser(version, currentUser);
+        Version newVersion = versionService.saveVersion(conferenceId, version);
 
         return ResponseEntity
                 // TODO: might change what URI is returned
                 .created(new URI("/version/" + newVersion.getId()))
                 .body(newVersion);
+    }
+
+    @GetMapping("/{versionId}")
+    public Version one(@PathVariable Long conferenceId, @PathVariable Long versionId) {
+        return versionService.findOne(conferenceId, versionId);
+    }
+
+    @PutMapping("/{versionId}")
+    public Version updateVersion(
+            @PathVariable Long conferenceId,
+            @PathVariable Long versionId,
+            @RequestBody Version version
+    ) {
+        return versionService.updateVersion(conferenceId, versionId, version);
+    }
+
+    @DeleteMapping("/{versionId}")
+    public ResponseEntity<?> deleteVersion(
+            @PathVariable Long conferenceId,
+            @PathVariable Long versionId
+    ) {
+        versionService.deleteVersion(conferenceId, versionId);
+        return ResponseEntity.noContent().build();
     }
 }

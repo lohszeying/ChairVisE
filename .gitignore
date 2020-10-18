@@ -35,4 +35,3 @@ package-lock.json
 src/main/webapp/WEB-INF/appengine-web.xml
 
 src/main/resources/application-local.properties
-src/main/resources/application-prod.properties

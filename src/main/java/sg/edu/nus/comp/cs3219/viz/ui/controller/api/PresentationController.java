@@ -2,78 +2,61 @@ package sg.edu.nus.comp.cs3219.viz.ui.controller.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sg.edu.nus.comp.cs3219.viz.common.datatransfer.AccessLevel;
-import sg.edu.nus.comp.cs3219.viz.common.datatransfer.UserInfo;
 import sg.edu.nus.comp.cs3219.viz.common.entity.Presentation;
-import sg.edu.nus.comp.cs3219.viz.common.exception.PresentationNotFoundException;
-import sg.edu.nus.comp.cs3219.viz.logic.GateKeeper;
-import sg.edu.nus.comp.cs3219.viz.logic.PresentationLogic;
+import sg.edu.nus.comp.cs3219.viz.service.PresentationService;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
-public class PresentationController extends BaseRestController {
+@RequestMapping("/api/versions/{versionId}/presentations")
+public class PresentationController {
 
-    private final PresentationLogic presentationLogic;
+    private final PresentationService presentationService;
 
-    private final GateKeeper gateKeeper;
-
-    public PresentationController(PresentationLogic presentationLogic,
-                                  GateKeeper gateKeeper) {
-        this.presentationLogic = presentationLogic;
-        this.gateKeeper = gateKeeper;
+    public PresentationController(PresentationService presentationService) {
+        this.presentationService = presentationService;
     }
 
-    @GetMapping("/presentations")
-    public List<Presentation> all() {
-        UserInfo currentUser = gateKeeper.verifyLoginAccess();
-
-        return presentationLogic.findAllForUser(currentUser);
+    @GetMapping
+    public List<Presentation> all(@PathVariable Long versionId) {
+        return presentationService.findAllByVersionId(versionId);
     }
 
-    @PostMapping("/presentations")
-    public ResponseEntity<?> newPresentation(@RequestBody Presentation presentation) throws URISyntaxException {
-        UserInfo currentUser = gateKeeper.verifyLoginAccess();
-
-        Presentation newPresentation = presentationLogic.saveForUser(presentation, currentUser);
+    @PostMapping
+    public ResponseEntity<?> newPresentation(
+            @PathVariable Long versionId,
+            @RequestBody Presentation presentation
+    ) throws URISyntaxException {
+        Presentation newPresentation = presentationService.saveForUser(versionId, presentation);
 
         return ResponseEntity
                 .created(new URI("/presentations/" + newPresentation.getId()))
                 .body(newPresentation);
     }
 
-    @GetMapping("/presentations/{id}")
-    public Presentation one(@PathVariable Long id) {
-        Presentation presentation = presentationLogic.findById(id)
-                .orElseThrow(() -> new PresentationNotFoundException(id));
-
-        gateKeeper.verifyAccessForPresentation(presentation, AccessLevel.CAN_READ);
-
-        return presentation;
+    @GetMapping("/{presentationId}")
+    public Presentation one(@PathVariable Long presentationId) {
+        return presentationService.findById(presentationId);
     }
 
-    @PutMapping("/presentations/{id}")
-    public ResponseEntity<?> updatePresentation(@RequestBody Presentation newPresentation, @PathVariable Long id) throws URISyntaxException {
+    @PutMapping("/{presentationId}")
+    public ResponseEntity<?> updatePresentation(
+            @PathVariable Long presentationId,
+            @RequestBody Presentation newPresentation
+    ) throws URISyntaxException {
 
-        Presentation oldPresentation = presentationLogic.findById(id)
-                .orElseThrow(() -> new PresentationNotFoundException(id));
-        gateKeeper.verifyAccessForPresentation(oldPresentation, AccessLevel.CAN_WRITE);
+        Presentation updatedPresentation = presentationService.updatePresentation(presentationId, newPresentation);
 
-        Presentation updatedPresentation = presentationLogic.updatePresentation(oldPresentation, newPresentation);
         return ResponseEntity
-                .created(new URI("/presentations/" + newPresentation.getId()))
+                .created(new URI("/presentations/" + presentationId))
                 .body(updatedPresentation);
     }
 
-    @DeleteMapping("/presentations/{id}")
-    public ResponseEntity<?> deletePresentation(@PathVariable Long id) {
-        Presentation oldPresentation = presentationLogic.findById(id)
-                .orElseThrow(() -> new PresentationNotFoundException(id));
-        gateKeeper.verifyDeletionAccessForPresentation(oldPresentation);
-
-        presentationLogic.deleteById(id);
+    @DeleteMapping("/{presentationId}")
+    public ResponseEntity<?> deletePresentation(@PathVariable Long presentationId) {
+        presentationService.deleteById(presentationId);
 
         return ResponseEntity.noContent().build();
     }
