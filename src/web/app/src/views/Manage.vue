@@ -1,8 +1,8 @@
 <template>
   <el-main>
-    <h1 class="alignLeft">My Created Presentations </h1>
+    <h1 class="alignLeft">My Created Conferences </h1>
     <el-button class="alignRight" type="primary" icon="el-icon-plus"
-           v-if="!isPresentationListEmpty" @click="createPresentation">Add New Presentation</el-button>
+           v-if="!isPresentationListEmpty" @click="createConference">Add New Conference</el-button>
     <br/>
     <el-divider></el-divider>
     <div class="infinite-list-wrapper">
@@ -86,7 +86,7 @@
       EmptyPresentation
     },
     methods: {
-      createPresentation() {
+      createConference() {
         this.$router.push("/manage/create");
       },
       loadPresentations() {

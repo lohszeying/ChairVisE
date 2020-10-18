@@ -1,20 +1,35 @@
 <template>
   <div>
-    <BannerDetail></BannerDetail>
-    <FeatureListDetail></FeatureListDetail>
+    <div v-if="!isLogin">
+      <BannerDetail></BannerDetail>
+      <FeatureListDetail></FeatureListDetail>
+    </div>
+
+    <div v-if="isLogin">
+      <Analyze></Analyze>
+    </div>
+
   </div>
+
 </template>
 
 <script>
   // @ is an alias to /src
   import BannerDetail from '@/components/homePageDetail/BannerDetail.vue'
   import FeatureListDetail from '@/components/homePageDetail/FeatureListDetail.vue'
+  import Analyze from "@/views/Manage.vue";
 
   export default {
     name: 'home',
     components: {
+      Analyze,
       BannerDetail,
       FeatureListDetail
+    },
+    computed: {
+      isLogin() {
+        return this.$store.state.userInfo.isLogin
+      },
     }
   }
   
