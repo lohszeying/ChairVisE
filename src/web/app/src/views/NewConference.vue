@@ -168,7 +168,6 @@
             },
             uploadClicked() {
                 this.$refs['conferenceForm'].validate((valid, object) => {
-                    console.log("save clicked");
                     if (!valid) {
                         if('name' in object) {
                             this.$notify.error({
