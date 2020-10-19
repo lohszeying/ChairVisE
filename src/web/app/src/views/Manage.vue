@@ -19,7 +19,7 @@
                     <p> #{{conference.id}} </p>
                   </el-col>
                   <el-col :span="19" :offset="1">
-                    <p> {{ conference.name }} </p>
+                    <p> {{ conference.title }} </p>
                   </el-col>
                   <el-col :span="19" :offset="1">
                     <p>{{ conference.description }}</p>

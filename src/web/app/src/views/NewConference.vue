@@ -9,9 +9,9 @@
             <el-form v-else :rules="rules" ref="conferenceForm"
                      :model="conferenceForm" v-loading="isLoading">
 
-                <el-form-item label="Name" :prop="'name'" >
+                <el-form-item label="Name" :prop="'title'" >
                     <el-col>
-                        <el-input v-model="conferenceFormName" placeholder="Enter name"/>
+                        <el-input v-model="conferenceFormTitle" placeholder="Enter name"/>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="Description">
@@ -72,7 +72,7 @@
             },
             conferenceForm() {
                 return {
-                    name: this.conferenceFormName,
+                    name: this.conferenceFormTitle,
                     creatorIdentifier: this.conferenceFormCreatorIdentifier,
                     description: this.conferenceFormDescription,
                 }
@@ -80,13 +80,13 @@
             conferenceFormCreatorIdentifier() {
                 return this.$store.state.conference.conferenceForm.creatorIdentifier
             },
-            conferenceFormName: {
+            conferenceFormTitle: {
                 get() {
-                    return this.$store.state.conference.conferenceForm.name
+                    return this.$store.state.conference.conferenceForm.title
                 },
                 set(value) {
                     this.$store.commit('setConferenceFormField', {
-                        field: 'name',
+                        field: 'title',
                         value
                     })
                 },
@@ -140,7 +140,7 @@
                     if (this.isNewConference && !this.isLogin) {
                         return
                     }
-                });
+                })
             },
             updateConferenceForm() {
                 if (this.$refs['conferenceForm']) {
@@ -169,10 +169,10 @@
             uploadClicked() {
                 this.$refs['conferenceForm'].validate((valid, object) => {
                     if (!valid) {
-                        if('name' in object) {
+                        if('title' in object) {
                             this.$notify.error({
                                 title: 'Error',
-                                message: object.name[0].message
+                                message: object.title[0].message
                             });
                         }
                         return
