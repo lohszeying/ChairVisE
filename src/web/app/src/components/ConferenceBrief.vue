@@ -10,9 +10,9 @@
                    :model="conferenceForm" v-loading="isLoading" >
             <el-alert v-if="isError" :title="apiErrorMsg" type="error" show-icon class="errorMsg"/>
 
-            <el-form-item label="Name: " :prop=" isInEditMode ? 'name' : ''" >
-              <div v-if="!isInEditMode">{{ conferenceForm.name }}</div>
-              <el-input v-model="conferenceFormName" v-if="isInEditMode"/>
+            <el-form-item label="Title: " :prop=" isInEditMode ? 'title' : ''" >
+              <div v-if="!isInEditMode">{{ conferenceForm.title }}</div>
+              <el-input v-model="conferenceFormTitle" v-if="isInEditMode"/>
             </el-form-item>
             <el-form-item label="Description: ">
               <div v-if="!isInEditMode" id="conference-description">{{ conferenceForm.description }}</div>
@@ -65,19 +65,19 @@
         var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
         var date = (new Date(new Date(this.conferenceFormDate) - tzoffset)).toISOString().slice(0, -1);
         return {
-          name: this.conferenceFormName,
+          title: this.conferenceFormTitle,
           creatorIdentifier: this.conferenceFormCreatorIdentifier,
           description: this.conferenceFormDescription,
           date: date,
         }
       },
-      conferenceFormName: {
+      conferenceFormTitle: {
         get() {
-          return this.$store.state.conference.conferenceForm.name
+          return this.$store.state.conference.conferenceForm.title
         },
         set(value) {
           this.$store.commit('setConferenceFormField', {
-            field: 'name',
+            field: 'title',
             value
           })
         },

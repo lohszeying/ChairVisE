@@ -1,196 +1,162 @@
-/*import axios from 'axios'
-import {deepCopy} from "@/common/utility"*/
+import axios from 'axios'
+import {deepCopy} from "@/common/utility"
 
 export default {
   state: {
     conferenceList: [],
-    versionList: [],
+    conferenceForm: {
+      id: '',
+      title: '',
+      description: '',
+      creatorIdentifier: '',
+    },
     conferenceListStatus: {
       isLoading: true,
       isApiError: false,
       apiErrorMsg: '',
     },
-    conferenceForm: {
-      id: '',
-      name: '',
-      version: '',
-      description: '',
-      creatorIdentifier: '',
-    },
-
     conferenceFormStatus: {
       isLoading: false,
       isApiError: false,
       apiErrorMsg: '',
     },
     isSaveSuccess: false,
-    isPresentationEditable: false
   },
   mutations: {
-    /*setConferenceListLoading(state, payload) {
+    setConferenceListLoading(state, payload) {
       if (payload) {
-        state.presentationListStatus.isApiError = false;
+        state.conferenceListStatus.isApiError = false;
       }
-      state.presentationListStatus.isLoading = payload;
+      state.conferenceListStatus.isLoading = payload;
     },
 
     setConferenceListApiError(state, payload) {
-      state.presentationListStatus.isApiError = true;
-      state.presentationListStatus.apiErrorMsg = payload;
-    },
-
-    setConferenceList(state, payload) {
-      state.presentationList = payload;
-    },
-
-    setVersionList(state, payload) {
-      state.versionList = payload;
-    },
-
-    addToConferenceList(state, payload) {
-      state.presentationList.push(payload);
-    },
-
-    deleteFromConferenceList(state, payload) {
-      const index = state.presentationList.findIndex(presentation => presentation.id === payload);
-      state.presentationList.splice(index, 1)
-    },
-
-    updateConferenceListWith(state, payload) {
-      state.presentationList = state.presentationList.map(presentation => {
-        if (presentation.id === payload.id) {
-          return payload
-        }
-        return presentation
-      });
+      state.conferenceListStatus.isApiError = true;
+      state.conferenceListStatus.apiErrorMsg = payload;
     },
 
     setConferenceFormLoading(state, isLoading) {
-      state.presentationFormStatus.isLoading = isLoading;
+      state.conferenceFormStatus.isLoading = isLoading;
     },
 
     setConferenceFormApiError(state, msg) {
-      state.presentationFormStatus.isApiError = true;
-      state.presentationFormStatus.apiErrorMsg = msg;
+      state.conferenceFormStatus.isApiError = true;
+      state.conferenceFormStatus.apiErrorMsg = msg;
     },
 
+    setConferenceList(state, payload) {
+      state.conferenceList = payload;
+    },
+
+    addToConferenceList(state, payload) {
+      state.conferenceList.push(payload);
+    },
+
+    deleteFromConferenceList(state, payload) {
+      const index = state.conferenceList.findIndex(conference => conference.id === payload);
+      state.conferenceList.splice(index, 1)
+    },
+
+    updateConferenceListWith(state, payload) {
+      state.conferenceList = state.conferenceList.map(conference => {
+        if (conference.id === payload.id) {
+          return payload
+        }
+        return conference
+      });
+    },
     setConferenceForm(state, payload) {
-      state.presentationForm = payload;
+      state.conferenceForm = payload;
     },
 
     resetConferenceForm(state) {
-      state.presentationForm.id = '';
-      state.presentationForm.name = '';
-      state.presentationForm.version = '';
-      state.presentationForm.description = '';
-      state.presentationForm.creatorIdentifier = '';
-      state.presentationFormStatus.isLoading = false;
-      state.presentationFormStatus.isApiError = false;
-      state.presentationFormStatus.apiErrorMsg = '';
+      state.conferenceForm.id = '';
+      state.conferenceForm.title = '';
+      state.conferenceForm.description = '';
+      state.conferenceForm.creatorIdentifier = '';
+      state.conferenceFormStatus.isLoading = false;
+      state.conferenceFormStatus.isApiError = false;
+      state.conferenceFormStatus.apiErrorMsg = '';
     },
-
-    setConferenceFormField(state, {field, value}) {
-      state.presentationForm[field] = value
-    },
-
     setSaveSuccess(state, success) {
       state.isSaveSuccess = success;
     },
-    setIsConferenceEditable(state, isPresentationEditable) {
-      //May not need to use this
-      state.isPresentationEditable = isPresentationEditable;
-    } */
+    setConferenceFormField(state, {field, value}) {
+      state.conferenceForm[field] = value
+    },
   },
+
   actions: {
-    /*async getConferenceList({commit}) {
-      commit('setPresentationListLoading', true);
-      axios.get('/api/presentations')
-        .then(response => {
-          commit('setPresentationList', response.data)
-        })
-        .catch(e => {
-          commit('setPresentationListApiError', e.toString());
-        })
-        .finally(() => {
-          commit('setPresentationListLoading', false);
-        })
-    },
-
-    async getVersionList({commit}) {
-      //May or may not need to use this
-
-      commit('setPresentationListLoading', true);
-      axios.get('/api/version')
+    async getConferenceList({commit}) {
+      axios.get('/api/conferences')
           .then(response => {
-            commit('setVersionList', response.data)
+            commit('setConferenceList', response.data)
           })
           .catch(e => {
-            commit('setPresentationListApiError', e.toString());
+            commit('setConferenceListApiError', e.toString());
           })
           .finally(() => {
-            commit('setPresentationListLoading', false);
+            commit('setConferenceListLoading', false);
           })
     },
-
-    async getConference({commit}, presentationId) {
-
-      commit('setPresentationFormLoading', true);
-      await axios.get(`/api/presentations/${presentationId}`)
+    async getConference({commit}, conferenceId) {
+      commit('setConferenceFormLoading', true);
+      await axios.get(`/api/conferences/${conferenceId}`)
           .then(response => {
-            commit('setPresentationForm', response.data)
+            commit('setConferenceForm', response.data)
           })
           .catch(e => {
-            commit('setPresentationFormApiError', e.toString());
+            commit('setConferenceFormApiError', e.toString());
           })
           .finally(() => {
-            commit('setPresentationFormLoading', false);
+            commit('setConferenceFormLoading', false);
           });
     },
 
-    async saveConference({commit, state}) {
-      commit('setPresentationFormLoading', true);
-      await axios.post('/api/presentations', state.presentationForm)
+    async updateConference({commit, state}) {
+      commit('setConferenceFormLoading', true);
+      await axios.put('/api/conferences/' + state.conferenceForm.id, state.conferenceForm)
           .then(response => {
-            commit('addToPresentationList', deepCopy(response.data));
-            commit('setPresentationForm', deepCopy(response.data));
-            commit("setSaveSuccess", true);
+            commit('updateConferenceListWith', response.data)
           })
           .catch(e => {
-            commit('setPresentationFormApiError', e.toString());
-            commit("setSaveSuccess", false);
+            commit('setConferenceFormApiError', e.toString());
           })
           .finally(() => {
-            commit('setPresentationFormLoading', false);
+            commit('setConferenceFormLoading', false);
           })
     },
 
-    async updateConference({commit, state}) {
-      commit('setPresentationFormLoading', true);
-      await axios.put('/api/presentations/' + state.presentationForm.id, state.presentationForm)
+    async saveConference({commit, state}) {
+      commit('setConferenceFormLoading', true);
+      await axios.post('/api/conferences', state.conferenceForm)
           .then(response => {
-            commit('updatePresentationListWith', response.data)
+            commit('addToConferenceList', deepCopy(response.data));
+            commit('setConferenceForm', deepCopy(response.data))
+            commit("setSaveSuccess", true);
           })
           .catch(e => {
-            commit('setPresentationFormApiError', e.toString());
+            commit('setConferenceFormApiError', e.toString());
+            commit("setSaveSuccess", false);
           })
           .finally(() => {
-            commit('setPresentationFormLoading', false);
+            commit('setConferenceFormLoading', false);
           })
     },
 
     async deleteConference({commit}, payload) {
-      commit('setPresentationFormLoading', true);
-      await axios.delete('/api/presentations/' + payload)
+      commit('setConferenceFormLoading', true);
+      await axios.delete('/api/conferences/' + payload)
           .then(() => {
-            commit('deleteFromPresentationList', payload);
-            commit('resetPresentationForm')
+            commit('deleteFromConferenceList', payload);
+            commit('resetConferenceForm')
           })
           .catch(e => {
-            commit('setPresentationFormApiError', e.toString());
+            commit('setConferenceFormApiError', e.toString());
           })
           .finally(() => {
-            commit('setPresentationFormLoading', false);
+            commit('setConferenceFormLoading', false);
           })
-    }*/
+    }
   }
 };

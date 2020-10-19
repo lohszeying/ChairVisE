@@ -2,38 +2,28 @@
     <el-main>
         <el-card>
             <div slot="header" class="clearfix">
-                <span> Add New Calendar  </span>
+                <span> Create New Conference </span>
             </div>
             <el-alert v-if="isNewConference && !isLogin" title="Please login to create new conference" type="error" show-icon
                       class="errorMsg"/>
             <el-form v-else :rules="rules" ref="conferenceForm"
                      :model="conferenceForm" v-loading="isLoading">
-                <el-form-item label="Name" :prop="'name'" >
+
+                <el-form-item label="Title" :prop="'title'" >
                     <el-col>
-                        <el-input v-model="conferenceFormName" placeholder="Enter name"/>
+                        <el-input v-model="conferenceFormTitle" placeholder="Enter title"/>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="Description">
                     <el-col>
-                        <el-input v-model="conferenceFormDescription" placeholder="Enter description"/>
+                        <el-input type="textarea" v-model="conferenceFormDescription" placeholder="Enter description"/>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="Conference Date" :prop="'date'">
-                    <el-col>
-                        <el-date-picker
-                                v-model="conferenceFormDate"
-                                type="datetime"
-                                placeholder="Select date and time">
-                        </el-date-picker>
-                    </el-col>
-                </el-form-item>
-
                 <el-form-item>
                     <el-button type="primary" icon="el-icon-check" @click="uploadClicked()">Save</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
-
 
         <!-- dialogs -->
         <el-dialog
@@ -60,10 +50,11 @@
 </template>
 
 <script>
-    import Datepicker from 'vuejs-datepicker';
-    import {ID_NEW_CONFERENCE} from "../common/const";
+    //import {AccessLevel, ID_NEW_CONFERENCE, SPECIAL_IDENTIFIER_PUBLIC} from "@/common/const";
+    import {ID_NEW_CONFERENCE} from "@/common/const";
+
     export default {
-        name: "AddConference",
+        name: 'ConferenceBrief',
         props: {
             id: String
         },
@@ -74,6 +65,7 @@
         },
         mounted() {
             this.updateConferenceForm();
+            //this.$store.dispatch('getVersionList')
         },
         computed: {
             isLogin() {
@@ -81,18 +73,21 @@
             },
             conferenceForm() {
                 return {
-                    name: this.conferenceFormName,
+                    title: this.conferenceFormTitle,
+                    creatorIdentifier: this.conferenceFormCreatorIdentifier,
                     description: this.conferenceFormDescription,
-                    date: this.conferenceFormDate,
                 }
             },
-            conferenceFormName: {
+            conferenceFormCreatorIdentifier() {
+                return this.$store.state.conference.conferenceForm.creatorIdentifier
+            },
+            conferenceFormTitle: {
                 get() {
-                    return this.$store.state.conference.conferenceForm.name
+                    return this.$store.state.conference.conferenceForm.title
                 },
                 set(value) {
                     this.$store.commit('setConferenceFormField', {
-                        field: 'name',
+                        field: 'title',
                         value
                     })
                 },
@@ -108,17 +103,7 @@
                     })
                 },
             },
-            conferenceFormDate: {
-                get() {
-                    return this.$store.state.conference.conferenceForm.date
-                },
-                set(value) {
-                    this.$store.commit('setConferenceFormField', {
-                        field: 'date',
-                        value
-                    })
-                },
-            },
+
             isNewConference() {
                 return this.id === ID_NEW_CONFERENCE
             },
@@ -138,35 +123,39 @@
                 return this.$store.state.conference.conferenceFormStatus.apiErrorMsg
             }
         },
+        data() {
+            return {
+                hasSubmitted: false,
+                rules: {
+                    title: [
+                        {required: true, message: 'Please enter conference name', trigger: 'blur'},
+                        {min: 3, message: 'The length should be more than 3 character', trigger: 'blur'}
+                    ],
+                }
+            }
+        },
         methods: {
             addConference() {
                 this.hasSubmitted = false;
                 this.$store.dispatch('saveConference').then(() => {
-                        if (this.isNewConference && !this.isLogin) {
-                            return
-                        }
-                    });
+                    if (this.isNewConference && !this.isLogin) {
+                        return
+                    }
+                })
             },
             updateConferenceForm() {
                 if (this.$refs['conferenceForm']) {
-                    this.$refs['conferenceForm'].clearValidate();
+                  this.$refs['conferenceForm'].clearValidate();
                 }
                 this.$store.commit('resetConferenceForm');
             },
             uploadClicked() {
                 this.$refs['conferenceForm'].validate((valid, object) => {
                     if (!valid) {
-                        if('name' in object) {
+                        if('title' in object) {
                             this.$notify.error({
                                 title: 'Error',
-                                message: object.name[0].message
-                            });
-                        }
-                        if ('date' in object) {
-                            this.$notify.error({
-                                title: 'Error',
-                                message: object.date[0].message,
-                                offset: 100
+                                message: object.title[0].message
                             });
                         }
                         return
@@ -178,30 +167,17 @@
             closeSuccess() {
                 this.$store.commit("setSaveSuccess", false);
                 this.$router.push({
-                    name: 'conference'
+                    name: 'manage'
                 });
             }
         },
         components: {
-            Datepicker,
-        },
-        data() {
-            return {
-                hasSubmitted: false,
-                rules: {
-                    name: [
-                        {required: true, message: 'Please enter conference name', trigger: 'blur'},
-                        {min: 3, message: 'The length should be more than 3 character', trigger: 'blur'}
-                    ],
-                    date: [
-                        {required: true, message: 'Please select a conference date and time.', trigger: 'blur'},
-                    ]
-                }
-            }
         },
     }
 </script>
 
 <style scoped>
-
+    .errorMsg {
+        margin-bottom: 18px;
+    }
 </style>

@@ -31,7 +31,7 @@ export default new Router({
       meta: {
         title: 'Create Presentation Page',
       },
-      component: () => import(/* webpackChunkName: "analyze" */ './views/NewPresentation.vue'),
+      component: () => import(/* webpackChunkName: "analyze" */ './views/NewConference.vue'),
       props: true
     },
     {
