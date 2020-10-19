@@ -9,9 +9,9 @@
             <el-form v-else :rules="rules" ref="conferenceForm"
                      :model="conferenceForm" v-loading="isLoading">
 
-                <el-form-item label="Name" :prop="'title'" >
+                <el-form-item label="Title" :prop="'title'" >
                     <el-col>
-                        <el-input v-model="conferenceFormTitle" placeholder="Enter name"/>
+                        <el-input v-model="conferenceFormTitle" placeholder="Enter title"/>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="Description">
@@ -72,7 +72,7 @@
             },
             conferenceForm() {
                 return {
-                    name: this.conferenceFormTitle,
+                    title: this.conferenceFormTitle,
                     creatorIdentifier: this.conferenceFormCreatorIdentifier,
                     description: this.conferenceFormDescription,
                 }
@@ -126,7 +126,7 @@
             return {
                 hasSubmitted: false,
                 rules: {
-                    name: [
+                    title: [
                         {required: true, message: 'Please enter conference name', trigger: 'blur'},
                         {min: 3, message: 'The length should be more than 3 character', trigger: 'blur'}
                     ],
