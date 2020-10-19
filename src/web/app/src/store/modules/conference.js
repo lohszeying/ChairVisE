@@ -73,6 +73,7 @@ export default {
       state.conferenceForm.id = '';
       state.conferenceForm.title = '';
       state.conferenceForm.description = '';
+      state.conferenceForm.creatorIdentifier = '';
       state.conferenceFormStatus.isLoading = false;
       state.conferenceFormStatus.isApiError = false;
       state.conferenceFormStatus.apiErrorMsg = '';

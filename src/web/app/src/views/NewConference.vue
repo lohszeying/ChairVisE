@@ -144,27 +144,9 @@
             },
             updateConferenceForm() {
                 if (this.$refs['conferenceForm']) {
-                    this.$refs['conferenceForm'].clearValidate();
+                  this.$refs['conferenceForm'].clearValidate();
                 }
-                this.$store.commit('resetConferenceFormForm');
-                if (this.id !== ID_NEW_CONFERENCE) {
-                    this.$store.dispatch('getConference', this.id)
-                        .then(() => {
-                            // check writable or not
-                            this.$store.dispatch('fetchAccessControlList', this.id)
-                                .then(() => {
-                                    let currentUser = this.$store.state.userInfo.userEmail;
-                                    let accessControlList = this.$store.state.accessControl.accessControlList;
-                                    let isPresentationEditable =
-                                        currentUser === this.conferenceFormCreatorIdentifier
-                                        || accessControlList.some(acl => acl.userIdentifier === currentUser && acl.permission === AccessLevel.CAN_WRITE)
-                                        || accessControlList.some(acl => acl.userIdentifier === SPECIAL_IDENTIFIER_PUBLIC && acl.permission === AccessLevel.CAN_WRITE);
-                                    this.$store.commit('setIsPresentationEditable', isPresentationEditable)
-                                })
-                        })
-                } else {
-                    this.$store.dispatch("getVersionList")
-                }
+                this.$store.commit('resetConferenceForm');
             },
             uploadClicked() {
                 this.$refs['conferenceForm'].validate((valid, object) => {
