@@ -50,7 +50,8 @@
 </template>
 
 <script>
-    import {AccessLevel, ID_NEW_CONFERENCE, SPECIAL_IDENTIFIER_PUBLIC} from "@/common/const";
+    //import {AccessLevel, ID_NEW_CONFERENCE, SPECIAL_IDENTIFIER_PUBLIC} from "@/common/const";
+    import {ID_NEW_CONFERENCE} from "@/common/const";
 
     export default {
         name: 'ConferenceBrief',
