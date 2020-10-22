@@ -85,7 +85,7 @@ export default {
   },
 
   actions: {
-    async getVersionList({commit}, conferenceId) {
+    async getVersionList({commit}, {conferenceId}) {
       axios.get('/api/conferences/${conferenceId}/versions')
           .then(response => {
             commit('setVersionList', response.data)
@@ -111,7 +111,7 @@ export default {
           });
     },
 
-    async updateVersion({commit, state}, conferenceId) {
+    async updateVersion({commit, state}, {conferenceId}) {
       commit('setVersionFormLoading', true);
       await axios.put('/api/conferences/${conferenceId}/versions/' + state.version.id, state.versionForm)
           .then(response => {
@@ -125,7 +125,7 @@ export default {
           })
     },
 
-    async saveVersion({commit, state}, conferenceId) {
+    async saveVersion({commit, state}, {conferenceId}) {
       commit('setVersionFormLoading', true);
       await axios.post('/api/conferences/${conferenceId}/versions', state.versionForm)
           .then(response => {
