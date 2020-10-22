@@ -125,7 +125,7 @@ export default {
           })
     },
 
-    async saveVersion({commit, state}, {conferenceId}) {
+    async saveVersion({commit, state}, conferenceId) {
       commit('setVersionFormLoading', true);
       await axios.post(`/api/conferences/${conferenceId}/versions`, state.versionForm)
           .then(response => {
