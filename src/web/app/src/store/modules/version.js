@@ -85,8 +85,8 @@ export default {
   },
 
   actions: {
-    async getVersionList({commit}, {conferenceId}) {
-      axios.get('/api/conferences/${conferenceId}/versions')
+    async getVersionList({commit}, conferenceId) {
+      axios.get(`/api/conferences/${conferenceId}/versions`)
           .then(response => {
             commit('setVersionList', response.data)
           })
@@ -111,9 +111,9 @@ export default {
           });
     },
 
-    async updateVersion({commit, state}, {conferenceId}) {
+    async updateVersion({commit, state}, conferenceId) {
       commit('setVersionFormLoading', true);
-      await axios.put('/api/conferences/${conferenceId}/versions/' + state.version.id, state.versionForm)
+      await axios.put(`/api/conferences/${conferenceId}/versions/` + state.version.id, state.versionForm)
           .then(response => {
             commit('updateVersionListWith', response.data)
           })
@@ -127,7 +127,7 @@ export default {
 
     async saveVersion({commit, state}, {conferenceId}) {
       commit('setVersionFormLoading', true);
-      await axios.post('/api/conferences/${conferenceId}/versions', state.versionForm)
+      await axios.post(`/api/conferences/${conferenceId}/versions`, state.versionForm)
           .then(response => {
             commit('addToVersionList', deepCopy(response.data));
             commit('setVersionForm', deepCopy(response.data))
@@ -144,7 +144,7 @@ export default {
 
     async deleteVersion({commit}, payload, conferenceId) {
       commit('setVersionFormLoading', true);
-      await axios.delete('/api/conferences/${conferenceId}/versions/' + payload)
+      await axios.delete(`/api/conferences/${conferenceId}/versions/` + payload)
           .then(() => {
             commit('deleteFromVersionList', payload);
             commit('resetVersionForm')
