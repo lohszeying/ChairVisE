@@ -85,6 +85,21 @@
           </el-tooltip>
         </h2>        
         <el-divider></el-divider>
+
+        <el-row class="form-card">
+          <el-col>
+            <label class="label">
+              Title
+            </label>
+            <br/>
+            <el-input
+                class="inline-input"
+                v-model="conferenceId"
+                :fetch-suggestions="querySearchConference"
+                placeholder="Title of Conference"
+            ></el-input>
+          </el-col>
+        </el-row>
         
         <el-row class="form-card">
           <el-col>
@@ -92,12 +107,12 @@
               Version
             </label>
             <br/>
-            <el-autocomplete
+            <el-date-picker
               class="inline-input"
               v-model="versionId"
               :fetch-suggestions="querySearch"
               placeholder="Input Version"
-            ></el-autocomplete>
+            ></el-date-picker>
           </el-col>
         </el-row>
         <div class="form-card">
@@ -147,7 +162,8 @@
     },
     beforeCreate() {
       this.$store.dispatch('fetchDBMetaDataEntities');
-      this.$store.dispatch('getVersionList');
+      this.$store.dispatch('getConferenceList');
+      //this.$store.dispatch('getVersionList');
     },
     computed: {
       isLogin() {
@@ -179,6 +195,14 @@
           }
           this.$store.commit("setTableType", newValue);
           this.$store.commit("setDBSchema", dbSchema);
+        }
+      },
+      conferenceId: {
+        get: function () {
+          return this.$store.state.dataMapping.data.conferenceId;
+        },
+        set: function (newValue) {
+          this.$store.commit("setConferenceId", newValue);
         }
       },
       versionId: {
@@ -219,6 +243,7 @@
           && this.$store.state.dataMapping.hasTableTypeSelected
           && this.$store.state.dataMapping.hasHeaderSpecified
           && this.$store.state.dataMapping.hasPredefinedSpecified
+          && this.$store.state.dataMapping.hasConferenceIdSpecified
           && this.$store.state.dataMapping.hasVersionIdSpecified;
       },
       uploaded: function () {
@@ -229,6 +254,7 @@
          && this.$store.state.dataMapping.hasTableTypeSelected
          && this.$store.state.dataMapping.hasHeaderSpecified
          && this.$store.state.dataMapping.hasPredefinedSwitchSpecified
+         && this.$store.state.dataMapping.hasConferenceIdSpecified
          && this.$store.state.dataMapping.hasVersionIdSpecified;
       },
       isReadyForChoosing: function () {
@@ -236,6 +262,16 @@
       }
     },
     methods: {
+      querySearchConference(queryString, cb) {
+        // convert to array of string
+        var links = this.$store.state.conference.conferenceList.map(c => c.conferenceId);
+        // function to remove duplicate from array of string
+        let reduceFunction = (links) => links.filter((c,i) => links.indexOf(c) === i );
+        links = reduceFunction(links);
+        links = links.map(c => { return { "value" : c} });
+        //var results = queryString ? links.filter(this.createFilter(queryString)) : links;
+        //cb(results);
+      },
       querySearch(queryString, cb) {
         // convert to array of string
         var links = this.$store.state.presentation.versionList.map(v => v.versionId);
@@ -243,8 +279,8 @@
         let reduceFunction = (links) => links.filter((v,i) => links.indexOf(v) === i );
         links = reduceFunction(links);
         links = links.map(v => { return { "value" : v} });
-        var results = queryString ? links.filter(this.createFilter(queryString)) : links;
-        cb(results);
+        //var results = queryString ? links.filter(this.createFilter(queryString)) : links;
+        //cb(results);
       },
       createFilter(queryString) {
         return (link) => {

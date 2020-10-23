@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {processMapping} from '@/store/helpers/processor.js'
+import conference from "@/store/modules/conference";
 
 export default {
   state: {
@@ -7,6 +8,7 @@ export default {
     hasFileUploaded: false,
     hasFormatTypeSpecified: false,
     hasTableTypeSelected: false,
+    hasConferenceIdSpecified: false,
     hasVersionIdSpecified: false,
     hasHeaderSpecified: false,
     hasPredefinedSpecified: false,
@@ -21,7 +23,9 @@ export default {
       processedResult: [],
       formatType: null,
       tableType: null,
+      isNewConference: null,
       isNewVersion: null,
+      conferenceId: null,
       versionId: null,
       hasHeader: null,
       hasPredefined: null, // new
@@ -76,6 +80,24 @@ export default {
     clearTableType(state) {
       state.data.tableType = null;
       state.hasTableTypeSelected = false;
+    },
+
+    setConferenceId(state, selected) {
+      state.data.conferenceId = selected;
+      state.hasConferenceIdSpecified = true;
+    },
+
+    clearConferenceId(state) {
+      state.data.conferenceId = null;
+      state.hasConferenceIdSpecified = false;
+    },
+
+    setIsNewConference(state, selected) {
+      state.data.isNewConference = selected;
+    },
+
+    clearIsNewConference(state) {
+      state.data.isNewConference = null;
     },
 
     setVersionId(state, selected) {
@@ -181,12 +203,14 @@ export default {
           break;
       }
       var fnKeyEntry = {};
+      fnKeyEntry.conferenceId = state.data.conferenceId;
       fnKeyEntry.versionId = state.data.versionId;
       fnKeyEntry.recordType = fnKeyTable;
       
       // add version to end
       for (var i=0; i<state.data.processedResult.length; i++){
         var row = state.data.processedResult[i];
+        row.conferenceId = state.data.conferenceId;
         row.versionId = state.data.versionId;
       }
 
@@ -221,6 +245,7 @@ export default {
       // add version to end
       for (var i=0; i<state.data.processedResult.length; i++){
         var row = state.data.processedResult[i];
+        row.conferenceId = state.data.conferenceId;
         row.versionId = state.data.versionId;
       }
       //console.log(state.data.processedResult);
@@ -237,7 +262,18 @@ export default {
     }
   }
 }
+
+function postConference(fnKeyEntry) {
+  return axios.post()
+}
 function postVersion(fnKeyEntry) {
+  /*this.$store.dispatch('saveConference').then(() => {
+    if (this.isNewConference && !this.isLogin) {
+      return axios.post(`/api/conferences/${conferenceId}/versions`, fnKeyEntry);
+    }
+  }) */
+  //console.log("fnKeyEntry: version ID: " + fnKeyEntry.versionId);
+
   return axios.post("/api/version", fnKeyEntry);
 }
 
