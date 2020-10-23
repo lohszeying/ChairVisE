@@ -198,10 +198,17 @@
       },
       conferenceTitle: {
         get: function () {
+          //return this.$store.state.dataMapping.data.conferenceTitle;
+          this.$store.state.conference.conferenceForm.title
           return this.$store.state.dataMapping.data.conferenceTitle;
         },
-        set: function (newValue) {
-          this.$store.commit("setConferenceTitle", newValue);
+        set: function (value) {
+          //this.$store.commit("setConferenceTitle", newValue);
+          this.$store.commit('setConferenceFormField', {
+            field: 'title',
+            value
+          });
+          this.$store.commit("setConferenceTitle", value);
         }
       },
       versionDate: {
@@ -297,8 +304,30 @@
         // show loading and go parsing
         this.$store.commit("setPageLoadingStatus", true);
 
+
+        /* WORK IN PROGRESS */
         //If conference list is empty, then create conference.
-        //if (!this.$store.state.conference)
+        //console.log(this.$store.state.conference.conferenceList);
+        if (!this.$store.state.conference.conferenceList) {
+          console.log("don't have");
+        } else {
+          var confExist = false;
+          for (var i = 0; i < this.$store.state.conference.conferenceList.length; i++) {
+            if (this.conferenceTitle.toLowerCase() === this.$store.state.conference.conferenceList[i].title.toLowerCase()) {
+              //Exist, don't save conference
+              confExist = true;
+              break;
+            }
+          }
+          if (!confExist) {
+            //console.log("didnt exist");
+            this.$store.dispatch('saveConference');
+            //Then add to version
+          } else {
+            //Existed, add to version
+            //console.log("exist");
+          }
+        }
 
 
         // if versionList is empty
@@ -330,7 +359,7 @@
               break;
             default:
           }
-          this.$store.commit("setIsNewVersion", 
+          this.$store.commit("setIsNewVersion",
                             !verList.includes(this.$store.state.dataMapping.data.versionId));
         }
 
