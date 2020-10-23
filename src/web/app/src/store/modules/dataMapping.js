@@ -8,8 +8,8 @@ export default {
     hasFileUploaded: false,
     hasFormatTypeSpecified: false,
     hasTableTypeSelected: false,
-    hasConferenceIdSpecified: false,
-    hasVersionIdSpecified: false,
+    hasConferenceTitleSpecified: false,
+    hasVersionDateSpecified: false,
     hasHeaderSpecified: false,
     hasPredefinedSpecified: false,
     hasPredefinedSwitchSpecified: false, // new
@@ -25,8 +25,8 @@ export default {
       tableType: null,
       isNewConference: null,
       isNewVersion: null,
-      conferenceId: null,
-      versionId: null,
+      conferenceTitle: null,
+      versionDate: null,
       hasHeader: null,
       hasPredefined: null, // new
       predefinedMapping: null,
@@ -82,14 +82,14 @@ export default {
       state.hasTableTypeSelected = false;
     },
 
-    setConferenceId(state, selected) {
-      state.data.conferenceId = selected;
-      state.hasConferenceIdSpecified = true;
+    setConferenceTitle(state, selected) {
+      state.data.conferenceTitle = selected;
+      state.hasConferenceTitleSpecified = true;
     },
 
-    clearConferenceId(state) {
-      state.data.conferenceId = null;
-      state.hasConferenceIdSpecified = false;
+    clearConferenceTitle(state) {
+      state.data.conferenceTitle = null;
+      state.hasConferenceTitleSpecified = false;
     },
 
     setIsNewConference(state, selected) {
@@ -100,14 +100,14 @@ export default {
       state.data.isNewConference = null;
     },
 
-    setVersionId(state, selected) {
-      state.data.versionId = selected;
-      state.hasVersionIdSpecified = true;
+    setVersionDate(state, selected) {
+      state.data.versionDate = selected;
+      state.hasVersionDateSpecified = true;
     },
 
-    clearVersionId(state) {
-      state.data.versionId = null;
-      state.hasVersionIdSpecified = false;
+    clearVersionDate(state) {
+      state.data.versionDate = null;
+      state.hasVersionDateSpecified = false;
     },
 
     setIsNewVersion(state, selected) {
@@ -203,15 +203,15 @@ export default {
           break;
       }
       var fnKeyEntry = {};
-      fnKeyEntry.conferenceId = state.data.conferenceId;
-      fnKeyEntry.versionId = state.data.versionId;
+      fnKeyEntry.conferenceId = state.data.conferenceTitle;
+      fnKeyEntry.versionId = state.data.versionDate;
       fnKeyEntry.recordType = fnKeyTable;
       
       // add version to end
       for (var i=0; i<state.data.processedResult.length; i++){
         var row = state.data.processedResult[i];
-        row.conferenceId = state.data.conferenceId;
-        row.versionId = state.data.versionId;
+        row.conferenceId = state.data.conferenceTitle;
+        row.versionId = state.data.versionDate;
       }
 
       // concurrent POST data and POST version requests 
@@ -245,8 +245,8 @@ export default {
       // add version to end
       for (var i=0; i<state.data.processedResult.length; i++){
         var row = state.data.processedResult[i];
-        row.conferenceId = state.data.conferenceId;
-        row.versionId = state.data.versionId;
+        row.conferenceId = state.data.conferenceTitle;
+        row.versionId = state.data.versionDate;
       }
       //console.log(state.data.processedResult);
       await axios.post("/api/record/" + endpoint, state.data.processedResult)

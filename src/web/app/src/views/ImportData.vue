@@ -92,12 +92,12 @@
               Title
             </label>
             <br/>
-            <el-input
+            <el-autocomplete
                 class="inline-input"
-                v-model="conferenceId"
+                v-model="conferenceTitle"
                 :fetch-suggestions="querySearchConference"
                 placeholder="Title of Conference"
-            ></el-input>
+            ></el-autocomplete>
           </el-col>
         </el-row>
         
@@ -109,7 +109,7 @@
             <br/>
             <el-date-picker
               class="inline-input"
-              v-model="versionId"
+              v-model="versionDate"
               :fetch-suggestions="querySearch"
               placeholder="Input Version"
             ></el-date-picker>
@@ -197,20 +197,20 @@
           this.$store.commit("setDBSchema", dbSchema);
         }
       },
-      conferenceId: {
+      conferenceTitle: {
         get: function () {
-          return this.$store.state.dataMapping.data.conferenceId;
+          return this.$store.state.dataMapping.data.conferenceTitle;
         },
         set: function (newValue) {
-          this.$store.commit("setConferenceId", newValue);
+          this.$store.commit("setConferenceTitle", newValue);
         }
       },
-      versionId: {
+      versionDate: {
         get: function () {
-          return this.$store.state.dataMapping.data.versionId;
+          return this.$store.state.dataMapping.data.versionDate;
         },
         set: function (newValue) {
-          this.$store.commit("setVersionId", newValue);
+          this.$store.commit("setVersionDate", newValue);
         }
       },
       hasHeader: {
@@ -243,8 +243,8 @@
           && this.$store.state.dataMapping.hasTableTypeSelected
           && this.$store.state.dataMapping.hasHeaderSpecified
           && this.$store.state.dataMapping.hasPredefinedSpecified
-          && this.$store.state.dataMapping.hasConferenceIdSpecified
-          && this.$store.state.dataMapping.hasVersionIdSpecified;
+          && this.$store.state.dataMapping.hasConferenceTitleSpecified
+          && this.$store.state.dataMapping.hasVersionDateSpecified;
       },
       uploaded: function () {
         return this.$store.state.dataMapping.hasFileUploaded;
@@ -254,8 +254,8 @@
          && this.$store.state.dataMapping.hasTableTypeSelected
          && this.$store.state.dataMapping.hasHeaderSpecified
          && this.$store.state.dataMapping.hasPredefinedSwitchSpecified
-         && this.$store.state.dataMapping.hasConferenceIdSpecified
-         && this.$store.state.dataMapping.hasVersionIdSpecified;
+         && this.$store.state.dataMapping.hasConferenceTitleSpecified
+         && this.$store.state.dataMapping.hasVersionDateSpecified;
       },
       isReadyForChoosing: function () {
         return this.$store.state.dataMapping.hasTableTypeSelected;
@@ -264,13 +264,13 @@
     methods: {
       querySearchConference(queryString, cb) {
         // convert to array of string
-        var links = this.$store.state.conference.conferenceList.map(c => c.conferenceId);
+        var links = this.$store.state.conference.conferenceList.map(c => c.title);
         // function to remove duplicate from array of string
         let reduceFunction = (links) => links.filter((c,i) => links.indexOf(c) === i );
         links = reduceFunction(links);
         links = links.map(c => { return { "value" : c} });
-        //var results = queryString ? links.filter(this.createFilter(queryString)) : links;
-        //cb(results);
+        var results = queryString ? links.filter(this.createFilter(queryString)) : links;
+        cb(results);
       },
       querySearch(queryString, cb) {
         // convert to array of string
