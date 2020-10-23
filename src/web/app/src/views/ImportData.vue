@@ -309,7 +309,7 @@
         //If conference list is empty, then create conference.
         //console.log(this.$store.state.conference.conferenceList);
         if (!this.$store.state.conference.conferenceList) {
-          console.log("don't have");
+          //console.log("don't have");
         } else {
           var confExist = false;
           for (var i = 0; i < this.$store.state.conference.conferenceList.length; i++) {
