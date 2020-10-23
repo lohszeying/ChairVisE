@@ -305,12 +305,12 @@
         // console.log(this.$store.state.presentation.versionList);
         // filter by "AuthorRecord" "ReviewRecord" "SubmissionRecord"
         if (!this.$store.state.presentation.versionList) {
-          console.log("here 1");
+          //console.log("here 1");
           this.$store.commit("setIsNewVersion", false);
         } else {
           // if tabletype 0 author elif 1 review elif 2 sub
           // filter by "AuthorRecord" "ReviewRecord" "SubmissionRecord"
-          console.log("here 2");
+          //console.log("here 2");
           var verList;
           switch (this.$store.state.dataMapping.data.tableType) {
             case 0:

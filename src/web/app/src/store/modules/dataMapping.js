@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {processMapping} from '@/store/helpers/processor.js'
-import conference from "@/store/modules/conference";
+//import conference from "@/store/modules/conference";
 
 export default {
   state: {
@@ -263,9 +263,6 @@ export default {
   }
 }
 
-function postConference(fnKeyEntry) {
-  return axios.post()
-}
 function postVersion(fnKeyEntry) {
   /*this.$store.dispatch('saveConference').then(() => {
     if (this.isNewConference && !this.isLogin) {
