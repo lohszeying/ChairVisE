@@ -25,7 +25,8 @@
 export default {
     methods: {
         createConference() {
-            this.$router.push("/manage/create");
+            //this.$router.push("/manage/create");
+            this.$router.push("/importData");
         },
     }    
 }

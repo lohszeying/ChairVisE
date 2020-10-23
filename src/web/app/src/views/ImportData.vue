@@ -85,6 +85,21 @@
           </el-tooltip>
         </h2>        
         <el-divider></el-divider>
+
+        <el-row class="form-card">
+          <el-col>
+            <label class="label">
+              Title
+            </label>
+            <br/>
+            <el-autocomplete
+                class="inline-input"
+                v-model="conferenceTitle"
+                :fetch-suggestions="querySearchConference"
+                placeholder="Title of Conference"
+            ></el-autocomplete>
+          </el-col>
+        </el-row>
         
         <el-row class="form-card">
           <el-col>
@@ -92,12 +107,11 @@
               Version
             </label>
             <br/>
-            <el-autocomplete
+            <el-date-picker
               class="inline-input"
-              v-model="versionId"
-              :fetch-suggestions="querySearch"
+              v-model="versionDate"
               placeholder="Input Version"
-            ></el-autocomplete>
+            ></el-date-picker>
           </el-col>
         </el-row>
         <div class="form-card">
@@ -147,7 +161,8 @@
     },
     beforeCreate() {
       this.$store.dispatch('fetchDBMetaDataEntities');
-      this.$store.dispatch('getVersionList');
+      this.$store.dispatch('getConferenceList');
+      //this.$store.dispatch('getVersionList');
     },
     computed: {
       isLogin() {
@@ -181,12 +196,27 @@
           this.$store.commit("setDBSchema", dbSchema);
         }
       },
-      versionId: {
+      conferenceTitle: {
         get: function () {
-          return this.$store.state.dataMapping.data.versionId;
+          //return this.$store.state.dataMapping.data.conferenceTitle;
+          this.$store.state.conference.conferenceForm.title
+          return this.$store.state.dataMapping.data.conferenceTitle;
+        },
+        set: function (value) {
+          //this.$store.commit("setConferenceTitle", newValue);
+          this.$store.commit('setConferenceFormField', {
+            field: 'title',
+            value
+          });
+          this.$store.commit("setConferenceTitle", value);
+        }
+      },
+      versionDate: {
+        get: function () {
+          return this.$store.state.dataMapping.data.versionDate;
         },
         set: function (newValue) {
-          this.$store.commit("setVersionId", newValue);
+          this.$store.commit("setVersionDate", newValue);
         }
       },
       hasHeader: {
@@ -219,7 +249,8 @@
           && this.$store.state.dataMapping.hasTableTypeSelected
           && this.$store.state.dataMapping.hasHeaderSpecified
           && this.$store.state.dataMapping.hasPredefinedSpecified
-          && this.$store.state.dataMapping.hasVersionIdSpecified;
+          && this.$store.state.dataMapping.hasConferenceTitleSpecified
+          && this.$store.state.dataMapping.hasVersionDateSpecified;
       },
       uploaded: function () {
         return this.$store.state.dataMapping.hasFileUploaded;
@@ -229,20 +260,21 @@
          && this.$store.state.dataMapping.hasTableTypeSelected
          && this.$store.state.dataMapping.hasHeaderSpecified
          && this.$store.state.dataMapping.hasPredefinedSwitchSpecified
-         && this.$store.state.dataMapping.hasVersionIdSpecified;
+         && this.$store.state.dataMapping.hasConferenceTitleSpecified
+         && this.$store.state.dataMapping.hasVersionDateSpecified;
       },
       isReadyForChoosing: function () {
         return this.$store.state.dataMapping.hasTableTypeSelected;
       }
     },
     methods: {
-      querySearch(queryString, cb) {
+      querySearchConference(queryString, cb) {
         // convert to array of string
-        var links = this.$store.state.presentation.versionList.map(v => v.versionId);
+        var links = this.$store.state.conference.conferenceList.map(c => c.title);
         // function to remove duplicate from array of string
-        let reduceFunction = (links) => links.filter((v,i) => links.indexOf(v) === i );
+        let reduceFunction = (links) => links.filter((c,i) => links.indexOf(c) === i );
         links = reduceFunction(links);
-        links = links.map(v => { return { "value" : v} });
+        links = links.map(c => { return { "value" : c} });
         var results = queryString ? links.filter(this.createFilter(queryString)) : links;
         cb(results);
       },
@@ -272,14 +304,42 @@
         // show loading and go parsing
         this.$store.commit("setPageLoadingStatus", true);
 
+
+        /* WORK IN PROGRESS */
+        //If conference list is empty, then create conference.
+        //console.log(this.$store.state.conference.conferenceList);
+        if (!this.$store.state.conference.conferenceList) {
+          //console.log("don't have");
+        } else {
+          var confExist = false;
+          for (var i = 0; i < this.$store.state.conference.conferenceList.length; i++) {
+            if (this.conferenceTitle.toLowerCase() === this.$store.state.conference.conferenceList[i].title.toLowerCase()) {
+              //Exist, don't save conference
+              confExist = true;
+              break;
+            }
+          }
+          if (!confExist) {
+            //console.log("didnt exist");
+            this.$store.dispatch('saveConference');
+            //Then add to version
+          } else {
+            //Existed, add to version
+            //console.log("exist");
+          }
+        }
+
+
         // if versionList is empty
         // console.log(this.$store.state.presentation.versionList);
         // filter by "AuthorRecord" "ReviewRecord" "SubmissionRecord"
         if (!this.$store.state.presentation.versionList) {
+          //console.log("here 1");
           this.$store.commit("setIsNewVersion", false);
         } else {
           // if tabletype 0 author elif 1 review elif 2 sub
           // filter by "AuthorRecord" "ReviewRecord" "SubmissionRecord"
+          //console.log("here 2");
           var verList;
           switch (this.$store.state.dataMapping.data.tableType) {
             case 0:
@@ -299,7 +359,7 @@
               break;
             default:
           }
-          this.$store.commit("setIsNewVersion", 
+          this.$store.commit("setIsNewVersion",
                             !verList.includes(this.$store.state.dataMapping.data.versionId));
         }
 

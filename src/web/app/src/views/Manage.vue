@@ -2,7 +2,7 @@
   <el-main>
     <h1 class="alignLeft">My Created Conferences </h1>
     <el-button class="alignRight" type="primary" icon="el-icon-plus"
-           v-if="!isConferenceListEmpty" @click="createConference">Add New Conference</el-button>
+           v-if="!isConferenceListEmpty" @click="createConference">Import Data</el-button>
     <br/>
     <el-divider></el-divider>
     <div class="infinite-list-wrapper">
@@ -87,7 +87,8 @@
     },
     methods: {
       createConference() {
-        this.$router.push("/manage/create");
+        //this.$router.push("/manage/create");
+        this.$router.push("/importData");
       },
       loadConferences() {
         this.show = true;
