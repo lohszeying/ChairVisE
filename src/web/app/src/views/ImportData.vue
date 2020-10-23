@@ -110,7 +110,6 @@
             <el-date-picker
               class="inline-input"
               v-model="versionDate"
-              :fetch-suggestions="querySearch"
               placeholder="Input Version"
             ></el-date-picker>
           </el-col>
@@ -272,16 +271,6 @@
         var results = queryString ? links.filter(this.createFilter(queryString)) : links;
         cb(results);
       },
-      querySearch(queryString, cb) {
-        // convert to array of string
-        var links = this.$store.state.presentation.versionList.map(v => v.versionId);
-        // function to remove duplicate from array of string
-        let reduceFunction = (links) => links.filter((v,i) => links.indexOf(v) === i );
-        links = reduceFunction(links);
-        links = links.map(v => { return { "value" : v} });
-        //var results = queryString ? links.filter(this.createFilter(queryString)) : links;
-        //cb(results);
-      },
       createFilter(queryString) {
         return (link) => {
           return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
@@ -308,14 +297,20 @@
         // show loading and go parsing
         this.$store.commit("setPageLoadingStatus", true);
 
+        //If conference list is empty, then create conference.
+        //if (!this.$store.state.conference)
+
+
         // if versionList is empty
         // console.log(this.$store.state.presentation.versionList);
         // filter by "AuthorRecord" "ReviewRecord" "SubmissionRecord"
         if (!this.$store.state.presentation.versionList) {
+          console.log("here 1");
           this.$store.commit("setIsNewVersion", false);
         } else {
           // if tabletype 0 author elif 1 review elif 2 sub
           // filter by "AuthorRecord" "ReviewRecord" "SubmissionRecord"
+          console.log("here 2");
           var verList;
           switch (this.$store.state.dataMapping.data.tableType) {
             case 0:
