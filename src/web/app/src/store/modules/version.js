@@ -48,7 +48,6 @@ export default {
     },
 
     addToVersionList(state, payload) {
-      console.log("Payload in version.js: ");
       console.log(payload);
       state.versionList.push(payload);
     },

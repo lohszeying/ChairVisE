@@ -18,12 +18,6 @@
               <div v-if="!isInEditMode" id="conference-description">{{ conferenceForm.description }}</div>
               <el-input type="textarea" autosize v-model="conferenceFormDescription" v-if="isInEditMode"/>
             </el-form-item>
-            <el-form-item label="Date: ">
-              <el-col>
-                <div v-if="!isInEditMode" id="conference-date">{{ conferenceForm.date.slice(0, 10) + "  " + conferenceForm.date.slice(11, 19) }}</div>
-                <el-input v-model="conferenceFormDate" v-if="isInEditMode"/>
-              </el-col>
-            </el-form-item>
           </el-form>
         </el-col>
       </el-row>
@@ -61,14 +55,10 @@
         return this.$store.state.userInfo.isLogin
       },
       conferenceForm() {
-
-        var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
-        var date = (new Date(new Date(this.conferenceFormDate) - tzoffset)).toISOString().slice(0, -1);
         return {
           title: this.conferenceFormTitle,
           creatorIdentifier: this.conferenceFormCreatorIdentifier,
           description: this.conferenceFormDescription,
-          date: date,
         }
       },
       conferenceFormTitle: {
@@ -92,17 +82,6 @@
         set(value) {
           this.$store.commit('setConferenceFormField', {
             field: 'description',
-            value
-          })
-        },
-      },
-      conferenceFormDate: {
-        get() {
-          return this.$store.state.conference.conferenceForm.date
-        },
-        set(value) {
-          this.$store.commit('setConferenceFormField', {
-            field: 'date',
             value
           })
         },
