@@ -50,18 +50,20 @@
 <script>
   import AbstractSectionDetail from "@/components/AbstractSectionDetail.vue"
   import {ID_NEW_PRESENTATION} from "@/common/const";
+  import {ID_NEW_CONFERENCE} from "@/common/const";
   import PredefinedQueries from "@/store/data/predefinedQueries"
   import EmptySection from "@/components/emptyStates/EmptySection.vue"
 
   export default {
     props: {
       presentationId: String,
+      id: String,
     },
     watch: {
       presentationId: 'fetchSectionList',
       'presentationFormVersion'() {
         this.updateVersion();
-      }
+      },
     },
     data() {
       return {
@@ -112,6 +114,9 @@
       isNewPresentation() {
         return this.presentationId === ID_NEW_PRESENTATION
       },
+      isNewConference() {
+        return this.id === ID_NEW_CONFERENCE
+      },
 
       sectionList() {
         return this.$store.state.section.sectionList
@@ -133,7 +138,11 @@
         return this.$store.state.dbMetaData.entitiesStatus.isLoading
       },
       versions() {
-        let list = Array.from(new Set(this.$store.state.presentation.versionList.map(v => v.versionId)));
+        //let test = Array.from(new Set(this.$store.state.version.versionList.map(v => v.date.split("-")[0])));
+        //console.log(test);
+
+        let list = Array.from(new Set(this.$store.state.version.versionList.map(v => v.date.split("-")[0])));
+        //let list = Array.from(new Set(this.$store.state.presentation.versionList.map(v => v.versionId)));
         this.setDefaultValueForVersionList(list[0]);
         return list;
       },
@@ -145,8 +154,7 @@
     mounted() {
       this.fetchSectionList();
       this.$store.dispatch('fetchDBMetaDataEntities');
-      //console.log(this.$store.state.);
-      this.$store.dispatch('getVersionList', 2);
+      this.$store.dispatch('getVersionList', this.$route.params.id);
     },
     methods: {
       updateVersion() {
