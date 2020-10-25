@@ -150,13 +150,7 @@
   import {deepCopy} from "@/common/utility"
   import PredefinedMappings from "@/store/data/predefinedMapping"
   import moment from "moment"
-
-  function format_date(value) {
-    if (value) {
-      return moment(String(value)).format('YYYY-MM-DD')
-    }
-  }
-
+  
   export default {
     name: "ImportData",
     data() {
