@@ -6,7 +6,7 @@ export default {
     versionList: [],
     versionForm: {
       id: '',
-      ver_date: '',
+      date: '',
       creatorIdentifier: '',
     },
     versionListStatus: {
@@ -71,7 +71,7 @@ export default {
 
     resetVersionForm(state) {
       state.versionForm.id = '';
-      state.versionForm.ver_date = '';
+      state.versionForm.date = '';
       state.versionForm.creatorIdentifier = '';
       state.versionFormStatus.isLoading = false;
       state.versionFormStatus.isApiError = false;
@@ -127,7 +127,7 @@ export default {
     },
 
     async saveVersion({commit, state}, conferenceId) {
-      console.log("inside version.js, version form: " + state.versionForm.ver_date);
+      console.log("inside version.js, version form: " + state.versionForm.date);
       commit('setVersionFormLoading', true);
       await axios.post(`/api/conferences/${conferenceId}/versions`, state.versionForm)
           .then(response => {
