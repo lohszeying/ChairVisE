@@ -151,6 +151,12 @@
   import PredefinedMappings from "@/store/data/predefinedMapping"
   import moment from "moment"
 
+  function format_date(value) {
+    if (value) {
+      return moment(String(value)).format('YYYY-MM-DD')
+    }
+  }
+
   export default {
     name: "ImportData",
     data() {
@@ -199,7 +205,7 @@
       conferenceTitle: {
         get: function () {
           //return this.$store.state.dataMapping.data.conferenceTitle;
-          this.$store.state.conference.conferenceForm.title
+          this.$store.state.conference.conferenceForm.title;
           return this.$store.state.dataMapping.data.conferenceTitle;
         },
         set: function (value) {
@@ -213,10 +219,17 @@
       },
       versionDate: {
         get: function () {
+          this.$store.state.version.versionForm.ver_date;
+          //console.log("version form: " + this.$store.state.version.versionForm.ver_date);
+          //console.log("dataMapping version date: " + this.$store.state.dataMapping.data.versionDate);
           return this.$store.state.dataMapping.data.versionDate;
         },
-        set: function (newValue) {
-          this.$store.commit("setVersionDate", newValue);
+        set: function (value) {
+          this.$store.commit('setVersionFormField', {
+            field: 'ver_date',
+            value
+          })
+          this.$store.commit("setVersionDate", value);
         }
       },
       hasHeader: {
@@ -312,20 +325,29 @@
           //console.log("don't have");
         } else {
           var confExist = false;
+          var confID = 0;
           for (var i = 0; i < this.$store.state.conference.conferenceList.length; i++) {
             if (this.conferenceTitle.toLowerCase() === this.$store.state.conference.conferenceList[i].title.toLowerCase()) {
               //Exist, don't save conference
               confExist = true;
+              confID = this.$store.state.conference.conferenceList[i].id;
               break;
             }
           }
           if (!confExist) {
             //console.log("didnt exist");
             this.$store.dispatch('saveConference');
+            //var newConfID = this.$store.state.conference.conferenceList[this.$store.state.conference.conferenceList.length].id;
+
             //Then add to version
           } else {
             //Existed, add to version
             //console.log("exist");
+            console.log("conf ID: " + confID);
+
+            this.$store.dispatch('saveVersion', confID);
+            console.log("version form: " + this.$store.state.version.versionForm.ver_date);
+
           }
         }
 
