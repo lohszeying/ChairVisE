@@ -131,6 +131,9 @@ export default {
       commit('setConferenceFormLoading', true);
       await axios.post('/api/conferences', state.conferenceForm)
           .then(response => {
+            console.log("In conference.js: ");
+            console.log(state.conferenceForm);
+            console.log(response.data);
             commit('addToConferenceList', deepCopy(response.data));
             commit('setConferenceForm', deepCopy(response.data))
             commit("setSaveSuccess", true);

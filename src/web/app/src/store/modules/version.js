@@ -48,6 +48,8 @@ export default {
     },
 
     addToVersionList(state, payload) {
+      console.log("Payload in version.js: ");
+      console.log(payload);
       state.versionList.push(payload);
     },
 
@@ -126,9 +128,18 @@ export default {
     },
 
     async saveVersion({commit, state}, conferenceId) {
+      console.log("inside version.js, version form: " + state.versionForm.ver_date);
       commit('setVersionFormLoading', true);
       await axios.post(`/api/conferences/${conferenceId}/versions`, state.versionForm)
           .then(response => {
+            //response.data.date = state.versionForm.ver_date;
+            //response.data.date = new Date(state.versionForm.ver_date);
+            //response.data.ver_date = new Date(state.versionForm.ver_date).toISOString().slice(0,10);
+            //response.data.ver_date = new Date(2020,1,2).toISOString().slice(0,10);
+            console.log("In version.js: ");
+            console.log(state.versionForm);
+            console.log(response.data);
+
             commit('addToVersionList', deepCopy(response.data));
             commit('setVersionForm', deepCopy(response.data))
             commit("setSaveSuccess", true);
