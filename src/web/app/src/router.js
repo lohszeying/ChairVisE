@@ -49,7 +49,7 @@ export default new Router({
       meta: {
         title: 'Section Page',
       },
-      component: () => import(/* webpackChunkName: "analyze" */ './views/PresentationSection.vue'),
+      component: () => import(/* webpackChunkName: "analyze" */ './views/ConferenceSection.vue'),
       props: true
     },
     {

@@ -117,7 +117,8 @@
         return this.$store.state.section.sectionList
       },
       isSectionListEmpty() {
-        return this.$store.state.section.sectionList.length <= 0
+        return this.$store.state.version.versionList.length <= 0
+        //return this.$store.state.section.sectionList.length <= 0
       },
       isLoadingSectionList() {
         return this.$store.state.section.sectionListStatus.isLoading
@@ -144,7 +145,8 @@
     mounted() {
       this.fetchSectionList();
       this.$store.dispatch('fetchDBMetaDataEntities');
-      this.$store.dispatch('getVersionList');
+      //console.log(this.$store.state.);
+      this.$store.dispatch('getVersionList', 2);
     },
     methods: {
       updateVersion() {
