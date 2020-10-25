@@ -107,11 +107,11 @@
               Version
             </label>
             <br/>
-            <el-date-picker
+            <el-input
               class="inline-input"
               v-model="versionDate"
               placeholder="Input Version"
-            ></el-date-picker>
+            ></el-input>
           </el-col>
         </el-row>
         <div class="form-card">
@@ -213,14 +213,14 @@
       },
       versionDate: {
         get: function () {
-          this.$store.state.version.versionForm.ver_date;
+          this.$store.state.version.versionForm.date;
           //console.log("version form: " + this.$store.state.version.versionForm.ver_date);
           //console.log("dataMapping version date: " + this.$store.state.dataMapping.data.versionDate);
           return this.$store.state.dataMapping.data.versionDate;
         },
         set: function (value) {
           this.$store.commit('setVersionFormField', {
-            field: 'ver_date',
+            field: 'date',
             value
           })
           this.$store.commit("setVersionDate", value);
@@ -340,7 +340,7 @@
             console.log("conf ID: " + confID);
 
             this.$store.dispatch('saveVersion', confID);
-            console.log("version form: " + this.$store.state.version.versionForm.ver_date);
+            console.log("version form: " + this.$store.state.version.versionForm.date);
 
           }
         }
