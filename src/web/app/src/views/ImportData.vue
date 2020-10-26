@@ -331,7 +331,16 @@
           if (!confExist) {
             //console.log("didnt exist");
             this.$store.dispatch('saveConference');
-            //var newConfID = this.$store.state.conference.conferenceList[this.$store.state.conference.conferenceList.length].id;
+
+            let newConfId = 1;
+
+            if (this.$store.state.conference.conferenceList.length > 0) {
+              let lastId = this.$store.state.conference.conferenceList[this.$store.state.conference.conferenceList.length - 1].id;
+              newConfId = newConfId + lastId;
+            }
+
+            //console.log("new id " + newConfID);
+            this.$store.dispatch('saveVersion', newConfId);
 
             //Then add to version
           } else {
