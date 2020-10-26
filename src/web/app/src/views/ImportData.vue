@@ -330,6 +330,7 @@
           }
           if (!confExist) {
             //console.log("didnt exist");
+            // if conf doesn't exist, save conf and save version at same time
             this.$store.dispatch('saveConference');
 
             let newConfId = 1;
@@ -345,11 +346,39 @@
             //Then add to version
           } else {
             //Existed, add to version
-            //console.log("exist");
-            console.log("conf ID: " + confID);
 
-            this.$store.dispatch('saveVersion', confID);
-            console.log("version form: " + this.$store.state.version.versionForm.date);
+            console.log("exist");
+            console.log("conf ID: " + confID);
+            console.log("current date: " + this.versionDate);
+
+            this.$store.dispatch('getVersionList', confID);
+            let isReplaced = false;
+
+            console.log("version list: " + this.$store.state.version.versionList);
+
+
+            for (let j = 0; j < this.$store.state.version.versionList.length; j++) {
+              let existingDate = this.$store.state.version.versionList[j].date.substring(0, 4);
+              let newDate = this.versionForm.date.substring(0, 4);
+
+              console.log("existing date: " + existingDate);
+              console.log("new date: " + newDate);
+              console.log(newDate === existingDate);
+
+
+              if (existingDate === newDate) {
+                let versionId = this.$store.state.version.versionList[j].id;
+                this.$store.dispatch('updateVersion', confID, versionId);
+                isReplaced = true;
+                break;
+              }
+            }
+
+            if (!isReplaced) {
+              this.$store.dispatch('saveVersion', confID);
+            }
+
+            //console.log("version form: " + this.$store.state.version.versionForm.date);
 
           }
         }

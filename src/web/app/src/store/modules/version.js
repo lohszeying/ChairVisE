@@ -112,9 +112,9 @@ export default {
           });
     },
 
-    async updateVersion({commit, state}, conferenceId) {
+    async updateVersion({commit, state}, {conferenceId, versionId}) {
       commit('setVersionFormLoading', true);
-      await axios.put(`/api/conferences/${conferenceId}/versions/` + state.version.id, state.versionForm)
+      await axios.put(`/api/conferences/${conferenceId}/versions/${versionId}`, state.versionForm)
           .then(response => {
             commit('updateVersionListWith', response.data)
           })
