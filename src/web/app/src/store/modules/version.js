@@ -87,7 +87,7 @@ export default {
 
   actions: {
     async getVersionList({commit}, conferenceId) {
-      axios.get(`/api/conferences/${conferenceId}/versions`)
+      return axios.get(`/api/conferences/${conferenceId}/versions`)
           .then(response => {
             commit('setVersionList', response.data)
           })
