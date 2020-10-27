@@ -1,3 +1,6 @@
+drop table if exists author_record, submission_record, review_record, presentation_permission,
+    presentation_section, presentation, version, conference;
+
 CREATE TABLE Conference (
     id int NOT NULL AUTO_INCREMENT,
     title varchar(255),
