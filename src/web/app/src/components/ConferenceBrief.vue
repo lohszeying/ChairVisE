@@ -161,7 +161,7 @@
                     return
                   }
                   this.$router.replace({
-                    name: 'conference',
+                    name: 'manage',
                     params: {
                       id: ID_NEW_CONFERENCE
                     }

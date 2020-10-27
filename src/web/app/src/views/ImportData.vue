@@ -104,11 +104,11 @@
         <el-row class="form-card">
           <el-col>
             <label class="label">
-              Version
+              Date
             </label>
             <br/>
             <el-input
-              class="inline-input"
+              type="date"
               v-model="versionDate"
               placeholder="Input Version"
             ></el-input>

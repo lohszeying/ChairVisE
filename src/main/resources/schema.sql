@@ -1,6 +1,3 @@
-drop table if exists author_record, submission_record, review_record, presentation_permission,
-    presentation_section, presentation, version, conference;
-
 CREATE TABLE Conference (
     id int NOT NULL AUTO_INCREMENT,
     title varchar(255),
@@ -14,7 +11,7 @@ CREATE TABLE Version (
     ver_date date,
     conference_id int,
     PRIMARY KEY (id),
-    FOREIGN KEY (conference_id) REFERENCES Conference (id),
+    FOREIGN KEY (conference_id) REFERENCES Conference (id) ON DELETE CASCADE,
     CONSTRAINT UC_Version UNIQUE (ver_date, conference_id)
 );
 
