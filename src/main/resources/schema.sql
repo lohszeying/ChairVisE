@@ -14,7 +14,7 @@ CREATE TABLE Version (
     ver_date date,
     conference_id int,
     PRIMARY KEY (id),
-    FOREIGN KEY (conference_id) REFERENCES Conference (id),
+    FOREIGN KEY (conference_id) REFERENCES Conference (id) ON DELETE CASCADE,
     CONSTRAINT UC_Version UNIQUE (ver_date, conference_id)
 );
 

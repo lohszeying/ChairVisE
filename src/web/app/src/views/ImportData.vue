@@ -77,9 +77,9 @@
 
           <el-tooltip placement="top">
             <div slot="content">
-              If the input version is an existing version, current record will be replaced based on record type.
+              If the date is based on an existing conference of the same year, current record will be replaced based on record type.
               <br/>
-              If the input version is a new version, current record will be created based on record type.
+              If the conference or the date of the conference is on a different year, current record will be created based on record type.
             </div>
             <el-button type="text" icon="el-icon-question" circle></el-button>
           </el-tooltip>
@@ -104,13 +104,13 @@
         <el-row class="form-card">
           <el-col>
             <label class="label">
-              Version
+              Date
             </label>
             <br/>
             <el-input
-              class="inline-input"
+              type="date"
               v-model="versionDate"
-              placeholder="Input Version"
+              placeholder="Input Date"
             ></el-input>
           </el-col>
         </el-row>
