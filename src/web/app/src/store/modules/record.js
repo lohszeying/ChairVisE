@@ -114,7 +114,7 @@ export default {
 
     actions: {
         async getRecordList({commit}, versionId) {
-            axios.get(`/api/versions/{versionId}`)
+            axios.get(`/api/versions/${versionId}`)
                 .then(response => {
                     commit('setRecordList', response.data)
                 })
@@ -128,7 +128,7 @@ export default {
 
         async saveAuthorRecord({commit, state}, versionId) {
             commit('setAuthorRecordFormLoading', true);
-            await axios.post(`/api/versions/{versionId}/authorRecord`, state.authorRecordForm)
+            await axios.post(`/api/versions/${versionId}/authorRecord`, state.authorRecordForm)
                 .then(response => {
                     console.log("In record.js: ");
                     console.log(state.authorRecordForm);
@@ -147,7 +147,7 @@ export default {
 
         async saveSubmissionRecord({commit, state}, versionId) {
             commit('setRecordFormLoading', true);
-            await axios.post(`/api/versions/{versionId}/submissionRecord`, state.submissionRecordForm)
+            await axios.post(`/api/versions/${versionId}/submissionRecord`, state.submissionRecordForm)
                 .then(response => {
                     console.log("In record.js: ");
                     console.log(state.submissionRecordForm);
@@ -166,7 +166,7 @@ export default {
 
         async saveReviewRecord({commit, state}, versionId) {
             commit('setRecordFormLoading', true);
-            await axios.post(`/api/versions/{versionId}/reviewRecord`, state.reviewRecordForm)
+            await axios.post(`/api/versions/${versionId}/reviewRecord`, state.reviewRecordForm)
                 .then(response => {
                     console.log("In record.js: ");
                     console.log(state.reviewRecordForm);
