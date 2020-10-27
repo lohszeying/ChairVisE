@@ -319,28 +319,68 @@
           //console.log("don't have");
         } else {
           var confExist = false;
-          var confID = 0;
+          var confId = 0;
           for (var i = 0; i < this.$store.state.conference.conferenceList.length; i++) {
             if (this.conferenceTitle.toLowerCase() === this.$store.state.conference.conferenceList[i].title.toLowerCase()) {
               //Exist, don't save conference
               confExist = true;
-              confID = this.$store.state.conference.conferenceList[i].id;
+              confId = this.$store.state.conference.conferenceList[i].id;
               break;
             }
           }
           if (!confExist) {
             //console.log("didnt exist");
+            // if conf doesn't exist, save conf and save version at same time
             this.$store.dispatch('saveConference');
-            //var newConfID = this.$store.state.conference.conferenceList[this.$store.state.conference.conferenceList.length].id;
+
+            let newConfId = 1;
+
+            if (this.$store.state.conference.conferenceList.length > 0) {
+              let lastId = this.$store.state.conference.conferenceList[this.$store.state.conference.conferenceList.length - 1].id;
+              newConfId = newConfId + lastId;
+            }
+
+            //console.log("new id " + newConfID);
+            this.$store.dispatch('saveVersion', newConfId);
 
             //Then add to version
           } else {
             //Existed, add to version
-            //console.log("exist");
-            console.log("conf ID: " + confID);
 
-            this.$store.dispatch('saveVersion', confID);
-            console.log("version form: " + this.$store.state.version.versionForm.date);
+            console.log("exist");
+            console.log("conf ID: " + confId);
+            console.log("current date: " + this.versionDate);
+            let isReplaced = false;
+
+            this.$store.dispatch('getVersionList', confId).then( () => {
+              console.log("version list: " + this.$store.state.version.versionList[0].date);
+
+
+              for (let j = 0; j < this.$store.state.version.versionList.length; j++) {
+                let existingDate = this.$store.state.version.versionList[j].date.substring(0, 4);
+                let newDate = this.versionDate.substring(0, 4);
+
+                console.log("existing date: " + existingDate);
+                console.log("new date: " + newDate);
+                console.log(newDate === existingDate);
+
+                if (existingDate === newDate) {
+                  let versionId = this.$store.state.version.versionList[j].id;
+                  console.log("conf id: " + confId);
+                  this.$store.dispatch('updateVersion', {conferenceId: confId, versionId: versionId});
+                  isReplaced = true;
+                  break;
+                }
+              }
+
+              if (!isReplaced) {
+                this.$store.dispatch('saveVersion', confId);
+              }
+
+
+            });
+
+            //console.log("version form: " + this.$store.state.version.versionForm.date);
 
           }
         }
