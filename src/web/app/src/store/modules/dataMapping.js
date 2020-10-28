@@ -220,6 +220,8 @@ export default {
         row.versionId = state.data.versionId;
       }
 
+      console.log("Payload: " + state.data.processedResult);
+
       // concurrent POST data and POST version requests 
       //axios.all([postTable(endpoint, state.data.processedResult), postVersion(fnKeyEntry)])  
       axios.post(`/api/versions/${state.data.versionId}/` + endpoint, state.data.processedResult)
