@@ -18,6 +18,10 @@
               <div v-if="!isInEditMode" id="conference-description">{{ conferenceForm.description }}</div>
               <el-input type="textarea" autosize v-model="conferenceFormDescription" v-if="isInEditMode"/>
             </el-form-item>
+            <el-form-item label="Creator: ">
+              <div v-if="!isInEditMode">{{ conferenceForm.creatorIdentifier }}</div>
+              <el-input type="textarea" autosize v-model="conferenceFormCreatorIdentifier" v-if="isInEditMode"/>
+            </el-form-item>
           </el-form>
         </el-col>
       </el-row>
@@ -73,7 +77,8 @@
         },
       },
       conferenceFormCreatorIdentifier() {
-        return this.$store.state.conference.conferenceForm.creatorIdentifier
+        return this.$store.state.conference.conferenceForm.userEmail
+        //return this.$store.state.conference.conferenceForm.creatorIdentifier
       },
       conferenceFormDescription: {
         get() {
