@@ -32,12 +32,12 @@ public class SubmissionRecord {
 
     // time submitted
     @Exportable(name = "Submission Time", nameInDB = "submission_time")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm")
     private Timestamp submission_time;
 
     //  time last updated
     @Exportable(name = "Last Updated Time", nameInDB = "last_updated_time")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm")
     private Timestamp last_updated_time;
 
     // keywords associated with submissions as put by the authors

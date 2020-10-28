@@ -1,7 +1,7 @@
-drop table if exists author_record, submission_record, review_record, presentation_permission,
+DROP TABLE IF EXISTS author_record, submission_record, review_record, presentation_permission,
     presentation_section, presentation, version, conference;
 
-CREATE TABLE Conference (
+CREATE TABLE conference (
     id int NOT NULL AUTO_INCREMENT,
     title varchar(255),
     description varchar(255),
@@ -9,16 +9,16 @@ CREATE TABLE Conference (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE Version (
+CREATE TABLE version (
     id int NOT NULL AUTO_INCREMENT,
     ver_date date,
     conference_id int,
     PRIMARY KEY (id),
-    FOREIGN KEY (conference_id) REFERENCES Conference (id) ON DELETE CASCADE,
+    FOREIGN KEY (conference_id) REFERENCES conference (id) ON DELETE CASCADE,
     CONSTRAINT UC_Version UNIQUE (ver_date, conference_id)
 );
 
-CREATE TABLE Author_Record (
+CREATE TABLE author_record (
     id int NOT NULL AUTO_INCREMENT,
     submission_id int,
     first_name varchar(255),
@@ -32,10 +32,10 @@ CREATE TABLE Author_Record (
     is_corresponding varchar(3),
     version_id int,
     PRIMARY KEY (id),
-    FOREIGN KEY (version_id) REFERENCES Version (id)
+    FOREIGN KEY (version_id) REFERENCES version (id)
 );
 
-CREATE TABLE Submission_Record (
+CREATE TABLE submission_record (
     id int NOT NULL AUTO_INCREMENT,
     submission_id int,
     track_id int,
@@ -50,10 +50,10 @@ CREATE TABLE Submission_Record (
     submission_abstract text,
     version_id int,
     PRIMARY KEY (id),
-    FOREIGN KEY (version_id) REFERENCES Version (id)
+    FOREIGN KEY (version_id) REFERENCES version (id)
 );
 
-CREATE TABLE Review_Record (
+CREATE TABLE review_record (
     id int NOT NULL AUTO_INCREMENT,
     review_id int,
     submission_id int,
@@ -67,28 +67,28 @@ CREATE TABLE Review_Record (
     has_recommended_for_best_paper varchar(3),
     version_id int,
     PRIMARY KEY (id),
-    FOREIGN KEY (version_id) REFERENCES Version (id)
+    FOREIGN KEY (version_id) REFERENCES version (id)
 );
 
-CREATE TABLE Presentation (
+CREATE TABLE presentation (
     id int NOT NULL AUTO_INCREMENT,
     user_email varchar(255),
     version_id int,
     PRIMARY KEY (id),
-    FOREIGN KEY (version_id) REFERENCES Version (id)
+    FOREIGN KEY (version_id) REFERENCES version (id)
 );
 
-CREATE TABLE Presentation_Permission (
+CREATE TABLE presentation_permission (
     id int NOT NULL AUTO_INCREMENT,
     user_email varchar(255),
     presentation_id int,
     permission varchar(255),
     PRIMARY KEY (id),
-    FOREIGN KEY (presentation_id) REFERENCES Presentation (id),
+    FOREIGN KEY (presentation_id) REFERENCES presentation (id),
     CONSTRAINT UC_Permission UNIQUE (user_email, presentation_id)
 );
 
-CREATE TABLE Presentation_Section (
+CREATE TABLE presentation_section (
     id int NOT NULL AUTO_INCREMENT,
     presentation_id int,
     title varchar(255),
@@ -102,5 +102,5 @@ CREATE TABLE Presentation_Section (
     sorters varchar(255),
     extra_data varchar(255),
     PRIMARY KEY (id),
-    FOREIGN KEY (presentation_id) REFERENCES Presentation (id)
+    FOREIGN KEY (presentation_id) REFERENCES presentation (id)
 );

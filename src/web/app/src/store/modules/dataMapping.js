@@ -27,6 +27,7 @@ export default {
       isNewVersion: null,
       conferenceTitle: null,
       versionDate: null,
+      versionId: null,
       hasHeader: null,
       hasPredefined: null, // new
       predefinedMapping: null,
@@ -103,6 +104,11 @@ export default {
     setVersionDate(state, selected) {
       state.data.versionDate = selected;
       state.hasVersionDateSpecified = true;
+    },
+
+    setVersionId(state, id) {
+      console.log("Set version is run!");
+      state.data.versionId = id;
     },
 
     clearVersionDate(state) {
@@ -190,15 +196,15 @@ export default {
       let fnKeyTable;
       switch (state.data.tableType) {
         case 0:
-          endpoint = "author";
+          endpoint = "authorRecord";
           fnKeyTable = "AuthorRecord";
           break;
         case 1:
-          endpoint = "review";
+          endpoint = "reviewRecord";
           fnKeyTable = "ReviewRecord";
           break;
         case 2:
-          endpoint = "submission";
+          endpoint = "submissionRecord";
           fnKeyTable = "SubmissionRecord";
           break;
       }
@@ -211,11 +217,14 @@ export default {
       for (var i=0; i<state.data.processedResult.length; i++){
         var row = state.data.processedResult[i];
         row.conferenceId = state.data.conferenceTitle;
-        row.versionId = state.data.versionDate;
+        row.versionId = state.data.versionId;
       }
 
+      console.log("Payload: " + state.data.processedResult);
+
       // concurrent POST data and POST version requests 
-      axios.all([postTable(endpoint, state.data.processedResult), postVersion(fnKeyEntry)])  
+      //axios.all([postTable(endpoint, state.data.processedResult), postVersion(fnKeyEntry)])  
+      axios.post(`/api/versions/${state.data.versionId}/` + endpoint, state.data.processedResult)
         .then(axios.spread( () => {
           commit("setPageLoadingStatus", false);
           commit("setUploadSuccess", true);
@@ -262,7 +271,7 @@ export default {
     }
   }
 }
-
+/*
 function postVersion(fnKeyEntry) {
   /*this.$store.dispatch('saveConference').then(() => {
     if (this.isNewConference && !this.isLogin) {
@@ -270,10 +279,11 @@ function postVersion(fnKeyEntry) {
     }
   }) */
   //console.log("fnKeyEntry: version ID: " + fnKeyEntry.versionId);
-
+/*
   return axios.post("/api/version", fnKeyEntry);
 }
 
 function postTable(endpoint, processedResult) {
   return axios.post("/api/record/" + endpoint, processedResult);
 }
+*/

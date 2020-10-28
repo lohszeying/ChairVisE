@@ -356,7 +356,12 @@
               let newConfId = this.$store.state.conference.conferenceList[this.$store.state.conference.conferenceList.length - 1].id;
 
               console.log("new id: " + newConfId);
-              this.$store.dispatch('saveVersion', newConfId);
+              this.$store.dispatch('saveVersion', newConfId).then(() => {
+                const versionId = this.$store.state.version.versionList[this.$store.state.version.versionList.length - 1].id;
+                console.log("New version id: " + versionId);
+                this.$store.commit('setVersionId', versionId);
+                console.log(this.$store.state.dataMapping.data.versionId);
+              });
 
             });
 
@@ -377,13 +382,15 @@
                 let existingDate = this.$store.state.version.versionList[j].date.substring(0, 4);
                 let newDate = this.versionDate.substring(0, 4);
 
-                //console.log("existing date: " + existingDate);
-                //console.log("new date: " + newDate);
-                //console.log(newDate === existingDate);
+                console.log("existing date: " + existingDate);
+                console.log("new date: " + newDate);
+                console.log(newDate === existingDate);
 
                 if (existingDate === newDate) {
                   let versionId = this.$store.state.version.versionList[j].id;
-                  //console.log("conf id: " + confId);
+                  console.log("conf id: " + confId);
+                  console.log("version id: " + versionId);
+                  this.$store.commit('setVersionId', versionId);
                   this.$store.dispatch('updateVersion', {conferenceId: confId, versionId: versionId});
                   isReplaced = true;
                   break;
@@ -393,11 +400,8 @@
               if (!isReplaced) {
                 this.$store.dispatch('saveVersion', confId);
               }
-
-
             });
-
-            //console.log("version form: " + this.$store.state.version.versionForm.date);
+            console.log("version form: " + this.$store.state.version.versionForm.date);
 
           }
         }
