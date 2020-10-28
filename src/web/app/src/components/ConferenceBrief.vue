@@ -37,7 +37,7 @@
         title="Warning"
         :visible.sync="wantToDelete"
         width="30%" center>
-      <span> Are you sure you want to delete your conference?</span>
+      <span> Are you sure you want to delete your conference? This action cannot be undone.</span>
       <span slot="footer" class="dialog-footer">
                 <el-button v-on:click="wantToDelete = false">Cancel</el-button>
                 <el-button type="danger" v-on:click="deleteConference">Yes</el-button>
