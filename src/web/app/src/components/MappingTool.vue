@@ -230,7 +230,9 @@
         this.$store.commit("clearPredefinedMapping");
         this.$store.commit("clearPredefinedSwitch");
         this.$store.commit("clearIsNewVersion");
-        this.$store.dispatch('getVersionList');
+        this.$router.push({
+                    name: 'manage'
+                });
       }
     },
     mounted() {
