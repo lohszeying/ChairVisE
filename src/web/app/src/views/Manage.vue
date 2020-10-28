@@ -18,11 +18,8 @@
                   <el-col class="conference-id" :span="1">
                     <p> #{{conference.id}} </p>
                   </el-col>
-                  <el-col :span="19" :offset="1">
+                  <el-col class="conference-title" :span="19" :offset="1">
                     <p> {{ conference.title }} </p>
-                  </el-col>
-                  <el-col :span="19" :offset="1">
-                    <p>{{ conference.description }}</p>
                   </el-col>
                 </el-row>
               </el-button>
@@ -153,6 +150,10 @@
     margin-top: 1rem;
   }
   .conference-id {
-    margin-top: 1.7rem;
+    margin-top: 1rem;
+    font-size: 13px;
+  }
+  .conference-title {
+    font-size: 17px;
   }
 </style>
