@@ -18,20 +18,20 @@ public class PresentationSectionService {
     }
 
     @Transactional
-    public List<PresentationSection> findAllByPresentation(Long presentationId) {
+    public List<PresentationSection> findAllByVersion(Long versionId) {
 
-        return presentationSectionRepository.findAllByPresentationId(presentationId);
+        return presentationSectionRepository.findAllByVersionId(versionId);
     }
 
     @Transactional
-    public PresentationSection savePresentationSection(Long presentationId, PresentationSection presentationSection) {
+    public PresentationSection savePresentationSection(Long versionId, PresentationSection presentationSection) {
 
-        presentationSection.setPresentationId(presentationId);
+        presentationSection.setVersionId(versionId);
         return presentationSectionRepository.save(presentationSection);
     }
 
     @Transactional
-    public PresentationSection updatePresentationSection(Long presentationId, Long sectionId, PresentationSection newPresentationSection) {
+    public PresentationSection updatePresentationSection(Long versionId, Long sectionId, PresentationSection newPresentationSection) {
         return presentationSectionRepository.findById(sectionId)
                 .map(presentationSection -> {
                     presentationSection.setTitle(newPresentationSection.getTitle());
@@ -45,13 +45,13 @@ public class PresentationSectionService {
                     presentationSection.setExtraData(newPresentationSection.getExtraData());
                     return presentationSectionRepository.save(presentationSection);
                 })
-                .orElseThrow(() -> new PresentationSectionNotFoundException(presentationId, sectionId));
+                .orElseThrow(() -> new PresentationSectionNotFoundException(versionId, sectionId));
     }
 
     @Transactional
-    public void deletePresentationSection(Long presentationId, Long sectionId) {
+    public void deletePresentationSection(Long versionId, Long sectionId) {
         presentationSectionRepository.findById(sectionId)
-                .orElseThrow(() -> new PresentationSectionNotFoundException(presentationId, sectionId));
+                .orElseThrow(() -> new PresentationSectionNotFoundException(versionId, sectionId));
 
         presentationSectionRepository.deleteById(sectionId);
     }

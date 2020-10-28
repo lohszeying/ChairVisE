@@ -1,5 +1,5 @@
 drop table if exists author_record, submission_record, review_record, presentation_permission,
-    presentation_section, presentation, version, conference;
+    presentation_section, version, conference;
 
 CREATE TABLE Conference (
     id int NOT NULL AUTO_INCREMENT,
@@ -70,27 +70,19 @@ CREATE TABLE Review_Record (
     FOREIGN KEY (version_id) REFERENCES Version (id)
 );
 
-CREATE TABLE Presentation (
-    id int NOT NULL AUTO_INCREMENT,
-    user_email varchar(255),
-    version_id int,
-    PRIMARY KEY (id),
-    FOREIGN KEY (version_id) REFERENCES Version (id)
-);
-
 CREATE TABLE Presentation_Permission (
     id int NOT NULL AUTO_INCREMENT,
     user_email varchar(255),
-    presentation_id int,
+    version_id int,
     permission varchar(255),
     PRIMARY KEY (id),
-    FOREIGN KEY (presentation_id) REFERENCES Presentation (id),
-    CONSTRAINT UC_Permission UNIQUE (user_email, presentation_id)
+    FOREIGN KEY (version_id) REFERENCES Version (id),
+    CONSTRAINT UC_Permission UNIQUE (user_email, version_id)
 );
 
 CREATE TABLE Presentation_Section (
     id int NOT NULL AUTO_INCREMENT,
-    presentation_id int,
+    version_id int,
     title varchar(255),
     description text,
     type varchar(255),
@@ -102,5 +94,5 @@ CREATE TABLE Presentation_Section (
     sorters varchar(255),
     extra_data varchar(255),
     PRIMARY KEY (id),
-    FOREIGN KEY (presentation_id) REFERENCES Presentation (id)
+    FOREIGN KEY (version_id) REFERENCES Version (id)
 );

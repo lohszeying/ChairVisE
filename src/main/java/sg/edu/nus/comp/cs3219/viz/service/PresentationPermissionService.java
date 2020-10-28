@@ -18,24 +18,24 @@ public class PresentationPermissionService {
     }
 
     @Transactional
-    public List<PresentationPermission> findAllByPresentation(Long presentationId) {
+    public List<PresentationPermission> findAllByVersion(Long versionId) {
 
-        return presentationPermissionRepository.findAllByPresentationId(presentationId);
+        return presentationPermissionRepository.findAllByVersionId(versionId);
     }
 
     @Transactional
     public PresentationPermission savePresentationPermission(
-            Long presentationId,
+            Long versionId,
             PresentationPermission presentationPermission
     ) {
 
-        presentationPermission.setPresentationId(presentationId);
+        presentationPermission.setVersionId(versionId);
         return presentationPermissionRepository.save(presentationPermission);
     }
 
     @Transactional
     public PresentationPermission updatePresentationPermission(
-            Long presentationId,
+            Long versionId,
             Long permissionId,
             PresentationPermission newPresentationPermission
     ) {
@@ -46,13 +46,13 @@ public class PresentationPermissionService {
                     permission.setUserEmail(newPresentationPermission.getUserEmail());
                     return presentationPermissionRepository.save(permission);
                 })
-                .orElseThrow(() -> new PresentationPermissionNotFoundException(presentationId, permissionId));
+                .orElseThrow(() -> new PresentationPermissionNotFoundException(versionId, permissionId));
     }
 
     @Transactional
-    public void deletePresentationPermission(Long presentationId, Long permissionId) {
+    public void deletePresentationPermission(Long versionId, Long permissionId) {
         presentationPermissionRepository.findById(permissionId)
-                .orElseThrow(() -> new PresentationPermissionNotFoundException(presentationId, permissionId));
+                .orElseThrow(() -> new PresentationPermissionNotFoundException(versionId, permissionId));
 
         presentationPermissionRepository.deleteById(permissionId);
     }

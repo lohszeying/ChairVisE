@@ -26,8 +26,8 @@ public class PresentationSection {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "presentation_id")
-    private Long presentationId;
+    @Column(name = "version_id")
+    private Long versionId;
 
     private String title;
 
@@ -175,7 +175,7 @@ public class PresentationSection {
             return objectMapper.readValue(data, new TypeReference<T>() {});
         } catch (IOException e) {
             log.severe(e.getMessage());
-            return new ArrayList<T>();
+            return new ArrayList<>();
         }
     }
 }

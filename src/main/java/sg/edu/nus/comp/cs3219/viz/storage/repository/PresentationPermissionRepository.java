@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface PresentationPermissionRepository extends JpaRepository<PresentationPermission, Long> {
 
-    List<PresentationPermission> findAllByPresentationId(Long presentationId);
+    List<PresentationPermission> findAllByVersionId(Long versionId);
 
 }
