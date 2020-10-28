@@ -162,9 +162,8 @@
     beforeCreate() {
       this.$store.dispatch('fetchDBMetaDataEntities');
       this.$store.dispatch('getConferenceList');
-      //Set HasHeader and PredefinedSwitch to true by default
+      //Set HasHeader to true by default
       this.$store.commit("setHasHeader", true);
-      this.$store.commit("setPredefinedSwitch", true);
     },
     computed: {
       isLogin() {
