@@ -320,28 +320,30 @@
         } else {
           var confExist = false;
           var confId = 0;
+
+          console.log("current user: " + this.$store.state.userInfo.userEmail);
+
           for (var i = 0; i < this.$store.state.conference.conferenceList.length; i++) {
-            if (this.conferenceTitle.toLowerCase() === this.$store.state.conference.conferenceList[i].title.toLowerCase()) {
+            if (this.conferenceTitle.toLowerCase() === this.$store.state.conference.conferenceList[i].title.toLowerCase() &&
+                this.$store.state.userInfo.userEmail === this.$store.state.conference.conferenceList[i].userEmail) {
               //Exist, don't save conference
+              console.log("conference user: " + this.$store.state.conference.conferenceList[i].userEmail);
               confExist = true;
               confId = this.$store.state.conference.conferenceList[i].id;
               break;
             }
           }
           if (!confExist) {
-            //console.log("didnt exist");
+            console.log("didnt exist");
             // if conf doesn't exist, save conf and save version at same time
-            this.$store.dispatch('saveConference');
+            this.$store.dispatch('saveConference').then(() => {
 
-            let newConfId = 1;
+              let newConfId = this.$store.state.conference.conferenceList[this.$store.state.conference.conferenceList.length - 1].id;
 
-            if (this.$store.state.conference.conferenceList.length > 0) {
-              let lastId = this.$store.state.conference.conferenceList[this.$store.state.conference.conferenceList.length - 1].id;
-              newConfId = newConfId + lastId;
-            }
+              console.log("new id: " + newConfId);
+              this.$store.dispatch('saveVersion', newConfId);
 
-            //console.log("new id " + newConfID);
-            this.$store.dispatch('saveVersion', newConfId);
+            });
 
             //Then add to version
           } else {
@@ -349,24 +351,24 @@
 
             console.log("exist");
             console.log("conf ID: " + confId);
-            console.log("current date: " + this.versionDate);
+            //console.log("current date: " + this.versionDate);
             let isReplaced = false;
 
             this.$store.dispatch('getVersionList', confId).then( () => {
-              console.log("version list: " + this.$store.state.version.versionList[0].date);
+              //console.log("version list: " + this.$store.state.version.versionList[0].date);
 
 
               for (let j = 0; j < this.$store.state.version.versionList.length; j++) {
                 let existingDate = this.$store.state.version.versionList[j].date.substring(0, 4);
                 let newDate = this.versionDate.substring(0, 4);
 
-                console.log("existing date: " + existingDate);
-                console.log("new date: " + newDate);
-                console.log(newDate === existingDate);
+                //console.log("existing date: " + existingDate);
+                //console.log("new date: " + newDate);
+                //console.log(newDate === existingDate);
 
                 if (existingDate === newDate) {
                   let versionId = this.$store.state.version.versionList[j].id;
-                  console.log("conf id: " + confId);
+                  //console.log("conf id: " + confId);
                   this.$store.dispatch('updateVersion', {conferenceId: confId, versionId: versionId});
                   isReplaced = true;
                   break;
