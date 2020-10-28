@@ -10,19 +10,13 @@
                    :model="conferenceForm" v-loading="isLoading" >
             <el-alert v-if="isError" :title="apiErrorMsg" type="error" show-icon class="errorMsg"/>
 
-            <el-form-item label="Name: " :prop=" isInEditMode ? 'name' : ''" >
-              <div v-if="!isInEditMode">{{ conferenceForm.name }}</div>
-              <el-input v-model="conferenceFormName" v-if="isInEditMode"/>
+            <el-form-item label="Title: " :prop=" isInEditMode ? 'title' : ''" >
+              <div v-if="!isInEditMode">{{ conferenceForm.title }}</div>
+              <el-input v-model="conferenceFormTitle" v-if="isInEditMode"/>
             </el-form-item>
-            <el-form-item label="Description: ">
-              <div v-if="!isInEditMode" id="conference-description">{{ conferenceForm.description }}</div>
-              <el-input type="textarea" autosize v-model="conferenceFormDescription" v-if="isInEditMode"/>
-            </el-form-item>
-            <el-form-item label="Date: ">
-              <el-col>
-                <div v-if="!isInEditMode" id="conference-date">{{ conferenceForm.date.slice(0, 10) + "  " + conferenceForm.date.slice(11, 19) }}</div>
-                <el-input v-model="conferenceFormDate" v-if="isInEditMode"/>
-              </el-col>
+            <el-form-item label="Creator: ">
+              <div v-if="!isInEditMode">{{ conferenceForm.creatorIdentifier }}</div>
+              <el-input type="textarea" autosize v-model="conferenceFormCreatorIdentifier" v-if="isInEditMode"/>
             </el-form-item>
           </el-form>
         </el-col>
@@ -31,12 +25,24 @@
       <div class="options-section">
         <el-button-group>
           <el-button type="danger" v-if="!isNewConference && isLogin"
-                    @click="deleteConference()">
+                    @click="deleteConferenceClick()">
             <i class="el-icon-delete"> Delete </i>
           </el-button>
         </el-button-group>
       </div>
     </el-card>
+
+    <!-- Newly added, will prompt user if user want to delete a conference -->
+    <el-dialog
+        title="Warning"
+        :visible.sync="wantToDelete"
+        width="30%" center>
+      <span> Are you sure you want to delete your conference? This action cannot be undone.</span>
+      <span slot="footer" class="dialog-footer">
+                <el-button v-on:click="wantToDelete = false">Cancel</el-button>
+                <el-button type="danger" v-on:click="deleteConference">Yes</el-button>
+            </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -61,51 +67,25 @@
         return this.$store.state.userInfo.isLogin
       },
       conferenceForm() {
-
-        var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
-        var date = (new Date(new Date(this.conferenceFormDate) - tzoffset)).toISOString().slice(0, -1);
         return {
-          name: this.conferenceFormName,
+          title: this.conferenceFormTitle,
           creatorIdentifier: this.conferenceFormCreatorIdentifier,
-          description: this.conferenceFormDescription,
-          date: date,
         }
       },
-      conferenceFormName: {
+      conferenceFormTitle: {
         get() {
-          return this.$store.state.conference.conferenceForm.name
+          return this.$store.state.conference.conferenceForm.title
         },
         set(value) {
           this.$store.commit('setConferenceFormField', {
-            field: 'name',
+            field: 'title',
             value
           })
         },
       },
       conferenceFormCreatorIdentifier() {
-        return this.$store.state.conference.conferenceForm.creatorIdentifier
-      },
-      conferenceFormDescription: {
-        get() {
-          return this.$store.state.conference.conferenceForm.description
-        },
-        set(value) {
-          this.$store.commit('setConferenceFormField', {
-            field: 'description',
-            value
-          })
-        },
-      },
-      conferenceFormDate: {
-        get() {
-          return this.$store.state.conference.conferenceForm.date
-        },
-        set(value) {
-          this.$store.commit('setConferenceFormField', {
-            field: 'date',
-            value
-          })
-        },
+        return this.$store.state.conference.conferenceForm.userEmail
+        //return this.$store.state.conference.conferenceForm.creatorIdentifier
       },
       isNewConference() {
         return this.id === ID_NEW_CONFERENCE
@@ -126,6 +106,7 @@
     data() {
       return {
         isEditing: false,
+        wantToDelete: false,
         rules: {
           name: [
             {required: true, message: 'Please enter conference name', trigger: 'blur'},
@@ -177,18 +158,21 @@
       },
       deleteConference() {
         this.$store.dispatch('deleteConference', this.id)
-                .then(() => {
-                  if (this.isError) {
-                    return
-                  }
-                  this.$router.replace({
-                    name: 'conference',
-                    params: {
-                      id: ID_NEW_CONFERENCE
-                    }
-                  });
-                  this.isEditing = false;
-                })
+            .then(() => {
+              if (this.isError) {
+                return
+              }
+              this.$router.replace({
+                name: 'manage',
+                params: {
+                  id: ID_NEW_CONFERENCE
+                }
+              });
+              this.isEditing = false;
+            })
+      },
+      deleteConferenceClick() {
+        this.wantToDelete = true;
       },
       updateConferenceForm() {
         if (this.$refs['conferenceForm']) {

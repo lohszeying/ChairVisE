@@ -31,7 +31,7 @@ export default new Router({
       meta: {
         title: 'Create Presentation Page',
       },
-      component: () => import(/* webpackChunkName: "analyze" */ './views/NewPresentation.vue'),
+      component: () => import(/* webpackChunkName: "analyze" */ './views/NewConference.vue'),
       props: true
     },
     {
@@ -49,33 +49,33 @@ export default new Router({
       meta: {
         title: 'Section Page',
       },
-      component: () => import(/* webpackChunkName: "analyze" */ './views/PresentationSection.vue'),
+      component: () => import(/* webpackChunkName: "analyze" */ './views/ConferenceSection.vue'),
       props: true
     },
     {
-      path: '/conference/add',
+      path: '/calendar/add',
       meta: {
         title: 'Add Conference Page',
       },
-      component: () => import(/* webpackChunkName: "conference" */ './views/NewConference.vue'),
+      component: () => import(/* webpackChunkName: "conference" */ './views/NewCalendar.vue'),
       props: true
     },
     {
-      path: '/conference',
+      path: '/calendar',
       name: 'conference',
       meta: {
         title: 'My Conferences',
       },
-      component: () => import(/* webpackChunkName: "analyze" */ './views/ViewConferences.vue'),
+      component: () => import(/* webpackChunkName: "analyze" */ './views/ViewCalendar.vue'),
       props: true
     },
     {
-      path: '/conference/:id',
+      path: '/calendar/:id',
       name: 'details',
       meta: {
         title: 'Conference Details Page',
       },
-      component: () => import(/* webpackChunkName: "analyze" */ './views/ConferenceSection.vue'),
+      component: () => import(/* webpackChunkName: "analyze" */ './views/CalendarSection.vue'),
       props: true
     },
     {

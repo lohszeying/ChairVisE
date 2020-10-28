@@ -50,18 +50,20 @@
 <script>
   import AbstractSectionDetail from "@/components/AbstractSectionDetail.vue"
   import {ID_NEW_PRESENTATION} from "@/common/const";
+  import {ID_NEW_CONFERENCE} from "@/common/const";
   import PredefinedQueries from "@/store/data/predefinedQueries"
   import EmptySection from "@/components/emptyStates/EmptySection.vue"
 
   export default {
     props: {
       presentationId: String,
+      id: String,
     },
     watch: {
       presentationId: 'fetchSectionList',
       'presentationFormVersion'() {
         this.updateVersion();
-      }
+      },
     },
     data() {
       return {
@@ -112,12 +114,16 @@
       isNewPresentation() {
         return this.presentationId === ID_NEW_PRESENTATION
       },
+      isNewConference() {
+        return this.id === ID_NEW_CONFERENCE
+      },
 
       sectionList() {
         return this.$store.state.section.sectionList
       },
       isSectionListEmpty() {
-        return this.$store.state.section.sectionList.length <= 0
+        return this.$store.state.version.versionList.length <= 0
+        //return this.$store.state.section.sectionList.length <= 0
       },
       isLoadingSectionList() {
         return this.$store.state.section.sectionListStatus.isLoading
@@ -132,7 +138,11 @@
         return this.$store.state.dbMetaData.entitiesStatus.isLoading
       },
       versions() {
-        let list = Array.from(new Set(this.$store.state.presentation.versionList.map(v => v.versionId)));
+        //let test = Array.from(new Set(this.$store.state.version.versionList.map(v => v.date.split("-")[0])));
+        //console.log(test);
+
+        let list = Array.from(new Set(this.$store.state.version.versionList.map(v => v.id + ". " + v.date.split("-")[0])));
+        //let list = Array.from(new Set(this.$store.state.presentation.versionList.map(v => v.versionId)));
         this.setDefaultValueForVersionList(list[0]);
         return list;
       },
@@ -144,11 +154,13 @@
     mounted() {
       this.fetchSectionList();
       this.$store.dispatch('fetchDBMetaDataEntities');
-      this.$store.dispatch('getVersionList');
+      this.$store.dispatch('getVersionList', this.$route.params.id);
     },
     methods: {
       updateVersion() {
-        var value = this.presentationFormVersion;
+        //Value is ID (will extract out ID)
+        var value = this.presentationFormVersion.split(".")[0];
+        console.log("value: " + value);
         if (value === undefined) {
             value = this.versions[0];
         }

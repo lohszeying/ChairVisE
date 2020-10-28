@@ -1,28 +1,28 @@
 <template>
   <el-main>
-    <h1 class="alignLeft">My Created Presentations </h1>
+    <h1 class="alignLeft">My Created Conferences </h1>
     <el-button class="alignRight" type="primary" icon="el-icon-plus"
-           v-if="!isPresentationListEmpty" @click="createPresentation">Add New Presentation</el-button>
+           v-if="!isConferenceListEmpty" @click="createConference">Import Data</el-button>
     <br/>
     <el-divider></el-divider>
     <div class="infinite-list-wrapper">
-      <el-card v-if="isPresentationListEmpty" >
-        <EmptyPresentation />
+      <el-card v-if="isConferenceListEmpty" >
+        <EmptyConference />
       </el-card>
-      <ul class="infinite-list" v-infinite-scroll="loadMorePresentation" infinite-scroll-disabled="disabled" v-loading="isLoading">
-        <li v-for="(presentation, index) in presentations" :key="presentation.id">
+      <ul class="infinite-list" v-infinite-scroll="loadMoreConference" infinite-scroll-disabled="disabled" v-loading="isLoading">
+        <li v-for="(conference, index) in conferences" :key="conference.id">
           <zoom-center-transition :duration="500" :delay="100 * (index - 1)">
             <el-card shadow="hover">
-              <el-button type="text" class="presentationCard" v-show="show" @click="viewPresentation(presentation.id)">
+              <el-button type="text" class="conferenceCard" v-show="show" @click="viewConference(conference.id)">
                 <el-row>
-                  <el-col class="presentation-id" :span="1">
-                    <p> #{{presentation.id}} </p>
+                  <el-col class="conference-id" :span="1">
+                    <p> #{{conference.id}} </p>
                   </el-col>
                   <el-col :span="19" :offset="1">
-                    <p> {{ presentation.name }} </p>
+                    <p> {{ conference.title }} </p>
                   </el-col>
                   <el-col :span="19" :offset="1">
-                    <p>{{ presentation.description }}</p>
+                    <p>{{ conference.description }}</p>
                   </el-col>
                 </el-row>
               </el-button>
@@ -36,10 +36,10 @@
 
 <script>
   import {ZoomCenterTransition} from 'vue2-transitions'
-  import EmptyPresentation from '@/components/emptyStates/EmptyPresentation.vue'
+  import EmptyConference from '@/components/emptyStates/EmptyConference.vue'
 
   export default {
-    name: 'Analyze',
+    name: 'Manage',
     props: {
       id: String,
     },
@@ -55,7 +55,7 @@
           return
         }
         this.$notify.error({
-          title: 'Presentation list API request fail',
+          title: 'Conference list API request fail',
           message: this.$store.state.presentation.presentationListStatus.apiErrorMsg,
           duration: 0
         });
@@ -69,39 +69,40 @@
         return this.$store.state.isPageLoading
       },
       isLoading() {
-        return this.$store.state.presentation.presentationListStatus.isLoading
+        return this.$store.state.conference.conferenceListStatus.isLoading
       },
-      presentations() {
-        return this.$store.state.presentation.presentationList;
+      conferences() {
+        return this.$store.state.conference.conferenceList;
       },
-      isPresentationListEmpty() {
-        return this.$store.state.presentation.presentationList.length <= 0;
+      isConferenceListEmpty() {
+        return this.$store.state.conference.conferenceList.length <= 0;
       },
       isError() {
-        return this.$store.state.presentation.presentationListStatus.isApiError
+        return this.$store.state.conference.conferenceListStatus.isApiError
       },
     },
     components: {
       ZoomCenterTransition,
-      EmptyPresentation
+      EmptyConference
     },
     methods: {
-      createPresentation() {
-        this.$router.push("/manage/create");
+      createConference() {
+        //this.$router.push("/manage/create");
+        this.$router.push("/importData");
       },
-      loadPresentations() {
+      loadConferences() {
         this.show = true;
       },
-      loadMorePresentation () {
+      loadMoreConference () {
         this.count += 5
       },
-      viewPresentation(id) {
+      viewConference(id) {
         this.$router.push("/manage/" + id);
       }
     },
     mounted() {
-      this.$store.dispatch('getPresentationList')
-      this.loadPresentations();
+      this.$store.dispatch('getConferenceList')
+      this.loadConferences();
     }
   }
 </script>
@@ -121,7 +122,7 @@
     background-color: transparent;
     border-style: hidden;
   }
-  .presentationCard {
+  .conferenceCard {
     width: 100%;
     height: 100%;
     margin-bottom: 16px;
@@ -142,7 +143,7 @@
     padding: 0;
     margin: 0;
   }
-  .presentationCard .button {
+  .conferenceCard .button {
     color: black;
     text-align: left;
   } 
@@ -151,7 +152,7 @@
     vertical-align: middle;
     margin-top: 1rem;
   }
-  .presentation-id {
+  .conference-id {
     margin-top: 1.7rem;
   }
 </style>

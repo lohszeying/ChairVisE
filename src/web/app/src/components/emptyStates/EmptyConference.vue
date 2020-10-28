@@ -10,12 +10,12 @@
         <el-row>
             <el-col>
                 <p> 
-                    <i> No presentation found. Want to generate presentation for a conference? </i>
+                    <i> No conference found. Want to create a conference? </i>
                 </p>
                 <p>
-                    Let's get started by adding a new presentation.
+                    Let's get started by adding a new conference.
                 </p>
-                <el-button type="primary" icon="el-icon-plus" @click="createPresentation">Add New Presentation</el-button>
+                <el-button type="primary" icon="el-icon-plus" @click="createConference">Add New Conference</el-button>
             </el-col>
         </el-row>
     </div>
@@ -24,8 +24,9 @@
 <script>
 export default {
     methods: {
-        createPresentation() {
-            this.$router.push("/manage/create");
+        createConference() {
+            //this.$router.push("/manage/create");
+            this.$router.push("/importData");
         },
     }    
 }
