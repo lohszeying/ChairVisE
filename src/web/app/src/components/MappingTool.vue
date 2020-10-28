@@ -200,7 +200,6 @@
         this.$store.commit("clearHasHeader");
         this.$store.commit("clearMapping");
         this.$store.commit("clearPredefinedMapping");
-        this.$store.commit("clearVersionId");
         this.$store.commit("clearPredefinedSwitch");
         this.$store.commit("clearIsNewVersion");
       },
@@ -229,7 +228,6 @@
         this.$store.commit("clearMapping");
         this.$store.commit("clearError");
         this.$store.commit("clearPredefinedMapping");
-        this.$store.commit("clearVersionId");
         this.$store.commit("clearPredefinedSwitch");
         this.$store.commit("clearIsNewVersion");
         this.$store.dispatch('getVersionList');
