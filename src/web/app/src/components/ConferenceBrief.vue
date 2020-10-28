@@ -173,21 +173,6 @@
       },
       deleteConferenceClick() {
         this.wantToDelete = true;
-
-          /*this.$store.dispatch('deleteConference', this.id)
-              .then(() => {
-                if (this.isError) {
-                  return
-                }
-                this.$router.replace({
-                  name: 'manage',
-                  params: {
-                    id: ID_NEW_CONFERENCE
-                  }
-                });
-                this.isEditing = false;
-              }) */
-
       },
       updateConferenceForm() {
         if (this.$refs['conferenceForm']) {
