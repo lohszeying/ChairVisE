@@ -141,7 +141,7 @@
         //let test = Array.from(new Set(this.$store.state.version.versionList.map(v => v.date.split("-")[0])));
         //console.log(test);
 
-        let list = Array.from(new Set(this.$store.state.version.versionList.map(v => v.date.split("-")[0])));
+        let list = Array.from(new Set(this.$store.state.version.versionList.map(v => v.id + ". " + v.date.split("-")[0])));
         //let list = Array.from(new Set(this.$store.state.presentation.versionList.map(v => v.versionId)));
         this.setDefaultValueForVersionList(list[0]);
         return list;
@@ -158,7 +158,9 @@
     },
     methods: {
       updateVersion() {
-        var value = this.presentationFormVersion;
+        //Value is ID (will extract out ID)
+        var value = this.presentationFormVersion.split(".")[0];
+        console.log("value: " + value);
         if (value === undefined) {
             value = this.versions[0];
         }

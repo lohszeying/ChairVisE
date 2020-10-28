@@ -203,12 +203,19 @@
           return this.$store.state.dataMapping.data.conferenceTitle;
         },
         set: function (value) {
-          //this.$store.commit("setConferenceTitle", newValue);
-          this.$store.commit('setConferenceFormField', {
-            field: 'title',
-            value
-          });
-          this.$store.commit("setConferenceTitle", value);
+          if (value !== '') {
+            this.$store.commit('setConferenceFormField', {
+              field: 'title',
+              value
+            });
+            this.$store.commit("setConferenceTitle", value);
+          } else {
+            this.$store.commit('setConferenceFormField', {
+              field: 'title',
+              value
+            });
+            this.$store.commit("clearConferenceTitle");
+          }
         }
       },
       versionDate: {
@@ -219,11 +226,19 @@
           return this.$store.state.dataMapping.data.versionDate;
         },
         set: function (value) {
-          this.$store.commit('setVersionFormField', {
-            field: 'date',
-            value
-          })
-          this.$store.commit("setVersionDate", value);
+          if (value !== '') {
+            this.$store.commit('setVersionFormField', {
+              field: 'date',
+              value
+            })
+            this.$store.commit("setVersionDate", value);
+          } else {
+            this.$store.commit('setVersionFormField', {
+              field: 'date',
+              value
+            })
+            this.$store.commit("clearVersionDate");
+          }
         }
       },
       hasHeader: {
@@ -628,6 +643,10 @@
   
   .clearfix:after {
     clear: both
+  }
+
+  .el-input {
+    width: 150px;
   }
 
   .box-card {
