@@ -14,10 +14,6 @@
               <div v-if="!isInEditMode">{{ conferenceForm.title }}</div>
               <el-input v-model="conferenceFormTitle" v-if="isInEditMode"/>
             </el-form-item>
-            <el-form-item label="Description: ">
-              <div v-if="!isInEditMode" id="conference-description">{{ conferenceForm.description }}</div>
-              <el-input type="textarea" autosize v-model="conferenceFormDescription" v-if="isInEditMode"/>
-            </el-form-item>
             <el-form-item label="Creator: ">
               <div v-if="!isInEditMode">{{ conferenceForm.creatorIdentifier }}</div>
               <el-input type="textarea" autosize v-model="conferenceFormCreatorIdentifier" v-if="isInEditMode"/>
@@ -29,12 +25,24 @@
       <div class="options-section">
         <el-button-group>
           <el-button type="danger" v-if="!isNewConference && isLogin"
-                    @click="deleteConference()">
+                    @click="deleteConferenceClick()">
             <i class="el-icon-delete"> Delete </i>
           </el-button>
         </el-button-group>
       </div>
     </el-card>
+
+    <!-- Newly added, will prompt user if user want to delete a conference -->
+    <el-dialog
+        title="Warning"
+        :visible.sync="wantToDelete"
+        width="30%" center>
+      <span> Are you sure you want to delete your conference?</span>
+      <span slot="footer" class="dialog-footer">
+                <el-button v-on:click="wantToDelete = false">Cancel</el-button>
+                <el-button type="danger" v-on:click="deleteConference">Yes</el-button>
+            </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -62,7 +70,6 @@
         return {
           title: this.conferenceFormTitle,
           creatorIdentifier: this.conferenceFormCreatorIdentifier,
-          description: this.conferenceFormDescription,
         }
       },
       conferenceFormTitle: {
@@ -79,17 +86,6 @@
       conferenceFormCreatorIdentifier() {
         return this.$store.state.conference.conferenceForm.userEmail
         //return this.$store.state.conference.conferenceForm.creatorIdentifier
-      },
-      conferenceFormDescription: {
-        get() {
-          return this.$store.state.conference.conferenceForm.description
-        },
-        set(value) {
-          this.$store.commit('setConferenceFormField', {
-            field: 'description',
-            value
-          })
-        },
       },
       isNewConference() {
         return this.id === ID_NEW_CONFERENCE
@@ -110,6 +106,7 @@
     data() {
       return {
         isEditing: false,
+        wantToDelete: false,
         rules: {
           name: [
             {required: true, message: 'Please enter conference name', trigger: 'blur'},
@@ -161,18 +158,36 @@
       },
       deleteConference() {
         this.$store.dispatch('deleteConference', this.id)
-                .then(() => {
-                  if (this.isError) {
-                    return
+            .then(() => {
+              if (this.isError) {
+                return
+              }
+              this.$router.replace({
+                name: 'manage',
+                params: {
+                  id: ID_NEW_CONFERENCE
+                }
+              });
+              this.isEditing = false;
+            })
+      },
+      deleteConferenceClick() {
+        this.wantToDelete = true;
+
+          /*this.$store.dispatch('deleteConference', this.id)
+              .then(() => {
+                if (this.isError) {
+                  return
+                }
+                this.$router.replace({
+                  name: 'manage',
+                  params: {
+                    id: ID_NEW_CONFERENCE
                   }
-                  this.$router.replace({
-                    name: 'manage',
-                    params: {
-                      id: ID_NEW_CONFERENCE
-                    }
-                  });
-                  this.isEditing = false;
-                })
+                });
+                this.isEditing = false;
+              }) */
+
       },
       updateConferenceForm() {
         if (this.$refs['conferenceForm']) {
