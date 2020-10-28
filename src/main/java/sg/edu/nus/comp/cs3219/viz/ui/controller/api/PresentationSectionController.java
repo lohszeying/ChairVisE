@@ -10,7 +10,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/presentations/{presentationId}/sections")
+@RequestMapping("/api/versions/{versionId}/sections")
 public class PresentationSectionController {
 
     private final PresentationSectionService presentationSectionService;
@@ -20,39 +20,40 @@ public class PresentationSectionController {
     }
 
     @GetMapping
-    public List<PresentationSection> all(@PathVariable Long presentationId) {
-        return presentationSectionService.findAllByPresentation(presentationId);
+    public List<PresentationSection> all(@PathVariable Long versionId) {
+        return presentationSectionService.findAllByVersion(versionId);
     }
 
     @PostMapping
     public ResponseEntity<?> newPresentationSection(
-            @PathVariable Long presentationId,
+            @PathVariable Long versionId,
             @RequestBody PresentationSection presentationSection
     ) throws URISyntaxException {
-        PresentationSection newPresentationSection = presentationSectionService.savePresentationSection(presentationId, presentationSection);
+        PresentationSection newPresentationSection =
+                presentationSectionService.savePresentationSection(versionId, presentationSection);
 
         return ResponseEntity
-                .created(new URI("/presentations/" + presentationId + "/sections/" + newPresentationSection.getId()))
+                .created(new URI("/versions/" + versionId + "/sections/" + newPresentationSection.getId()))
                 .body(newPresentationSection);
     }
 
     @PutMapping("/{sectionId}")
     public ResponseEntity<?> updatePresentationSection(
-            @PathVariable Long presentationId,
+            @PathVariable Long versionId,
             @PathVariable Long sectionId,
             @RequestBody PresentationSection newPresentationSection
     ) throws URISyntaxException {
         PresentationSection updatedPresentationSection =
-                presentationSectionService.updatePresentationSection(presentationId, sectionId, newPresentationSection);
+                presentationSectionService.updatePresentationSection(versionId, sectionId, newPresentationSection);
 
         return ResponseEntity
-                .created(new URI("/presentations/" + presentationId + "/sections/" + updatedPresentationSection.getId()))
+                .created(new URI("/versions/" + versionId + "/sections/" + updatedPresentationSection.getId()))
                 .body(updatedPresentationSection);
     }
 
     @DeleteMapping("/{sectionId}")
-    public ResponseEntity<?> deletePresentationSection(@PathVariable Long presentationId, @PathVariable Long sectionId) {
-        presentationSectionService.deletePresentationSection(presentationId, sectionId);
+    public ResponseEntity<?> deletePresentationSection(@PathVariable Long versionId, @PathVariable Long sectionId) {
+        presentationSectionService.deletePresentationSection(versionId, sectionId);
 
         return ResponseEntity.noContent().build();
     }

@@ -16,8 +16,8 @@ public class PresentationPermission {
     @Column(name = "user_email")
     private String userEmail;
 
-    @Column(name = "presentation_id")
-    private Long presentationId;
+    @Column(name = "version_id")
+    private Long versionId;
 
     // access level for the user
     @Enumerated(EnumType.STRING)

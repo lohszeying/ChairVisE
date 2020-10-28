@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface PresentationSectionRepository extends JpaRepository<PresentationSection, Long> {
 
-    List<PresentationSection> findAllByPresentationId(Long presentationId);
+    List<PresentationSection> findAllByVersionId(Long versionId);
 }

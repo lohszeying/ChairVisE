@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS author_record, submission_record, review_record, presentation_permission,
-    presentation_section, presentation, version, conference;
+    presentation_section, version, conference;
 
 CREATE TABLE conference (
     id int NOT NULL AUTO_INCREMENT,
@@ -32,7 +32,7 @@ CREATE TABLE author_record (
     is_corresponding varchar(3),
     version_id int,
     PRIMARY KEY (id),
-    FOREIGN KEY (version_id) REFERENCES version (id)
+    FOREIGN KEY (version_id) REFERENCES version (id) ON DELETE CASCADE
 );
 
 CREATE TABLE submission_record (
@@ -50,7 +50,7 @@ CREATE TABLE submission_record (
     submission_abstract text,
     version_id int,
     PRIMARY KEY (id),
-    FOREIGN KEY (version_id) REFERENCES version (id)
+    FOREIGN KEY (version_id) REFERENCES version (id) ON DELETE CASCADE
 );
 
 CREATE TABLE review_record (
@@ -67,30 +67,22 @@ CREATE TABLE review_record (
     has_recommended_for_best_paper varchar(3),
     version_id int,
     PRIMARY KEY (id),
-    FOREIGN KEY (version_id) REFERENCES version (id)
-);
-
-CREATE TABLE presentation (
-    id int NOT NULL AUTO_INCREMENT,
-    user_email varchar(255),
-    version_id int,
-    PRIMARY KEY (id),
-    FOREIGN KEY (version_id) REFERENCES version (id)
+    FOREIGN KEY (version_id) REFERENCES version (id) ON DELETE CASCADE
 );
 
 CREATE TABLE presentation_permission (
     id int NOT NULL AUTO_INCREMENT,
     user_email varchar(255),
-    presentation_id int,
+    version_id int,
     permission varchar(255),
     PRIMARY KEY (id),
-    FOREIGN KEY (presentation_id) REFERENCES presentation (id),
-    CONSTRAINT UC_Permission UNIQUE (user_email, presentation_id)
+    FOREIGN KEY (version_id) REFERENCES version (id) ON DELETE CASCADE,
+    CONSTRAINT UC_Permission UNIQUE (user_email, version_id)
 );
 
 CREATE TABLE presentation_section (
     id int NOT NULL AUTO_INCREMENT,
-    presentation_id int,
+    version_id int,
     title varchar(255),
     description text,
     type varchar(255),
@@ -102,5 +94,5 @@ CREATE TABLE presentation_section (
     sorters varchar(255),
     extra_data varchar(255),
     PRIMARY KEY (id),
-    FOREIGN KEY (presentation_id) REFERENCES presentation (id)
+    FOREIGN KEY (version_id) REFERENCES Version (id) ON DELETE CASCADE
 );

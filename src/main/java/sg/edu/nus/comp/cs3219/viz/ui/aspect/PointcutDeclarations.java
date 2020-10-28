@@ -15,9 +15,6 @@ public class PointcutDeclarations {
     @Pointcut("execution(* sg.edu.nus.comp.cs3219.viz.ui.controller.api.RecordController.*(*))")
     public void forRecordMethods() {}
 
-    @Pointcut("execution(* sg.edu.nus.comp.cs3219.viz.ui.controller.api.PresentationController.*(*))")
-    public void forPresentationMethods() {}
-
     @Pointcut("execution(* sg.edu.nus.comp.cs3219.viz.ui.controller.api.PresentationPermissionController.*(*))")
     public void forPresentationAccessControlMethods() {}
 
@@ -28,7 +25,7 @@ public class PointcutDeclarations {
     public void forAnalysisMethods() {}
 
     @Pointcut("forConferenceMethods() || forVersionMethods() || forRecordMethods() || " +
-            "forPresentationMethods() || forPresentationAccessControlMethods() || forPresentationSectionMethods() ||" +
+            "forPresentationAccessControlMethods() || forPresentationSectionMethods() ||" +
             "forAnalysisMethods()")
     public void forAuthentication() {}
 }
