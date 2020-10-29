@@ -32,7 +32,7 @@ CREATE TABLE author_record (
     is_corresponding varchar(3),
     version_id int,
     PRIMARY KEY (id),
-    FOREIGN KEY (version_id) REFERENCES version (id)
+    FOREIGN KEY (version_id) REFERENCES version (id) ON DELETE CASCADE
 );
 
 CREATE TABLE submission_record (
@@ -50,7 +50,7 @@ CREATE TABLE submission_record (
     submission_abstract text,
     version_id int,
     PRIMARY KEY (id),
-    FOREIGN KEY (version_id) REFERENCES version (id)
+    FOREIGN KEY (version_id) REFERENCES version (id) ON DELETE CASCADE
 );
 
 CREATE TABLE review_record (
@@ -67,7 +67,7 @@ CREATE TABLE review_record (
     has_recommended_for_best_paper varchar(3),
     version_id int,
     PRIMARY KEY (id),
-    FOREIGN KEY (version_id) REFERENCES version (id)
+    FOREIGN KEY (version_id) REFERENCES version (id) ON DELETE CASCADE
 );
 
 CREATE TABLE presentation (

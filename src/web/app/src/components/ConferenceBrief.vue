@@ -24,9 +24,8 @@
       <el-divider></el-divider>
       <div class="options-section">
         <el-button-group>
-          <el-button type="danger" v-if="!isNewConference && isLogin"
-                    @click="deleteConferenceClick()">
-            <i class="el-icon-delete"> Delete </i>
+          <el-button type="danger" v-if="!isNewConference && isLogin" icon="el-icon-delete"
+                    @click="deleteConferenceClick()">Delete
           </el-button>
         </el-button-group>
       </div>

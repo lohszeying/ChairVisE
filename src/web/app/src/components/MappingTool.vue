@@ -229,7 +229,10 @@
         this.$store.commit("clearError");
         this.$store.commit("clearPredefinedMapping");
         this.$store.commit("clearPredefinedSwitch");
+        this.$store.commit("clearIsNewConference");
         this.$store.commit("clearIsNewVersion");
+        this.$store.commit("clearVersionDate");
+        this.$store.commit("clearConferenceTitle");
         this.$router.push({
                     name: 'manage'
                 });
