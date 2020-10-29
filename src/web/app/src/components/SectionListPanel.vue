@@ -68,7 +68,8 @@
     data() {
       return {
         selectedNewSection: '',
-        presentationFormVersion: ''
+        presentationFormVersion: '',
+        verId: '',
       }
     },
     computed: {
@@ -152,9 +153,10 @@
       EmptySection
     },
     mounted() {
-      this.fetchSectionList();
+
       this.$store.dispatch('fetchDBMetaDataEntities');
       this.$store.dispatch('getVersionList', this.$route.params.id);
+      //this.fetchSectionList();
     },
     methods: {
       updateVersion() {
@@ -168,6 +170,8 @@
             field: 'version',
             value
         });
+        this.verId = value;
+        this.fetchSectionList();
       },
 
       setDefaultValueForVersionList(value) {
@@ -178,7 +182,7 @@
         if (this.isNewPresentation) {
           this.$store.commit('clearSectionList');
         } else {
-          this.$store.dispatch('fetchSectionList', this.presentationId)
+          this.$store.dispatch('fetchSectionList', this.verId);
         }
       },
 
@@ -192,7 +196,7 @@
           return;
         }
         this.$store.dispatch('addSectionDetail', {
-          presentationId: this.presentationId,
+          versionId: this.verId,
           selectedNewSection: this.selectedNewSection,
           dataSet: this.$store.state.userInfo.userEmail,
         }).then(() => {
