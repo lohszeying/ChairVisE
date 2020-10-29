@@ -162,7 +162,8 @@
     beforeCreate() {
       this.$store.dispatch('fetchDBMetaDataEntities');
       this.$store.dispatch('getConferenceList');
-      //this.$store.dispatch('getVersionList');
+      //Set HasHeader to true by default
+      this.$store.commit("setHasHeader", true);
     },
     computed: {
       isLogin() {
@@ -652,7 +653,7 @@
   }
 
   .el-input {
-    width: 150px;
+    width: 207px;
   }
 
   .box-card {
