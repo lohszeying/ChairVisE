@@ -188,11 +188,7 @@
         type: Object,
         required: true
       },
-      presentationId: {
-        type: String,
-        required: true
-      },
-      version: {
+      versionId: {
         type: String,
         required: true
       },
@@ -237,7 +233,7 @@
 
     },
     watch: {
-      'version'() {
+      'versionId'() {
         if (this.isEditing == true) {
           this.previewAnalysisResult('editForm');
         }
@@ -309,7 +305,8 @@
         return this.filtersFieldOptions;
       },
       isPresentationEditable() {
-        return this.$store.state.presentation.isPresentationEditable;
+        return true;
+        //return this.$store.state.presentation.isPresentationEditable;
       }
     },
 
@@ -328,11 +325,13 @@
         this.editForm.title = this.sectionDetail.title;
         this.editForm.description = this.sectionDetail.description;
         this.editForm.dataSet = this.sectionDetail.dataSet;
+        console.log(this.editForm.dataSet);
         this.editForm.selections = deepCopy(this.sectionDetail.selections); // deep copy
-        this.editForm.involvedRecords = this.sectionDetail.involvedRecords.map(r => r.name);
-        this.editForm.filters = this.sectionDetail.filters.map(f => Object.assign({}, f));
+        console.log("in syncDataWithProps: " + this.sectionDetail.involvedRecords);
+        //this.editForm.involvedRecords = this.sectionDetail.involvedRecords.map(r => r.name);
+        /*this.editForm.filters = this.sectionDetail.filters.map(f => Object.assign({}, f));
         this.editForm.joiners = this.sectionDetail.joiners.map(f => Object.assign({}, f));
-        this.editForm.groupers = this.sectionDetail.groupers.map(r => r.field);
+        this.editForm.groupers = this.sectionDetail.groupers.map(r => r.field); */
         this.editForm.sorters = deepCopy(this.sectionDetail.sorters); // deep copy
         this.editForm.extraData = deepCopy(this.sectionDetail.extraData) // deep copy
       },
@@ -391,7 +390,7 @@
           if (valid) {
             this.$store.dispatch('saveSectionDetail', {
               id: this.sectionDetail.id,
-              presentationId: this.presentationId,
+              versionId: this.versionId,
               title: this.editForm.title,
               description: this.editForm.description,
               dataSet: this.sectionDetail.dataSet,
@@ -420,7 +419,7 @@
 
       deleteSectionDetail() {
         this.$store.dispatch('deleteSectionDetail', {
-          presentationId: this.presentationId,
+          versionId: this.versionId,
           id: this.sectionDetail.id
         });
       },
@@ -432,7 +431,7 @@
           }
 
           this.$store.dispatch('sendPreviewAnalysisRequest', {
-            presentationId: this.presentationId,
+            versionId: this.versionId,
             id: this.sectionDetail.id,
             dataSet: this.sectionDetail.dataSet,
             selections: this.editForm.selections,
@@ -441,7 +440,6 @@
             joiners: this.editForm.joiners.map(j => Object.assign({}, j)),
             groupers: this.editForm.groupers.map(g => ({field: g})),
             sorters: this.editForm.sorters.map(s => Object.assign({}, s)),
-            versionId: this.version
           })
             .then(() => {
               this.$emit('update-visualisation', {
@@ -459,10 +457,10 @@
       },
 
       sendAnalysisRequest() {
-        this.$store.dispatch('sendAnalysisRequest', {id: this.sectionDetail.id, presentationId: this.presentationId, version: this.version})
+        this.$store.dispatch('sendAnalysisRequest', {id: this.sectionDetail.id, versionId: this.versionId})
           .then(() => {
             this.$emit('update-visualisation', {
-              presentationId: this.presentationId,
+              versionId: this.versionId,
               selections: this.sectionDetail.selections,
               involvedRecords: this.sectionDetail.involvedRecords,
               filters: this.sectionDetail.filters,
@@ -471,7 +469,6 @@
               groupers: this.sectionDetail.groupers,
               sorters: this.sectionDetail.sorters,
               extraData: this.sectionDetail.extraData,
-              versionId: this.version
             });
           })
       },

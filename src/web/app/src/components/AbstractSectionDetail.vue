@@ -2,31 +2,31 @@
   <el-row class="sectionDetail">
     <div v-if="version !== undefined && typeof version != 'undefined'">
       <div v-if="sectionDetail.type === WORD_CLOUD">
-        <word-cloud-section-detail :sectionDetail="sectionDetail" :presentationId="presentationId" :version="version"/>
+        <word-cloud-section-detail :sectionDetail="sectionDetail" :presentationId="versionId" :version="version"/>
       </div>
       <div v-else-if="sectionDetail.type === BAR_CHART">
-        <bar-chart-section-detail :sectionDetail="sectionDetail" :presentationId="presentationId" :version="version"/>
+        <bar-chart-section-detail :sectionDetail="sectionDetail" :versionId="versionId"/>
       </div>
       <div v-else-if="sectionDetail.type === PIE_CHART">
-        <pie-chart-section-detail :sectionDetail="sectionDetail" :presentationId="presentationId" :version="version"/>
+        <pie-chart-section-detail :sectionDetail="sectionDetail" :presentationId="versionId" :version="version"/>
       </div>
       <div v-else-if="sectionDetail.type === LINE_CHART">
-        <line-chart-section-detail :sectionDetail="sectionDetail" :presentationId="presentationId" :version="version"/>
+        <line-chart-section-detail :sectionDetail="sectionDetail" :presentationId="versionId" :version="version"/>
       </div>
       <div v-else-if="sectionDetail.type === STATS">
-        <stats-section-detail :sectionDetail="sectionDetail" :presentationId="presentationId" :version="version"/>
+        <stats-section-detail :sectionDetail="sectionDetail" :presentationId="versionId" :version="version"/>
       </div>
       <div v-else-if="sectionDetail.type === SCATTER_CHART">
-        <scatter-chart-section-detail :sectionDetail="sectionDetail" :presentationId="presentationId" :version="version"/>
+        <scatter-chart-section-detail :sectionDetail="sectionDetail" :presentationId="versionId" :version="version"/>
       </div>
       <div v-else-if="sectionDetail.type === GRAPH_NETWORK">
-        <graph-network-section-detail :sectionDetail="sectionDetail" :presentationId="presentationId" :version="version"/>
+        <graph-network-section-detail :sectionDetail="sectionDetail" :presentationId="versionId" :version="version"/>
       </div>    
       <div v-else-if="sectionDetail.type === RADAR_CHART">
-        <radar-chart-section-detail :sectionDetail="sectionDetail" :presentationId="presentationId" :version="version"/>
+        <radar-chart-section-detail :sectionDetail="sectionDetail" :presentationId="versionId" :version="version"/>
       </div>    
       <div v-else-if="sectionDetail.type === DEPENDENCY_CHART">
-        <dependency-chart-section-detail :sectionDetail="sectionDetail" :presentationId="presentationId" :version="version"/>
+        <dependency-chart-section-detail :sectionDetail="sectionDetail" :presentationId="versionId" :version="version"/>
       </div>
       <div v-else>
         <el-alert
@@ -72,7 +72,7 @@
         type: Object,
         required: true
       },
-      presentationId: {
+      versionId: {
         type: String,
         required: true
       },
