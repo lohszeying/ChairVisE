@@ -127,7 +127,12 @@ export default {
     },
 
     async saveVersion({commit, state}, conferenceId) {
-      console.log("inside version.js, version form: " + state.versionForm.date);
+      console.log("inside version.js");
+      console.log("{");
+      console.log(" id: " + state.versionForm.id);
+      console.log(" date: " + state.versionForm.date);
+      console.log(" creatorIdentifier: " + state.versionForm.creatorIdentifier);
+      console.log("}");
       commit('setVersionFormLoading', true);
       await axios.post(`/api/conferences/${conferenceId}/versions`, state.versionForm)
           .then(response => {

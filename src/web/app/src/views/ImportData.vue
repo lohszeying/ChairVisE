@@ -368,7 +368,7 @@
 
             //Then add to version
           } else {
-            //Existed, add to version
+            //Existed, check if version exists to version
 
             console.log("exist");
             console.log("conf ID: " + confId);
@@ -399,11 +399,16 @@
               }
 
               if (!isReplaced) {
-                this.$store.dispatch('saveVersion', confId);
+                console.log("Not Replaced");
+                this.$store.dispatch('saveVersion', confId).then(() => {
+                  const versionId = this.$store.state.version.versionList[this.$store.state.version.versionList.length - 1].id;
+                  console.log("New version id: " + versionId);
+                  this.$store.commit('setVersionId', versionId);
+                  console.log(this.$store.state.dataMapping.data.versionId);
+                });
               }
             });
             console.log("version form: " + this.$store.state.version.versionForm.date);
-
           }
         }
 
