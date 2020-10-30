@@ -23,7 +23,7 @@ public class AnalysisController {
         this.analysisService = analysisService;
     }
 
-    @PostMapping("/presentations/{id}/analysis")
+    @PostMapping("/versions/{id}/analysis")
     public List<Map<String, Object>> analysis(@PathVariable Long id, @Valid @RequestBody AnalysisRequest analysisRequest) {
         List<Map<String, Object>> result = analysisService.analyse(analysisRequest);
         log.info("Analysis Result from query: " + result);

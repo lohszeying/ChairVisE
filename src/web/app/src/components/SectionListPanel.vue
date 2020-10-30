@@ -40,7 +40,7 @@
       </el-alert>
       <el-card shadow="hover">
         <abstract-section-detail class="presentation-section" v-for="section in sectionList" :sectionDetail="section"
-                            :key="section.id" :presentationId="presentationId" :version="presentationFormVersion"/>
+                                 :key="section.id" versionId="presentationId" :version="presentationFormVersion"/>
         <EmptySection v-if="isSectionListEmpty" />
       </el-card>
     </div>

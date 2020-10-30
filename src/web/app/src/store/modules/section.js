@@ -161,6 +161,8 @@ export default {
     },
 
     async deleteSectionDetail({commit}, {id, versionId}) {
+      console.log("want to delete section, id: " + id);
+      console.log("want to delete section, versionId: " + versionId);
       commit('setSectionDetailLoading', {id, isLoading: true});
 
       await axios.delete(`/api/versions/${versionId}/sections/${id}`)
@@ -184,7 +186,7 @@ export default {
         joiners,
         groupers,
         sorters,
-        //versionId
+        versionId
       })
         .then(response => {
           commit('updateSectionAnalysisPreviewResult', {id, result: response.data});
@@ -209,7 +211,7 @@ export default {
         joiners: sectionToAnalysis.joiners,
         groupers: sectionToAnalysis.groupers,
         sorters: sectionToAnalysis.sorters,
-        //versionId: version
+        versionId: versionId
       })
         .then(response => {
           commit('updateSectionAnalysisResult', {id: sectionToAnalysis.id, result: response.data});
