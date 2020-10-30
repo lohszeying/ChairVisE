@@ -139,11 +139,8 @@
         return this.$store.state.dbMetaData.entitiesStatus.isLoading
       },
       versions() {
-        //let test = Array.from(new Set(this.$store.state.version.versionList.map(v => v.date.split("-")[0])));
-        //console.log(test);
-
-        let list = Array.from(new Set(this.$store.state.version.versionList.map(v => v.id + ". " + v.date.split("-")[0])));
-        //let list = Array.from(new Set(this.$store.state.presentation.versionList.map(v => v.versionId)));
+        let list = Array.from(new Set(this.$store.state.version.versionList.map(v => v.date.split("-")[0])))
+            .sort((a,b) => (a < b)? 1 : -1);
         this.setDefaultValueForVersionList(list[0]);
         return list;
       },
@@ -160,17 +157,27 @@
     },
     methods: {
       updateVersion() {
-        //Value is ID (will extract out ID)
-        var value = this.presentationFormVersion.split(".")[0];
-        console.log("value: " + value);
+        //Value is year (will extract out ID)
+        var value = this.presentationFormVersion;
+
         if (value === undefined) {
             value = this.versions[0];
         }
+
+        //For loop to get ID
+        for (var i = 0; i < this.$store.state.version.versionList.length; i++) {
+          if (value === this.$store.state.version.versionList[i].date.split("-")[0]) {
+            //Match!
+            this.verId = this.$store.state.version.versionList[i].id;
+            break;
+          }
+        }
+
+        var id = this.verId;
+        console.log("id is: " + id);
         this.$store.commit('setPresentationFormField', {
-            field: 'version',
-            value
+            field: 'version', id
         });
-        this.verId = value;
         this.fetchSectionList();
       },
 
