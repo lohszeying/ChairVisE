@@ -2,7 +2,7 @@
   <div>
     <div v-loading="isLoadingDBMetaData || isLoadingSectionList" v-if="!isNewPresentation">
       <el-aside width="300px" class="addRowRightAlign" v-if="isLogin">
-        <el-card v-if="!isSectionListEmpty" >
+        <el-card v-if="!isVersionListEmpty" >
           <div slot="header" class="clearfix">
             <span> Select version </span>
           </div>
@@ -122,9 +122,12 @@
       sectionList() {
         return this.$store.state.section.sectionList
       },
-      isSectionListEmpty() {
+      isVersionListEmpty() {
         return this.$store.state.version.versionList.length <= 0
         //return this.$store.state.section.sectionList.length <= 0
+      },
+      isSectionListEmpty() {
+        return this.$store.state.section.sectionList.length <= 0
       },
       isLoadingSectionList() {
         return this.$store.state.section.sectionListStatus.isLoading
