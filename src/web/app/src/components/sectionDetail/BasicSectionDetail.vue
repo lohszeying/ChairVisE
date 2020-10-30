@@ -328,8 +328,10 @@
         console.log(this.editForm.dataSet);
         this.editForm.selections = deepCopy(this.sectionDetail.selections); // deep copy
         console.log("in syncDataWithProps: " + this.sectionDetail.involvedRecords);
-        //this.editForm.involvedRecords = this.sectionDetail.involvedRecords.map(r => r.name);
-        /*this.editForm.filters = this.sectionDetail.filters.map(f => Object.assign({}, f));
+        console.log("dbMetaData.entities:")
+        console.log(this.$store.state.dbMetaData.entities);
+        /*this.editForm.involvedRecords = this.sectionDetail.involvedRecords.map(r => r.name);
+        this.editForm.filters = this.sectionDetail.filters.map(f => Object.assign({}, f));
         this.editForm.joiners = this.sectionDetail.joiners.map(f => Object.assign({}, f));
         this.editForm.groupers = this.sectionDetail.groupers.map(r => r.field); */
         this.editForm.sorters = deepCopy(this.sectionDetail.sorters); // deep copy
@@ -390,7 +392,7 @@
           if (valid) {
             this.$store.dispatch('saveSectionDetail', {
               id: this.sectionDetail.id,
-              versionId: this.versionId,
+              versionId: this.sectionDetail.versionId,
               title: this.editForm.title,
               description: this.editForm.description,
               dataSet: this.sectionDetail.dataSet,
@@ -419,7 +421,8 @@
 
       deleteSectionDetail() {
         this.$store.dispatch('deleteSectionDetail', {
-          versionId: this.versionId,
+          //versionId: this.versionId,
+          versionId: this.sectionDetail.versionId,
           id: this.sectionDetail.id
         });
       },
@@ -431,7 +434,7 @@
           }
 
           this.$store.dispatch('sendPreviewAnalysisRequest', {
-            versionId: this.versionId,
+            versionId: this.sectionDetail.versionId,
             id: this.sectionDetail.id,
             dataSet: this.sectionDetail.dataSet,
             selections: this.editForm.selections,
@@ -457,10 +460,10 @@
       },
 
       sendAnalysisRequest() {
-        this.$store.dispatch('sendAnalysisRequest', {id: this.sectionDetail.id, versionId: this.versionId})
+        this.$store.dispatch('sendAnalysisRequest', {id: this.sectionDetail.id, versionId: this.sectionDetail.versionId})
           .then(() => {
             this.$emit('update-visualisation', {
-              versionId: this.versionId,
+              versionId: this.sectionDetail.versionId,
               selections: this.sectionDetail.selections,
               involvedRecords: this.sectionDetail.involvedRecords,
               filters: this.sectionDetail.filters,
