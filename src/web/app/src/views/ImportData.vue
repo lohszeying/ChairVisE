@@ -350,10 +350,17 @@
             }
           }
           if (!confExist) {
-            console.log("didnt exist");
+            console.log("Conference does not exist");
+            
+            console.log("Current conference form: ");
+            console.log("id: " + this.$store.state.conference.conferenceForm.id);
+            console.log("title: " + this.$store.state.conference.conferenceForm.title);
+            console.log("description: " + this.$store.state.conference.conferenceForm.description);
+            console.log("creatorIdentifier: " + this.$store.state.conference.conferenceForm.creatorIdentifier);
+
             // if conf doesn't exist, save conf and save version at same time
             this.$store.dispatch('saveConference').then(() => {
-
+              console.log("Conference list length: " + this.$store.state.conference.conferenceList.length);
               let newConfId = this.$store.state.conference.conferenceList[this.$store.state.conference.conferenceList.length - 1].id;
 
               console.log("new id: " + newConfId);

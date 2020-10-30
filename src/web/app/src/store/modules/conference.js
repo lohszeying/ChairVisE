@@ -78,6 +78,11 @@ export default {
       state.conferenceFormStatus.isApiError = false;
       state.conferenceFormStatus.apiErrorMsg = '';
     },
+
+    clearConferenceFormId(state) {
+      state.conferenceForm.id = '';
+    },
+
     setSaveSuccess(state, success) {
       state.isSaveSuccess = success;
     },
@@ -88,6 +93,7 @@ export default {
 
   actions: {
     async getConferenceList({commit}) {
+      console.log("Getting conference list");
       axios.get('/api/conferences')
           .then(response => {
             commit('setConferenceList', response.data)
