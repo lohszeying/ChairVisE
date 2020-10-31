@@ -50,7 +50,6 @@
         show: false,
         count: 0,
         sortAscend: false,
-        confListLength: 0,
       }
     },
     watch: {
