@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS author_record, submission_record, review_record, presentation_permission,
+DROP TABLE IF EXISTS author_record, submission_record, review_record, presentation, presentation_permission,
     presentation_section, version, conference;
 
 CREATE TABLE conference (
@@ -94,5 +94,5 @@ CREATE TABLE presentation_section (
     sorters varchar(255),
     extra_data varchar(255),
     PRIMARY KEY (id),
-    FOREIGN KEY (version_id) REFERENCES Version (id) ON DELETE CASCADE
+    FOREIGN KEY (version_id) REFERENCES version (id) ON DELETE CASCADE
 );
