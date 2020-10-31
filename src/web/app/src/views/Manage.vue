@@ -50,6 +50,8 @@
         show: false,
         count: 0,
         sortAscend: false,
+        currConfListLength: 0,
+        confDeleted: false,
       }
     },
     watch: {
@@ -63,6 +65,21 @@
           duration: 0
         });
       },
+      'conferences'() {
+        if (this.confList.length > 0 && this.confList.length === this.$store.state.conference.conferenceList.length) {
+          if (this.sortAscend) {
+            this.$notify.info({
+              title: 'Sorted in ascending order',
+              duration: 1000
+            });
+          } else {
+            this.$notify.info({
+              title: 'Sorted in descending order',
+              duration: 1000
+            });
+          }
+        }
+      },
     },
     computed: {
       isLogin() {
@@ -74,6 +91,7 @@
       isLoading() {
         return this.$store.state.conference.conferenceListStatus.isLoading
       },
+
       conferences: {
         get() {
           if (this.confList.length > 0 && this.confList.length === this.$store.state.conference.conferenceList.length) {
@@ -142,6 +160,13 @@
     mounted() {
       this.$store.dispatch('getConferenceList');
       this.loadConferences();
+
+      this.$root.$on('deletedConference', () => {
+        this.$notify.success({
+          title: 'Successfully deleted a conference',
+          duration: 2000
+        });
+      });
     }
   }
 </script>

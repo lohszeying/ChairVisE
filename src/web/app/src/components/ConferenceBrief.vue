@@ -168,6 +168,7 @@
                 }
               });
               this.isEditing = false;
+              this.$root.$emit('deletedConference');
             })
       },
       deleteConferenceClick() {
