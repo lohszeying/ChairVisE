@@ -1,9 +1,13 @@
 <template>
   <el-main>
     <h1 class="alignLeft">My Created Conferences </h1>
+    <div class="btn-group">
     <el-button class="alignRight" type="primary" icon="el-icon-plus"
            v-if="!isConferenceListEmpty" @click="createConference">Import Data</el-button>
+    <el-button class="alignRight-wrap" icon="el-icon-sort" v-model="conferences"
+                 v-if="!isConferenceListEmpty" @click="sortConferences">Sort</el-button>
     <br/>
+    </div>
     <el-divider></el-divider>
     <div class="infinite-list-wrapper">
       <el-card v-if="isConferenceListEmpty" >
@@ -42,8 +46,11 @@
     },
     data() {
       return {
+        confList: [],
         show: false,
-        count: 0
+        count: 0,
+        sortAscend: false,
+        confListLength: 0,
       }
     },
     watch: {
@@ -56,7 +63,7 @@
           message: this.$store.state.presentation.presentationListStatus.apiErrorMsg,
           duration: 0
         });
-      }
+      },
     },
     computed: {
       isLogin() {
@@ -68,9 +75,31 @@
       isLoading() {
         return this.$store.state.conference.conferenceListStatus.isLoading
       },
-      conferences() {
-        return this.$store.state.conference.conferenceList;
+      conferences: {
+        get() {
+          if (this.confList.length > 0 && this.confList.length === this.$store.state.conference.conferenceList.length) {
+            //If sort button is pressed, will call this part
+            //console.log("here 1");
+            return this.confList;
+          } else if (this.confList.length != this.$store.state.conference.conferenceList.length) {
+            //After deleting a conference and going back to this page
+            //console.log("here 2");
+            return this.$store.state.conference.conferenceList;
+          } else {
+            //When refreshing page
+            //console.log("here 3");
+
+            this.confList = this.$store.state.conference.conferenceList;
+            return this.confList;
+          }
+        },
+        set(payload) {
+          this.confList = payload;
+        },
       },
+      /*conferences() {
+        return this.$store.state.conference.conferenceList;
+      },*/
       isConferenceListEmpty() {
         return this.$store.state.conference.conferenceList.length <= 0;
       },
@@ -87,6 +116,20 @@
         //this.$router.push("/manage/create");
         this.$router.push("/importData");
       },
+      sortConferences() {
+        //Sort according to conference title
+        if (!this.sortAscend) {
+          //Sort ascending order
+          let sortedConfList = Array.from(new Set(this.$store.state.conference.conferenceList)).sort((a, b) => (a.title > b.title) ? 1 : -1);
+          this.conferences = sortedConfList;
+          this.sortAscend = true;
+        } else {
+          //Sort descending order
+          let sortedConfList = Array.from(new Set(this.$store.state.conference.conferenceList)).sort((a, b) => (a.title < b.title) ? 1 : -1);
+          this.conferences = sortedConfList;
+          this.sortAscend = false;
+        }
+      },
       loadConferences() {
         this.show = true;
       },
@@ -98,7 +141,7 @@
       }
     },
     mounted() {
-      this.$store.dispatch('getConferenceList')
+      this.$store.dispatch('getConferenceList');
       this.loadConferences();
     }
   }
@@ -114,6 +157,11 @@
     float: right;
     display: inline-block;
     margin: 0;
+  }
+  .alignRight-wrap {
+    float: right;
+    display: inline-block;
+    margin-right: 5px;
   }
   .background {
     background-color: transparent;
