@@ -96,18 +96,9 @@
         get() {
           if (this.confList.length > 0 && this.confList.length === this.$store.state.conference.conferenceList.length) {
             //If sort button is pressed, will call this part
-            //console.log("here 1");
             return this.confList;
-          } else if (this.confList.length != this.$store.state.conference.conferenceList.length) {
-            //After deleting a conference and going back to this page
-            //console.log("here 2");
-            return this.$store.state.conference.conferenceList;
           } else {
-            //When refreshing page
-            //console.log("here 3");
-
-            this.confList = this.$store.state.conference.conferenceList;
-            return this.confList;
+            return this.$store.state.conference.conferenceList;
           }
         },
         set(payload) {
@@ -160,13 +151,6 @@
     mounted() {
       this.$store.dispatch('getConferenceList');
       this.loadConferences();
-
-      this.$root.$on('deletedConference', () => {
-        this.$notify.success({
-          title: 'Successfully deleted a conference',
-          duration: 2000
-        });
-      });
     }
   }
 </script>

@@ -168,7 +168,10 @@
                 }
               });
               this.isEditing = false;
-              this.$root.$emit('deletedConference');
+              this.$notify.success({
+                title: 'Successfully deleted a conference',
+                duration: 2000
+              });
             })
       },
       deleteConferenceClick() {
