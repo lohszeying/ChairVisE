@@ -70,6 +70,7 @@
         selectedNewSection: '',
         presentationFormVersion: '',
         verId: '',
+        getUpdatedVerList: false,
       }
     },
     computed: {
@@ -142,10 +143,12 @@
         return this.$store.state.dbMetaData.entitiesStatus.isLoading
       },
       versions() {
-        let list = Array.from(new Set(this.$store.state.version.versionList.map(v => v.date.split("-")[0])))
-            .sort((a,b) => (a < b)? 1 : -1);
-        this.setDefaultValueForVersionList(list[0]);
-        return list;
+        if (this.getUpdatedVerList) {
+          let list = Array.from(new Set(this.$store.state.version.versionList.map(v => v.date.split("-")[0])))
+              .sort((a, b) => (a < b) ? 1 : -1);
+          this.setDefaultValueForVersionList(list[0]);
+          return list;
+        }
       },
     },
     components: {
@@ -155,7 +158,7 @@
     mounted() {
 
       this.$store.dispatch('fetchDBMetaDataEntities');
-      this.$store.dispatch('getVersionList', this.$route.params.id);
+      this.$store.dispatch('getVersionList', this.$route.params.id).then(() => this.getUpdatedVerList = true);
       //this.fetchSectionList();
     },
     methods: {
