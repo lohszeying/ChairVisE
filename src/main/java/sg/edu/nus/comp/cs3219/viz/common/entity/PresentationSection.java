@@ -163,7 +163,7 @@ public class PresentationSection {
 
     private String set(List<?> data) {
         try {
-            return objectMapper.writeValueAsString(extraData);
+            return objectMapper.writeValueAsString(data);
         } catch (JsonProcessingException e) {
             log.severe(e.getMessage());
             return "";
