@@ -11,14 +11,14 @@ public class AnalysisRequest {
     @NotEmpty
     private String dataSet;
 
-    @NotEmpty
-    private String versionId;
 
-    public String getVersionId(){
+    private int versionId;
+
+    public int getVersionId(){
         return versionId;
     }
 
-    public void setVersionId(String versionId){this.versionId = versionId;}
+    public void setVersionId(int versionId){this.versionId = versionId;}
 
     private List<PresentationSection.Selection> selections = new ArrayList<>();
 
