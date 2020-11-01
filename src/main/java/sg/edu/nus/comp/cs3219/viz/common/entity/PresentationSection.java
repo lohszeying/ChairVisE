@@ -36,6 +36,9 @@ public class PresentationSection {
 
     private String type;
 
+    private String dataSet;
+
+
     // The following field does not worth to be stored as relation in RDBMS
     // we store them as serialized json string
 
@@ -60,89 +63,178 @@ public class PresentationSection {
     @Column(columnDefinition = "TEXT")
     private String extraData;
 
-    @Data
+
+
     public static class Selection {
         private String expression;
+
         private String rename;
+
+        public String getExpression() {
+            return expression;
+        }
+
+        public void setExpression(String expression) {
+            this.expression = expression;
+        }
+
+        public String getRename() {
+            return rename;
+        }
+
+        public void setRename(String rename) {
+            this.rename = rename;
+        }
     }
 
-    @Data
     public static class Record {
         private String name;
+
         private boolean isCustomized;
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public boolean isCustomized() {
+            return isCustomized;
+        }
+
+        public void setCustomized(boolean customized) {
+            isCustomized = customized;
+        }
     }
 
-    @Data
     public static class Filter {
         private String field;
         private String comparator;
         private String value;
+
+        public String getField() {
+            return field;
+        }
+
+        public void setField(String field) {
+            this.field = field;
+        }
+
+        public String getComparator() {
+            return comparator;
+        }
+
+        public void setComparator(String comparator) {
+            this.comparator = comparator;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
     }
 
-    @Data
     public static class Joiner {
         private String left;
         private String right;
+
+        public String getLeft() {
+            return left;
+        }
+
+        public void setLeft(String left) {
+            this.left = left;
+        }
+
+        public String getRight() {
+            return right;
+        }
+
+        public void setRight(String right) {
+            this.right = right;
+        }
     }
 
-    @Data
     public static class Grouper {
         private String field;
+
+        public String getField() {
+            return field;
+        }
+
+        public void setField(String field) {
+            this.field = field;
+        }
     }
 
-    @Data
     public static class Sorter {
         private String field;
+
         private String order;
+
+        public String getField() {
+            return field;
+        }
+
+        public void setField(String field) {
+            this.field = field;
+        }
+
+        public String getOrder() {
+            return order;
+        }
+
+        public void setOrder(String order) {
+            this.order = order;
+        }
     }
 
-    public List<Selection> getSelections() {
-        return get(groupers, Selection.class);
+    public Long getId() {
+        return id;
     }
 
-    public void setSelections(List<Selection> selections) {
-        this.selections = set(selections);
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public List<Record> getInvolvedRecords() {
-        return get(groupers, Record.class);
+
+    public String getTitle() {
+        return title;
     }
 
-    public void setInvolvedRecords(List<Record> involvedRecords) {
-        this.involvedRecords = set(involvedRecords);
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public List<Filter> getFilters() {
-        return get(groupers, Filter.class);
+    public String getDescription() {
+        return description;
     }
 
-    public void setFilters(List<Filter> filters) {
-        this.filters = set(filters);
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public List<Joiner> getJoiners() {
-        return get(groupers, Joiner.class);
+    public String getType() {
+        return type;
     }
 
-    public void setJoiners(List<Joiner> joiners) {
-        this.joiners = set(joiners);
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public List<Grouper> getGroupers() {
-        return get(groupers, Grouper.class);
+    public String getDataSet() {
+        return dataSet;
     }
 
-    public void setGroupers(List<Grouper> groupers) {
-        this.groupers = set(groupers);
+    public void setDataSet(String dataSet) {
+        this.dataSet = dataSet;
     }
 
-    public List<Sorter> getSorters() {
-        return get(sorters, Sorter.class);
-    }
-
-    public void setSorters(List<Sorter> sorters) {
-        this.sorters = set(sorters);
-    }
 
     public Map<String, Object> getExtraData() {
         try {
@@ -161,21 +253,111 @@ public class PresentationSection {
         }
     }
 
-    private String set(List<?> data) {
+    public List<Selection> getSelections() {
         try {
-            return objectMapper.writeValueAsString(data);
-        } catch (JsonProcessingException e) {
-            log.severe(e.getMessage());
-            return "";
-        }
-    }
-
-    private <T> List<T> get(String data, Class<T> type) {
-        try {
-            return objectMapper.readValue(data, new TypeReference<T>() {});
+            return objectMapper.readValue(selections, new TypeReference<List<Selection>>() {
+            });
         } catch (IOException e) {
             log.severe(e.getMessage());
             return new ArrayList<>();
+        }
+    }
+
+    public void setSelections(List<Selection> selections) {
+        try {
+            this.selections = objectMapper.writeValueAsString(selections);
+        } catch (JsonProcessingException e) {
+            log.severe(e.getMessage());
+        }
+    }
+
+    public List<Record> getInvolvedRecords() {
+        try {
+            return objectMapper.readValue(involvedRecords, new TypeReference<List<Record>>() {
+            });
+        } catch (IOException e) {
+            log.severe(e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    public void setInvolvedRecords(List<Record> involvedRecords) {
+        try {
+            this.involvedRecords = objectMapper.writeValueAsString(involvedRecords);
+        } catch (JsonProcessingException e) {
+            log.severe(e.getMessage());
+        }
+    }
+
+    public List<Filter> getFilters() {
+        try {
+            return objectMapper.readValue(filters, new TypeReference<List<Filter>>() {
+            });
+        } catch (IOException e) {
+            log.severe(e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    public void setFilters(List<Filter> filters) {
+        try {
+            this.filters = objectMapper.writeValueAsString(filters);
+        } catch (JsonProcessingException e) {
+            log.severe(e.getMessage());
+        }
+    }
+
+    public List<Joiner> getJoiners() {
+        try {
+            return objectMapper.readValue(joiners, new TypeReference<List<Joiner>>() {
+            });
+        } catch (IOException e) {
+            log.severe(e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    public void setJoiners(List<Joiner> joiners) {
+        try {
+            this.joiners = objectMapper.writeValueAsString(joiners);
+        } catch (JsonProcessingException e) {
+            log.severe(e.getMessage());
+        }
+    }
+
+    public List<Grouper> getGroupers() {
+        try {
+            return objectMapper.readValue(groupers, new TypeReference<List<Grouper>>() {
+            });
+        } catch (IOException e) {
+            log.severe(e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    public void setGroupers(List<Grouper> groupers) {
+        try {
+            this.groupers = objectMapper.writeValueAsString(groupers);
+        } catch (JsonProcessingException e) {
+            log.severe(e.getMessage());
+        }
+    }
+
+    public List<Sorter> getSorters() {
+        try {
+            return objectMapper.readValue(sorters, new TypeReference<List<Sorter>>() {
+            });
+        } catch (IOException e) {
+            log.severe(e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    public void setSorters(List<Sorter> sorters) {
+        try {
+            this.sorters = objectMapper.writeValueAsString(sorters);
+        } catch (JsonProcessingException e) {
+            log.severe(e.getMessage());
         }
     }
 }

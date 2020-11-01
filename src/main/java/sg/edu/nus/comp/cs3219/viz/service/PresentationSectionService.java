@@ -32,6 +32,7 @@ public class PresentationSectionService {
         newPresentationSection.setTitle(presentationSection.getTitle());
         newPresentationSection.setDescription(presentationSection.getDescription());
         newPresentationSection.setType(presentationSection.getType());
+        newPresentationSection.setDataSet(presentationSection.getDataSet());
         newPresentationSection.setSelections(presentationSection.getSelections());
         newPresentationSection.setInvolvedRecords(presentationSection.getInvolvedRecords());
         newPresentationSection.setFilters(presentationSection.getFilters());
@@ -50,6 +51,7 @@ public class PresentationSectionService {
                 .map(presentationSection -> {
                     presentationSection.setTitle(newPresentationSection.getTitle());
                     presentationSection.setDescription(newPresentationSection.getDescription());
+                    presentationSection.setDataSet(newPresentationSection.getDataSet());
                     presentationSection.setSelections(newPresentationSection.getSelections());
                     presentationSection.setInvolvedRecords(newPresentationSection.getInvolvedRecords());
                     presentationSection.setFilters(newPresentationSection.getFilters());
