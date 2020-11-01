@@ -25,9 +25,24 @@ public class PresentationSectionService {
 
     @Transactional
     public PresentationSection savePresentationSection(Long versionId, PresentationSection presentationSection) {
+        PresentationSection newPresentationSection = new PresentationSection();
 
-        presentationSection.setVersionId(versionId);
-        return presentationSectionRepository.save(presentationSection);
+        newPresentationSection.setVersionId(versionId);
+
+        newPresentationSection.setTitle(presentationSection.getTitle());
+        newPresentationSection.setDescription(presentationSection.getDescription());
+        newPresentationSection.setType(presentationSection.getType());
+        newPresentationSection.setDataSet(presentationSection.getDataSet());
+        newPresentationSection.setSelections(presentationSection.getSelections());
+        newPresentationSection.setInvolvedRecords(presentationSection.getInvolvedRecords());
+        newPresentationSection.setFilters(presentationSection.getFilters());
+        newPresentationSection.setJoiners(presentationSection.getJoiners());
+        newPresentationSection.setGroupers(presentationSection.getGroupers());
+        newPresentationSection.setSorters(presentationSection.getSorters());
+        newPresentationSection.setExtraData(presentationSection.getExtraData());
+
+        return presentationSectionRepository.save(newPresentationSection);
+
     }
 
     @Transactional
@@ -36,6 +51,7 @@ public class PresentationSectionService {
                 .map(presentationSection -> {
                     presentationSection.setTitle(newPresentationSection.getTitle());
                     presentationSection.setDescription(newPresentationSection.getDescription());
+                    presentationSection.setDataSet(newPresentationSection.getDataSet());
                     presentationSection.setSelections(newPresentationSection.getSelections());
                     presentationSection.setInvolvedRecords(newPresentationSection.getInvolvedRecords());
                     presentationSection.setFilters(newPresentationSection.getFilters());

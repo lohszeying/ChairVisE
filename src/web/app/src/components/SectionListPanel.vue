@@ -179,7 +179,7 @@
         var id = this.verId;
         console.log("id is: " + id);
         this.$store.commit('setPresentationFormField', {
-            field: 'version', id
+            field: 'version_id', id
         });
         this.fetchSectionList();
       },

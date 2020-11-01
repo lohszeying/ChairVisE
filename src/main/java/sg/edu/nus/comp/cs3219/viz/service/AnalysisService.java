@@ -54,10 +54,10 @@ public class AnalysisService {
         return jdbcTemplate.queryForList(sql);
     }
 
-    private String addVersionToNestedQuery(PresentationSection.Record record, String version){
+    private String addVersionToNestedQuery(PresentationSection.Record record, int version){
         String regex = "(\\w+\\S).data_set";
         String strToMatch = record.getName();
-        strToMatch = strToMatch.replaceAll(regex, "$1.version = '" + version + "' AND $1.data_set" );
+        strToMatch = strToMatch.replaceAll(regex, "$1.version_id = " + version);
         return strToMatch;
     }
 
@@ -84,8 +84,8 @@ public class AnalysisService {
 
         String dataSetVersionFilter = analysisRequest.getInvolvedRecords().stream()
                 .filter(r -> !r.isCustomized())
-                .map(t -> String.format("%s.data_set = '%s' AND %s.version = '%s'",
-                        t.getName(), analysisRequest.getDataSet(),
+                .map(t -> String.format(" %s.version_id = %d ",
+                       /* t.getName(), analysisRequest.getDataSet(), */
                         t.getName(), analysisRequest.getVersionId()))
                 .collect(Collectors.joining(" AND "));
 
