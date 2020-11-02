@@ -3689,7 +3689,7 @@ export default {
       }
     }
   },
-  "avg_weighted_score_paper_author": {
+  /*"avg_weighted_score_paper_author": {
     name: "Average Weighted Score Rank Paper Author",
     group: 'Review Record + Submission Record',
     data: {
@@ -3742,7 +3742,7 @@ export default {
         isColorfulBar: true,
       }
     }
-  },
+  }, */
   "avg_weighted_score_author": {
     name: "Average Weighted Score Rank Author",
     group: 'Author Record + Review Record',
@@ -4128,7 +4128,7 @@ export default {
 
 
 
-      "Test": {
+      /*"Test": {
         name: "Test", // define the name of the chart
         group: 'Author Record', // classify the group of record (author/submission/review)
         data: {
@@ -4194,5 +4194,5 @@ export default {
             nodeMessage: "Name: ",
           }
         }
-      },
+      }, */
 }
