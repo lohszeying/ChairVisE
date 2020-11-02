@@ -1142,7 +1142,7 @@ export default {
     }
   },
   */
-  "submission_rank_paper_author_in_full_papers": {
+  /*"submission_rank_paper_author_in_full_papers": {
     name: "Submission Rank Paper Author in Full Papers",
     group: 'Submission Record',
     data: {
@@ -1200,8 +1200,8 @@ export default {
         isColorfulBar: true,
       }
     }
-  },
-  "submission_acceptance_rate_rank_paper_author": {
+  },*/
+  /*"submission_acceptance_rate_rank_paper_author": {
     name: "Submission Acceptance Rate Rank Paper Author",
     group: 'Submission Record',
     data: {
@@ -1270,8 +1270,8 @@ export default {
         isColorfulBar: true,
       }
     }
-  },
-  "submission_accepted_rank_paper_author": {
+  }, */
+  /*"submission_accepted_rank_paper_author": {
     name: "Submission Accepted Rank Paper Author",
     group: 'Submission Record',
     data: {
@@ -1339,7 +1339,7 @@ export default {
         isColorfulBar: true,
       }
     }
-  },
+  }, */
   "submission_rank_country": {
     name: "Submission Rank Country",
     group: 'Author Record',
