@@ -3529,7 +3529,7 @@ export default {
             "  WHEN avg_expertise_level <= 5.00 THEN '4.75 ~ 5.00'\n" +
             "END AS `avg_expertise_level_interval` FROM " +
             "(SELECT AVG(r_expertise_level) AS `avg_expertise_level` FROM review_record " +
-            "WHERE review_record.data_set = \"${PLACEHOLDER_DATA_SET}\"" +
+            "WHERE review_record.data_set = \"${PLACEHOLDER_DATA_SET}\" " +
             "GROUP BY r_submission_id " +
             "UNION ALL SELECT 0.25\n" +
             "UNION ALL SELECT 0.50\n" +
@@ -3641,7 +3641,7 @@ export default {
             "  WHEN avg_confidence_level <= 5.00 THEN '4.75 ~ 5.00'\n" +
             "END AS `avg_confidence_level_interval` FROM " +
             "(SELECT AVG(r_confidence_level) AS `avg_confidence_level` FROM review_record " +
-            "WHERE review_record.data_set = \"${PLACEHOLDER_DATA_SET}\"" +
+            "WHERE review_record.data_set = \"${PLACEHOLDER_DATA_SET}\" " +
             "GROUP BY r_submission_id " +
             "UNION ALL SELECT 0.25\n" +
             "UNION ALL SELECT 0.50\n" +
