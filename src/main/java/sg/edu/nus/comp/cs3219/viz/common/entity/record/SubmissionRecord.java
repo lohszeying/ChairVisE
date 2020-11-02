@@ -30,6 +30,10 @@ public class SubmissionRecord {
     @Exportable(name = "Title", nameInDB = "s_title")
     private String s_title;
 
+    // Authors of the submission
+    @Exportable(name = "Authors", nameInDB = "s_authors")
+    private String s_authors;
+
     // time submitted
     @Exportable(name = "Submission Time", nameInDB = "s_submission_time")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm")
