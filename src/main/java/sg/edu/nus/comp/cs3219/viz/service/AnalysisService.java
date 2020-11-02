@@ -58,9 +58,9 @@ public class AnalysisService {
         String MAIL_REGEX = "([_A-Za-z0-9-]+)(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})";
         String regex = "(\\w+\\S).data_set = \"" + MAIL_REGEX + "\"";
         String strToMatch = record.getName();
-        log.info("strToMatch in record.getName(): " + strToMatch);
+        //log.info("strToMatch in record.getName(): " + strToMatch);
         strToMatch = strToMatch.replaceAll(regex, "$1.version_id = " + version);
-        log.info("strToMatch: " + strToMatch);
+        //log.info("strToMatch: " + strToMatch);
         return strToMatch;
     }
 
