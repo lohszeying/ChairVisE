@@ -1,6 +1,5 @@
 <template>
-  <basic-section-detail :section-detail="sectionDetail" :presentation-id="presentationId" :has-data="hasData"
-                        :version="version"
+  <basic-section-detail :section-detail="sectionDetail" :version-id="versionId" :has-data="hasData"
                         :edit-form-selections-rule="editFormSelectionsRule"
                         :edit-form-involved-records-rule="editFormInvolvedRecordsRule"
                         :edit-form-filters-rule="editFormFiltersRule"
@@ -74,14 +73,10 @@
         type: Object,
         required: true
       },
-      presentationId: {
+      versionId: {
         type: String,
         required: true
-      },      
-      version: {
-        type: String,
-        required: true
-      }
+      },
     },
 
     data() {
