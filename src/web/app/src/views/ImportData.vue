@@ -160,6 +160,7 @@
       };
     },
     beforeCreate() {
+      this.$store.commit("resetConferenceForm");
       this.$store.dispatch('fetchDBMetaDataEntities');
       this.$store.dispatch('getConferenceList');
       //Set HasHeader to true by default
