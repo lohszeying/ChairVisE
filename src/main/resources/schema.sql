@@ -41,6 +41,7 @@ CREATE TABLE submission_record (
     s_track_id int,
     s_track_name varchar(255),
     s_title text,
+    s_authors text,
     s_submission_time timestamp,
     s_last_updated_time timestamp,
     s_keywords varchar(255),
