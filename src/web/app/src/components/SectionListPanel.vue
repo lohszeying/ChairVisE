@@ -11,6 +11,19 @@
             </el-option>
           </el-select>        
         </el-card>
+
+        <el-card v-if="!isVersionListEmpty" class="versionInfo">
+          <div slot="header" class="clearfix">
+            <span> Version information </span>
+          </div>
+          <el-button class="recordButton" type="secondary" icon="el-icon-success" v-if="isAuthorUploaded">Author record uploaded</el-button>
+          <el-button class="recordButton" type="info" icon="el-icon-warning" v-if="!isAuthorUploaded">No author record found</el-button>
+          <el-button class="recordButton" type="secondary" icon="el-icon-success" v-if="isReviewUploaded">Review record uploaded</el-button>
+          <el-button class="recordButton" type="info" icon="el-icon-warning" v-if="!isReviewUploaded">No review record found</el-button>
+          <el-button class="recordButton" type="secondary" icon="el-icon-success" v-if="isSubmissionUploaded">Submission record uploaded</el-button>
+          <el-button class="recordButton" type="info" icon="el-icon-warning" v-if="!isSubmissionUploaded">No submission record found</el-button>
+        </el-card>
+
         <el-card v-if="isOwner">
           <div slot="header" class="clearfix">
             <span> Add section </span>
@@ -269,6 +282,33 @@
           return list;
         }
       },
+      isAuthorUploaded() {
+        if (this.recordList.authorRecord) {
+          //return "Author record uploaded";
+          return true;
+        } else {
+          return false;
+          //return "No author record found";
+        }
+      },
+      isReviewUploaded() {
+        if (this.recordList.reviewRecord) {
+          return true;
+          //return "Review record uploaded";
+        } else {
+          return false;
+          //return "No review record found";
+        }
+      },
+      isSubmissionUploaded() {
+        if (this.recordList.submissionRecord) {
+          return true;
+          //return "Submission record uploaded";
+        } else {
+          return false;
+          //return "No submission record found";
+        }
+      },
     },
     components: {
       AbstractSectionDetail,
@@ -374,6 +414,17 @@
   .selectionInputButton {
     display: inline-block;
     width: 100%;
+  }
+  .versionInfo {
+    height: 110%;
+    display: inline-block;
+  }
+  .recordButton {
+    float: right;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 2px;
+
   }
   .addRowRightAlign {
     float: right;
