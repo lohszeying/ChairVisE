@@ -10,10 +10,7 @@
       </ol>
       To use our user guide, click on any of the tabs above to begin exploring.
     </el-collapse-item>
-    <el-collapse-item title="My chart seems to overlapped" name="2">
-      <p> Scroll all the way to the top and click "PDF" / "Powerpoint" again. </p>
-    </el-collapse-item>
-    <el-collapse-item title="Cannot upload Review Record with no header for EasyChair" name="3">
+    <el-collapse-item title="Cannot upload Review Record with no header for EasyChair" name="2">
       <p> Use the with header option. </p>
     </el-collapse-item>
   </el-collapse>
