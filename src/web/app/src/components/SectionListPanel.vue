@@ -11,7 +11,7 @@
             </el-option>
           </el-select>        
         </el-card>
-        <el-card>  
+        <el-card v-if="isOwner">
           <div slot="header" class="clearfix">
             <span> Add section </span>
           </div>
@@ -29,7 +29,7 @@
               </el-option>
             </el-option-group>
           </el-select>
-          <el-button class="selectionInputButton" icon="el-icon-plus" type="success" v-if="isLogin" @click="addNewSection">Add New Section</el-button>
+          <el-button class="selectionInputButton" icon="el-icon-plus" type="success" v-if="isOwner" @click="addNewSection">Add New Section</el-button>
         </el-card>
       </el-aside>
       <br/>
@@ -75,9 +75,10 @@
     },
     computed: {
       isLogin() {
-
-
         return this.$store.state.userInfo.isLogin;
+      },
+      isOwner() {
+        return this.$store.state.userInfo.isLogin && (this.$store.state.conference.conferenceForm.userEmail === this.$store.state.userInfo.userEmail);
       },
 
       isPresentationEditable() {
