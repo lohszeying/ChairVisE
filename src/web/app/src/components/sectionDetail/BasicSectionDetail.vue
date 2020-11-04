@@ -4,9 +4,9 @@
              :rules="editFormRule">
       <div class="title" v-if="!isEditing">
         {{ sectionDetail.title }}
-        <el-button type="primary" @click="changeEditMode(true)" v-if="isPresentationEditable" icon="el-icon-edit">
+        <!-- <el-button type="primary" @click="changeEditMode(true)" v-if="isPresentationEditable" icon="el-icon-edit">
           Edit
-        </el-button>
+        </el-button> -->
         <el-button type="danger" icon="el-icon-delete"  @click="deleteSectionDetail"
                    v-if="isPresentationEditable">
           Delete
@@ -246,7 +246,6 @@
       this.syncDataWithProps();
       this.sendAnalysisRequest();
     },
-
     data() {
       return {
         isInAdvancedMode: false,
@@ -305,7 +304,8 @@
         return this.filtersFieldOptions;
       },
       isPresentationEditable() {
-        return true;
+        return this.$store.state.userInfo.isLogin && (this.$store.state.userInfo.userEmail === this.sectionDetail.dataSet)
+        //return true;
         //return this.$store.state.presentation.isPresentationEditable;
       }
     },
@@ -325,11 +325,11 @@
         this.editForm.title = this.sectionDetail.title;
         this.editForm.description = this.sectionDetail.description;
         this.editForm.dataSet = this.sectionDetail.dataSet;
-        console.log(this.editForm.dataSet);
+        //console.log(this.editForm.dataSet);
         this.editForm.selections = deepCopy(this.sectionDetail.selections); // deep copy
-        console.log("in syncDataWithProps: " + this.sectionDetail.involvedRecords);
-        console.log("dbMetaData.entities:")
-        console.log(this.$store.state.dbMetaData.entities);
+        //console.log("in syncDataWithProps: " + this.sectionDetail.involvedRecords);
+        //console.log("dbMetaData.entities:")
+        //console.log(this.$store.state.dbMetaData.entities);
         /*this.editForm.involvedRecords = this.sectionDetail.involvedRecords.map(r => r.name);
         this.editForm.filters = this.sectionDetail.filters.map(f => Object.assign({}, f));
         this.editForm.joiners = this.sectionDetail.joiners.map(f => Object.assign({}, f));

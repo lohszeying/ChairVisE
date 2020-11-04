@@ -29,7 +29,7 @@
               </el-option>
             </el-option-group>
           </el-select>
-          <el-button class="selectionInputButton" icon="el-icon-plus" type="success" @click="addNewSection">Add New Section</el-button>
+          <el-button class="selectionInputButton" icon="el-icon-plus" type="success" v-if="isLogin" @click="addNewSection">Add New Section</el-button>
         </el-card>
       </el-aside>
       <br/>
@@ -75,7 +75,9 @@
     },
     computed: {
       isLogin() {
-        return this.$store.state.userInfo.isLogin
+
+
+        return this.$store.state.userInfo.isLogin;
       },
 
       isPresentationEditable() {
