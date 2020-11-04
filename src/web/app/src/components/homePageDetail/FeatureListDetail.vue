@@ -12,14 +12,14 @@
               </el-card> 
             </el-col>
           </zoom-x-transition>
-          <zoom-x-transition :duration="500" :delay="600">
+          <!--<zoom-x-transition :duration="500" :delay="600">
             <el-col :sm="24" :md="8" :lg="8" :xl="8" v-show="show">
               <el-card shadow="hover" class="feature-card">
                 <img src="@/assets/collaboration.png"/>
                 <p> Create and share presentation with others </p>
               </el-card> 
             </el-col>
-          </zoom-x-transition>
+          </zoom-x-transition> -->
           <zoom-x-transition :duration="500" :delay="600">
             <el-col :sm="24" :md="8" :lg="8" :xl="8" v-show="show">
               <el-card shadow="hover" class="feature-card">                
