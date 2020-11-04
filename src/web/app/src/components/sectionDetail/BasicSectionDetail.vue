@@ -304,7 +304,7 @@
         return this.filtersFieldOptions;
       },
       isPresentationEditable() {
-        return this.$store.state.userInfo.isLogin && (this.$store.state.userInfo.userEmail === this.sectionDetail.dataSet)
+        return this.$store.state.userInfo.isLogin && (this.$store.state.userInfo.userEmail === this.$store.state.conference.conferenceForm.userEmail)
         //return true;
         //return this.$store.state.presentation.isPresentationEditable;
       }
