@@ -35,7 +35,17 @@
       </ul>
     </el-collapse-item>    
     <el-collapse-item title="Enable data persistance" name="8">
-      
+      Every conference you uploaded is tied to the year a conference is held. <br>
+      It is as simple as filling in the date the conference is held. <br>
+      You can visualize conferences of different years with our simple to use navigation. <br>
+    </el-collapse-item>
+    <el-collapse-item title="Data to visualize automatically filtered" name="9">
+      All the options listed under "Add section" is specifically filtered based on your uploaded records for that particular conference and year.
+    </el-collapse-item>
+    <el-collapse-item title="Sort conference data alphabetically" name="10">
+      Do you have too many conferences? Don't you want to sort it in alphabetical order? Now you can, with "sort" button at home page. <br>
+      Sort allows you to sort conferences according to alphabetical order. <br>
+      You can sort both in ascending and descending order, according to conference title.
     </el-collapse-item>
   </el-collapse>
 </template>
