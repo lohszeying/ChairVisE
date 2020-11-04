@@ -32,10 +32,10 @@ public class RecordService {
 
     @Transactional
     public Map<String, Boolean> checkRecords(Long versionId) {
-        boolean hasAuthorRecord = authorRecordRepository.existsById(versionId);
+        boolean hasAuthorRecord = authorRecordRepository.existsByVersionId(versionId);
         log.info("hasAuthorRecord verId: " + versionId + ", bool: " + hasAuthorRecord);
-        boolean hasSubmissionRecord = submissionRecordRepository.existsById(versionId);
-        boolean hasReviewRecord = reviewRecordRepository.existsById(versionId);
+        boolean hasSubmissionRecord = submissionRecordRepository.existsByVersionId(versionId);
+        boolean hasReviewRecord = reviewRecordRepository.existsByVersionId(versionId);
         HashMap<String, Boolean> map = new HashMap<>();
         map.put("authorRecord", hasAuthorRecord);
         map.put("submissionRecord", hasSubmissionRecord);
