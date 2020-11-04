@@ -330,7 +330,7 @@
         //console.log("in syncDataWithProps: " + this.sectionDetail.involvedRecords);
         //console.log("dbMetaData.entities:")
         //console.log(this.$store.state.dbMetaData.entities);
-        console.log(this.sectionDetail.involvedRecords);
+        //console.log(this.sectionDetail.involvedRecords);
         this.editForm.involvedRecords = this.sectionDetail.involvedRecords.map(r => r.name);
         this.editForm.filters = this.sectionDetail.filters.map(f => Object.assign({}, f));
         this.editForm.joiners = this.sectionDetail.joiners.map(f => Object.assign({}, f));
