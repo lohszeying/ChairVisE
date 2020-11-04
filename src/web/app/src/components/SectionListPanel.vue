@@ -65,12 +65,18 @@
         this.updateVersion();
       },
     },
+    beforeCreate() {
+      this.recordList = '';
+      console.log("clearing this record list");
+      this.$store.commit('resetRecordList');
+    },
     data() {
       return {
         selectedNewSection: '',
         presentationFormVersion: '',
         verId: '',
         getUpdatedVerList: false,
+        recordList: '',
       }
     },
     computed: {
@@ -86,6 +92,7 @@
       },
 
       predefinedSections() {
+
         let sectionOptionsGroup = {};
         // grouping the predefined queries
         for (let key in PredefinedQueries) {
@@ -150,6 +157,7 @@
           let list = Array.from(new Set(this.$store.state.version.versionList.map(v => v.date.split("-")[0])))
               .sort((a, b) => (a < b) ? 1 : -1);
           this.setDefaultValueForVersionList(list[0]);
+
           return list;
         }
       },
@@ -159,10 +167,11 @@
       EmptySection
     },
     mounted() {
-
       this.$store.dispatch('fetchDBMetaDataEntities');
       this.$store.dispatch('getVersionList', this.$route.params.id).then(() => this.getUpdatedVerList = true);
       //this.fetchSectionList();
+
+
     },
     methods: {
       updateVersion() {
@@ -170,7 +179,7 @@
         var value = this.presentationFormVersion;
 
         if (value === undefined) {
-            value = this.versions[0];
+          value = this.versions[0];
         }
 
         //For loop to get ID
@@ -185,8 +194,14 @@
         var id = this.verId;
         console.log("id is: " + id);
         this.$store.commit('setPresentationFormField', {
-            field: 'version_id', id
+          field: 'version_id', id
         });
+
+        this.$store.dispatch('getRecordList', id).then(() => {
+          this.recordList = this.$store.state.record.recordList;
+          console.log(this.$store.state.record.recordList);
+        });
+
         this.fetchSectionList();
 
         this.$notify.info({
