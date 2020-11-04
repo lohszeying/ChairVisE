@@ -11,6 +11,19 @@
             </el-option>
           </el-select>        
         </el-card>
+
+        <el-card v-if="!isVersionListEmpty" class="versionInfo">
+          <div slot="header" class="clearfix">
+            <span> Version information </span>
+          </div>
+          <el-button class="recordButton" type="secondary" icon="el-icon-success" v-if="isAuthorUploaded">Author record uploaded</el-button>
+          <el-button class="recordButton" type="info" icon="el-icon-warning" v-if="!isAuthorUploaded">No author record found</el-button>
+          <el-button class="recordButton" type="secondary" icon="el-icon-success" v-if="isReviewUploaded">Review record uploaded</el-button>
+          <el-button class="recordButton" type="info" icon="el-icon-warning" v-if="!isReviewUploaded">No review record found</el-button>
+          <el-button class="recordButton" type="secondary" icon="el-icon-success" v-if="isSubmissionUploaded">Submission record uploaded</el-button>
+          <el-button class="recordButton" type="info" icon="el-icon-warning" v-if="!isSubmissionUploaded">No submission record found</el-button>
+        </el-card>
+
         <el-card v-if="isOwner">
           <div slot="header" class="clearfix">
             <span> Add section </span>
@@ -103,10 +116,70 @@
           if (sectionOptionsGroup[groupName] === undefined) {
             sectionOptionsGroup[groupName] = [];
           }
+
           sectionOptionsGroup[groupName].push({
             value: key,
             label: PredefinedQueries[key].name,
           })
+
+          /*if (this.recordList.authorRecord && this.recordList.reviewRecord && this.recordList.submissionRecord) {
+            sectionOptionsGroup[groupName].push({
+              value: key,
+              label: PredefinedQueries[key].name,
+            })
+            break;
+          } else if (this.recordList.authorRecord && this.recordList.submissionRecord) {
+            if (groupName === 'Co-authorship' || groupName === 'Author Record + Submission Record'
+                || groupName === 'Author Record' || groupName === 'Submission Record' ) {
+
+              sectionOptionsGroup[groupName].push({
+                value: key,
+                label: PredefinedQueries[key].name,
+              })
+            }
+            break;
+          } else if (this.recordList.authorRecord && this.recordList.reviewRecord) {
+            if (groupName === 'Author Record + Review Record' || groupName === 'Author Record' || groupName === 'Review Record') {
+              sectionOptionsGroup[groupName].push({
+                value: key,
+                label: PredefinedQueries[key].name,
+              })
+            }
+            break;
+          } else if (this.recordList.reviewRecord && this.recordList.submissionRecord) {
+            if (groupName === 'Review Record + Submission Record' || groupName === 'Review Record' || groupName === 'Submission Record') {
+              sectionOptionsGroup[groupName].push({
+                value: key,
+                label: PredefinedQueries[key].name,
+              })
+            }
+            break;
+          } else if (this.recordList.authorRecord) {
+            if (groupName === 'Author Record') {
+              sectionOptionsGroup[groupName].push({
+                value: key,
+                label: PredefinedQueries[key].name,
+              })
+            }
+            break;
+          } else if (this.recordList.reviewRecord) {
+            if (groupName === 'Review Record') {
+              sectionOptionsGroup[groupName].push({
+                value: key,
+                label: PredefinedQueries[key].name,
+              })
+            }
+            break;
+          } else if (this.recordList.submissionRecord) {
+            if (groupName === 'Submission Record') {
+              sectionOptionsGroup[groupName].push({
+                value: key,
+                label: PredefinedQueries[key].name,
+              })
+            }
+            break;
+          } */
+
         }
 
         // generate to format that element ui requires
@@ -120,6 +193,54 @@
             options: sectionOptionsGroup[groupName]
           })
         }
+
+        if (!this.recordList.authorRecord && !this.recordList.reviewRecord && !this.recordList.submissionRecord) {
+          sectionOptions = [];
+        } else if (!this.recordList.authorRecord && !this.recordList.reviewRecord) {
+          //Only has submission
+          sectionOptions.splice(0,1);
+          sectionOptions.splice(1,1);
+          sectionOptions.splice(1,1);
+          sectionOptions.splice(1,1);
+          sectionOptions.splice(1,1);
+          sectionOptions.splice(1,1);
+        } else if (!this.recordList.authorRecord && !this.recordList.submissionRecord) {
+          //Only has review
+          sectionOptions.splice(0,1);
+          sectionOptions.splice(0,1);
+          sectionOptions.splice(1,1);
+          sectionOptions.splice(1,1);
+          sectionOptions.splice(1,1);
+          sectionOptions.splice(1,1);
+        } else if (!this.recordList.reviewRecord && !this.recordList.submissionRecord) {
+          //Only has author
+          sectionOptions.splice(0,1);
+          sectionOptions.splice(0,1);
+          sectionOptions.splice(0,1);
+          sectionOptions.splice(1,1);
+          sectionOptions.splice(1,1);
+          sectionOptions.splice(1,1);
+        } else if (!this.recordList.authorRecord) {
+          //Only have review + submission (no author)
+          sectionOptions.splice(0,1);
+          sectionOptions.splice(2,1);
+          sectionOptions.splice(2,1);
+          sectionOptions.splice(3,1);
+        } else if (!this.recordList.reviewRecord) {
+          //Only have author + submission (no review)
+          sectionOptions.splice(2,1);
+          sectionOptions.splice(4,1);
+          sectionOptions.splice(4,1);
+        } else if (!this.recordList.submissionRecord) {
+          sectionOptions.splice(0,1);
+          sectionOptions.splice(0,1);
+          sectionOptions.splice(2,1);
+          sectionOptions.splice(2,1);
+        }
+
+
+        //console.log(sectionOptions);
+
         return sectionOptions;
       },
 
@@ -159,6 +280,33 @@
           this.setDefaultValueForVersionList(list[0]);
 
           return list;
+        }
+      },
+      isAuthorUploaded() {
+        if (this.recordList.authorRecord) {
+          //return "Author record uploaded";
+          return true;
+        } else {
+          return false;
+          //return "No author record found";
+        }
+      },
+      isReviewUploaded() {
+        if (this.recordList.reviewRecord) {
+          return true;
+          //return "Review record uploaded";
+        } else {
+          return false;
+          //return "No review record found";
+        }
+      },
+      isSubmissionUploaded() {
+        if (this.recordList.submissionRecord) {
+          return true;
+          //return "Submission record uploaded";
+        } else {
+          return false;
+          //return "No submission record found";
         }
       },
     },
@@ -266,6 +414,17 @@
   .selectionInputButton {
     display: inline-block;
     width: 100%;
+  }
+  .versionInfo {
+    height: 110%;
+    display: inline-block;
+  }
+  .recordButton {
+    float: right;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 2px;
+
   }
   .addRowRightAlign {
     float: right;
