@@ -188,6 +188,12 @@
             field: 'version_id', id
         });
         this.fetchSectionList();
+
+        this.$notify.info({
+          title: 'Selected version',
+          message: 'Currently selecting year ' + value + ' to visualize',
+          duration: 2000
+        });
       },
 
       setDefaultValueForVersionList(value) {
@@ -218,6 +224,12 @@
         }).then(() => {
           this.selectedNewSection = ''
         })
+
+        this.$notify.success({
+          title: 'Added new section',
+          message: 'Successfully added a new section to visualize.',
+          duration: 2000
+        });
       }
     }
   }

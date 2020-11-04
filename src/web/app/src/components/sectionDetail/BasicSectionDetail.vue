@@ -426,6 +426,12 @@
           versionId: this.sectionDetail.versionId,
           id: this.sectionDetail.id
         });
+
+        this.$notify.success({
+          title: 'Deleted section',
+          message: 'Successfully deleted a section.',
+          duration: 2000
+        });
       },
 
       previewAnalysisResult(formName) {
