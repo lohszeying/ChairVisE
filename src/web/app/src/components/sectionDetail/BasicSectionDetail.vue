@@ -246,7 +246,6 @@
       this.syncDataWithProps();
       this.sendAnalysisRequest();
     },
-
     data() {
       return {
         isInAdvancedMode: false,
@@ -305,7 +304,8 @@
         return this.filtersFieldOptions;
       },
       isPresentationEditable() {
-        return true;
+        return this.$store.state.userInfo.isLogin && (this.$store.state.userInfo.userEmail === this.$store.state.conference.conferenceForm.userEmail)
+        //return true;
         //return this.$store.state.presentation.isPresentationEditable;
       }
     },
@@ -325,15 +325,16 @@
         this.editForm.title = this.sectionDetail.title;
         this.editForm.description = this.sectionDetail.description;
         this.editForm.dataSet = this.sectionDetail.dataSet;
-        console.log(this.editForm.dataSet);
+        //console.log(this.editForm.dataSet);
         this.editForm.selections = deepCopy(this.sectionDetail.selections); // deep copy
-        console.log("in syncDataWithProps: " + this.sectionDetail.involvedRecords);
-        console.log("dbMetaData.entities:")
-        console.log(this.$store.state.dbMetaData.entities);
-        /*this.editForm.involvedRecords = this.sectionDetail.involvedRecords.map(r => r.name);
+        //console.log("in syncDataWithProps: " + this.sectionDetail.involvedRecords);
+        //console.log("dbMetaData.entities:")
+        //console.log(this.$store.state.dbMetaData.entities);
+        console.log(this.sectionDetail.involvedRecords);
+        this.editForm.involvedRecords = this.sectionDetail.involvedRecords.map(r => r.name);
         this.editForm.filters = this.sectionDetail.filters.map(f => Object.assign({}, f));
         this.editForm.joiners = this.sectionDetail.joiners.map(f => Object.assign({}, f));
-        this.editForm.groupers = this.sectionDetail.groupers.map(r => r.field); */
+        this.editForm.groupers = this.sectionDetail.groupers.map(r => r.field);
         this.editForm.sorters = deepCopy(this.sectionDetail.sorters); // deep copy
         this.editForm.extraData = deepCopy(this.sectionDetail.extraData) // deep copy
       },
@@ -424,6 +425,12 @@
           //versionId: this.versionId,
           versionId: this.sectionDetail.versionId,
           id: this.sectionDetail.id
+        });
+
+        this.$notify.success({
+          title: 'Deleted section',
+          message: 'Successfully deleted a section.',
+          duration: 2000
         });
       },
 

@@ -8,6 +8,7 @@ import sg.edu.nus.comp.cs3219.viz.storage.repository.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @Service
 public class RecordService {
@@ -17,6 +18,8 @@ public class RecordService {
     private final SubmissionRecordRepository submissionRecordRepository;
 
     private final ReviewRecordRepository reviewRecordRepository;
+
+    private static final Logger log = Logger.getLogger(AnalysisService.class.getSimpleName());
 
     public RecordService(AuthorRecordRepository authorRecordRepository,
                          SubmissionRecordRepository submissionRecordRepository,
@@ -30,6 +33,7 @@ public class RecordService {
     @Transactional
     public Map<String, Boolean> checkRecords(Long versionId) {
         boolean hasAuthorRecord = authorRecordRepository.existsById(versionId);
+        log.info("hasAuthorRecord verId: " + versionId + ", bool: " + hasAuthorRecord);
         boolean hasSubmissionRecord = submissionRecordRepository.existsById(versionId);
         boolean hasReviewRecord = reviewRecordRepository.existsById(versionId);
         HashMap<String, Boolean> map = new HashMap<>();

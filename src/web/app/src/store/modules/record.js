@@ -76,6 +76,11 @@ export default {
         setRecordList(state, payload) {
             state.recordList = payload;
         },
+        resetRecordList(state) {
+            state.recordList = [];
+            console.log("resetting");
+            console.log(state.recordList);
+        },
         setAuthorRecordFormLoading(state, isLoading) {
             state.authorRecordFormStatus.isLoading = isLoading;
         },
@@ -114,9 +119,9 @@ export default {
 
     actions: {
         async getRecordList({commit}, versionId) {
-            axios.get(`/api/versions/${versionId}`)
+            await axios.get(`/api/versions/${versionId}`)
                 .then(response => {
-                    commit('setRecordList', response.data)
+                    commit('setRecordList', response.data);
                 })
                 .catch(e => {
                     commit('setRecordListApiError', e.toString());

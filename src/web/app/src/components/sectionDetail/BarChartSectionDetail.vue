@@ -161,7 +161,6 @@
 
     methods: {
       updateVisualisation({result, extraData}) {
-        console.log("test 2");
         this.partialResult = result.slice(0, extraData.numOfResultToDisplay);
         // process x axis
         this.labels = this.partialResult.map(record => record[extraData.xAxisFieldName]);

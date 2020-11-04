@@ -63,7 +63,8 @@
     },
     computed: {
       isLogin() {
-        return this.$store.state.userInfo.isLogin
+        //return this.$store.state.userInfo.isLogin
+        return this.$store.state.userInfo.isLogin && (this.$store.state.userInfo.userEmail === this.conferenceFormCreatorIdentifier)
       },
       conferenceForm() {
         return {
