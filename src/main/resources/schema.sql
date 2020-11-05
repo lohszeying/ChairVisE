@@ -1,5 +1,4 @@
-DROP TABLE IF EXISTS author_record, submission_record, review_record, presentation, presentation_permission,
-    presentation_section, version, conference;
+
 
 CREATE TABLE conference (
     id int NOT NULL AUTO_INCREMENT,
