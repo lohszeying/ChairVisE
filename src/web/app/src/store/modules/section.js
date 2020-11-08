@@ -86,9 +86,9 @@ export default {
     }
   },
   actions: {
-    async fetchSectionList({commit}, presentationId) {
+    async fetchSectionList({commit}, versionId) {
       commit('setSectionListLoading', true);
-      await axios.get(`/api/presentations/${presentationId}/sections`)
+      await axios.get(`/api/versions/${versionId}/sections`)
         .then(response => {
           commit('clearSectionList');
           response.data.forEach(s => {
@@ -103,13 +103,13 @@ export default {
         })
     },
 
-    async addSectionDetail({commit}, {presentationId, selectedNewSection, dataSet}) {
+    async addSectionDetail({commit}, {versionId, selectedNewSection, dataSet}) {
       commit('setSectionListLoading', true);
 
       let newSection = PredefinedQueries[selectedNewSection].data;
       newSection = JSON.parse(JSON.stringify(newSection).replace(/\${PLACEHOLDER_DATA_SET}/g, dataSet));
 
-      await axios.post(`/api/presentations/${presentationId}/sections`, newSection)
+      await axios.post(`/api/versions/${versionId}/sections`, newSection)
         .then(response => {
           commit('addSectionDetail', response.data)
         })
@@ -121,10 +121,10 @@ export default {
         })
     },
 
-    async saveSectionDetail({commit}, {id, presentationId, title, description, dataSet, selections, involvedRecords, filters, joiners, groupers, sorters, extraData}) {
+    async saveSectionDetail({commit}, {id, versionId, title, description, dataSet, selections, involvedRecords, filters, joiners, groupers, sorters, extraData}) {
       commit('setSectionDetailLoading', {id, isLoading: true});
 
-      await axios.put(`/api/presentations/${presentationId}/sections/${id}`, {
+      await axios.put(`/api/versions/${versionId}/sections/${id}`, {
         title,
         description,
         dataSet,
@@ -160,10 +160,12 @@ export default {
         })
     },
 
-    async deleteSectionDetail({commit}, {id, presentationId}) {
+    async deleteSectionDetail({commit}, {id, versionId}) {
+      console.log("want to delete section, id: " + id);
+      console.log("want to delete section, versionId: " + versionId);
       commit('setSectionDetailLoading', {id, isLoading: true});
 
-      await axios.delete(`/api/presentations/${presentationId}/sections/${id}`)
+      await axios.delete(`/api/versions/${versionId}/sections/${id}`)
         .then(() => {
           commit('deleteSectionDetail', id)
         })
@@ -173,10 +175,10 @@ export default {
         })
     },
 
-    async sendPreviewAnalysisRequest({commit}, {presentationId, id, dataSet, selections, involvedRecords, filters, joiners, groupers, sorters, versionId}) {
+    async sendPreviewAnalysisRequest({commit}, {versionId, id, dataSet, selections, involvedRecords, filters, joiners, groupers, sorters}) {
       commit('setSectionDetailLoading', {id, isLoading: true});
 
-      await axios.post(`/api/presentations/${presentationId}/analysis`, {
+      await axios.post(`/api/versions/${versionId}/analysis`, {
         dataSet,
         selections,
         involvedRecords,
@@ -197,11 +199,11 @@ export default {
         })
     },
 
-    async sendAnalysisRequest({state, commit}, {id, presentationId, version}) {
+    async sendAnalysisRequest({state, commit}, {id, versionId}) {
       let sectionToAnalysis = findSectionDetailById(state.sectionList, id);
       commit('setSectionDetailLoading', {id: sectionToAnalysis.id, isLoading: true});
 
-      await axios.post(`/api/presentations/${presentationId}/analysis`, {
+      await axios.post(`/api/versions/${versionId}/analysis`, {
         dataSet: sectionToAnalysis.dataSet,
         selections: sectionToAnalysis.selections,
         involvedRecords: sectionToAnalysis.involvedRecords,
@@ -209,7 +211,7 @@ export default {
         joiners: sectionToAnalysis.joiners,
         groupers: sectionToAnalysis.groupers,
         sorters: sectionToAnalysis.sorters,
-        versionId: version
+        versionId: versionId
       })
         .then(response => {
           commit('updateSectionAnalysisResult', {id: sectionToAnalysis.id, result: response.data});

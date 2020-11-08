@@ -77,27 +77,41 @@
 
           <el-tooltip placement="top">
             <div slot="content">
-              If the input version is an existing version, current record will be replaced based on record type.
+              If the date is based on an existing conference of the same year, current record will be replaced based on record type.
               <br/>
-              If the input version is a new version, current record will be created based on record type.
+              If the conference or the date of the conference is on a different year, current record will be created based on record type.
             </div>
             <el-button type="text" icon="el-icon-question" circle></el-button>
           </el-tooltip>
         </h2>        
         <el-divider></el-divider>
+
+        <el-row class="form-card">
+          <el-col>
+            <label class="label">
+              Title
+            </label>
+            <br/>
+            <el-autocomplete
+                class="inline-input"
+                v-model="conferenceTitle"
+                :fetch-suggestions="querySearchConference"
+                placeholder="Title of Conference"
+            ></el-autocomplete>
+          </el-col>
+        </el-row>
         
         <el-row class="form-card">
           <el-col>
             <label class="label">
-              Version
+              Date
             </label>
             <br/>
-            <el-autocomplete
-              class="inline-input"
-              v-model="versionId"
-              :fetch-suggestions="querySearch"
-              placeholder="Input Version"
-            ></el-autocomplete>
+            <el-input
+              type="date"
+              v-model="versionDate"
+              placeholder="Input Date"
+            ></el-input>
           </el-col>
         </el-row>
         <div class="form-card">
@@ -114,6 +128,18 @@
 
       </el-card>
     </div>
+
+    <!-- Newly added, Will tell user to only upload .csv file -->
+    <el-dialog
+        title="Upload failed"
+        :visible.sync="isFailure"
+        width="30%" center>
+      <span>Please only submit .csv file.</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" v-on:click="isFailure = false">Go Back</el-button>
+      </span>
+    </el-dialog>
+
   </el-main>
 </template>
 
@@ -124,17 +150,21 @@
   import {deepCopy} from "@/common/utility"
   import PredefinedMappings from "@/store/data/predefinedMapping"
   import moment from "moment"
-
+  
   export default {
     name: "ImportData",
     data() {
       return {
-        predefinedMappings: PredefinedMappings
+        predefinedMappings: PredefinedMappings,
+        isFailure: false
       };
     },
     beforeCreate() {
+      this.$store.commit("resetConferenceForm");
       this.$store.dispatch('fetchDBMetaDataEntities');
-      this.$store.dispatch('getVersionList');
+      this.$store.dispatch('getConferenceList');
+      //Set HasHeader to true by default
+      this.$store.commit("setHasHeader", true);
     },
     computed: {
       isLogin() {
@@ -168,12 +198,49 @@
           this.$store.commit("setDBSchema", dbSchema);
         }
       },
-      versionId: {
+      conferenceTitle: {
         get: function () {
-          return this.$store.state.dataMapping.data.versionId;
+          //return this.$store.state.dataMapping.data.conferenceTitle;
+          this.$store.state.conference.conferenceForm.title;
+          return this.$store.state.dataMapping.data.conferenceTitle;
         },
-        set: function (newValue) {
-          this.$store.commit("setVersionId", newValue);
+        set: function (value) {
+          if (value !== '') {
+            this.$store.commit('setConferenceFormField', {
+              field: 'title',
+              value
+            });
+            this.$store.commit("setConferenceTitle", value);
+          } else {
+            this.$store.commit('setConferenceFormField', {
+              field: 'title',
+              value
+            });
+            this.$store.commit("clearConferenceTitle");
+          }
+        }
+      },
+      versionDate: {
+        get: function () {
+          this.$store.state.version.versionForm.date;
+          //console.log("version form: " + this.$store.state.version.versionForm.ver_date);
+          //console.log("dataMapping version date: " + this.$store.state.dataMapping.data.versionDate);
+          return this.$store.state.dataMapping.data.versionDate;
+        },
+        set: function (value) {
+          if (value !== '') {
+            this.$store.commit('setVersionFormField', {
+              field: 'date',
+              value
+            })
+            this.$store.commit("setVersionDate", value);
+          } else {
+            this.$store.commit('setVersionFormField', {
+              field: 'date',
+              value
+            })
+            this.$store.commit("clearVersionDate");
+          }
         }
       },
       hasHeader: {
@@ -206,7 +273,8 @@
           && this.$store.state.dataMapping.hasTableTypeSelected
           && this.$store.state.dataMapping.hasHeaderSpecified
           && this.$store.state.dataMapping.hasPredefinedSpecified
-          && this.$store.state.dataMapping.hasVersionIdSpecified;
+          && this.$store.state.dataMapping.hasConferenceTitleSpecified
+          && this.$store.state.dataMapping.hasVersionDateSpecified;
       },
       uploaded: function () {
         return this.$store.state.dataMapping.hasFileUploaded;
@@ -216,20 +284,21 @@
          && this.$store.state.dataMapping.hasTableTypeSelected
          && this.$store.state.dataMapping.hasHeaderSpecified
          && this.$store.state.dataMapping.hasPredefinedSwitchSpecified
-         && this.$store.state.dataMapping.hasVersionIdSpecified;
+         && this.$store.state.dataMapping.hasConferenceTitleSpecified
+         && this.$store.state.dataMapping.hasVersionDateSpecified;
       },
       isReadyForChoosing: function () {
         return this.$store.state.dataMapping.hasTableTypeSelected;
       }
     },
     methods: {
-      querySearch(queryString, cb) {
+      querySearchConference(queryString, cb) {
         // convert to array of string
-        var links = this.$store.state.presentation.versionList.map(v => v.versionId);
+        var links = this.$store.state.conference.conferenceList.map(c => c.title);
         // function to remove duplicate from array of string
-        let reduceFunction = (links) => links.filter((v,i) => links.indexOf(v) === i );
+        let reduceFunction = (links) => links.filter((c,i) => links.indexOf(c) === i );
         links = reduceFunction(links);
-        links = links.map(v => { return { "value" : v} });
+        links = links.map(c => { return { "value" : c} });
         var results = queryString ? links.filter(this.createFilter(queryString)) : links;
         cb(results);
       },
@@ -242,17 +311,126 @@
         this.$router.replace("/home");
       },
       fileUploadHandler: function (file) {
+        //If file extension is not .csv, do not allow user to proceed
+        if(file.name.split(".").pop() != 'csv'){
+          // eslint-disable-next-line no-console
+          //console.log('file is not .csv, prompt will show to tell user to upload .csv file');
+          this.isFailure = true;
+          return;
+        } else {
+          //Can proceed
+
+          // eslint-disable-next-line no-console
+          //console.log('file is .csv');
+          this.isFailure = false;
+        }
+
         // show loading and go parsing
         this.$store.commit("setPageLoadingStatus", true);
+
+
+        /* WORK IN PROGRESS */
+        //If conference list is empty, then create conference.
+        //console.log(this.$store.state.conference.conferenceList);
+        if (!this.$store.state.conference.conferenceList) {
+          //console.log("don't have");
+        } else {
+          var confExist = false;
+          var confId = 0;
+
+          console.log("current user: " + this.$store.state.userInfo.userEmail);
+
+          for (var i = 0; i < this.$store.state.conference.conferenceList.length; i++) {
+            if (this.conferenceTitle.toLowerCase() === this.$store.state.conference.conferenceList[i].title.toLowerCase() &&
+                this.$store.state.userInfo.userEmail === this.$store.state.conference.conferenceList[i].userEmail) {
+              //Exist, don't save conference
+              console.log("conference user: " + this.$store.state.conference.conferenceList[i].userEmail);
+              confExist = true;
+              confId = this.$store.state.conference.conferenceList[i].id;
+              break;
+            }
+          }
+          if (!confExist) {
+            console.log("Conference does not exist");
+            
+            console.log("Current conference form: ");
+            console.log("id: " + this.$store.state.conference.conferenceForm.id);
+            console.log("title: " + this.$store.state.conference.conferenceForm.title);
+            console.log("description: " + this.$store.state.conference.conferenceForm.description);
+            console.log("creatorIdentifier: " + this.$store.state.conference.conferenceForm.creatorIdentifier);
+
+            // if conf doesn't exist, save conf and save version at same time
+            this.$store.dispatch('saveConference').then(() => {
+              console.log("Conference list length: " + this.$store.state.conference.conferenceList.length);
+              let newConfId = this.$store.state.conference.conferenceList[this.$store.state.conference.conferenceList.length - 1].id;
+
+              console.log("new id: " + newConfId);
+              this.$store.dispatch('saveVersion', newConfId).then(() => {
+                const versionId = this.$store.state.version.versionList[this.$store.state.version.versionList.length - 1].id;
+                console.log("New version id: " + versionId);
+                this.$store.commit('setVersionId', versionId);
+                console.log(this.$store.state.dataMapping.data.versionId);
+              });
+
+            });
+
+            //Then add to version
+          } else {
+            //Existed, check if version exists to version
+
+            console.log("exist");
+            console.log("conf ID: " + confId);
+            //console.log("current date: " + this.versionDate);
+            let isReplaced = false;
+
+            this.$store.dispatch('getVersionList', confId).then( () => {
+              //console.log("version list: " + this.$store.state.version.versionList[0].date);
+
+
+              for (let j = 0; j < this.$store.state.version.versionList.length; j++) {
+                let existingDate = this.$store.state.version.versionList[j].date.substring(0, 4);
+                let newDate = this.versionDate.substring(0, 4);
+
+                console.log("existing date: " + existingDate);
+                console.log("new date: " + newDate);
+                console.log(newDate === existingDate);
+
+                if (existingDate === newDate) {
+                  let versionId = this.$store.state.version.versionList[j].id;
+                  console.log("conf id: " + confId);
+                  console.log("version id: " + versionId);
+                  this.$store.commit('setVersionId', versionId);
+                  this.$store.dispatch('updateVersion', {conferenceId: confId, versionId: versionId});
+                  isReplaced = true;
+                  break;
+                }
+              }
+
+              if (!isReplaced) {
+                console.log("Not Replaced");
+                this.$store.dispatch('saveVersion', confId).then(() => {
+                  const versionId = this.$store.state.version.versionList[this.$store.state.version.versionList.length - 1].id;
+                  console.log("New version id: " + versionId);
+                  this.$store.commit('setVersionId', versionId);
+                  console.log(this.$store.state.dataMapping.data.versionId);
+                });
+              }
+            });
+            console.log("version form: " + this.$store.state.version.versionForm.date);
+          }
+        }
+
 
         // if versionList is empty
         // console.log(this.$store.state.presentation.versionList);
         // filter by "AuthorRecord" "ReviewRecord" "SubmissionRecord"
         if (!this.$store.state.presentation.versionList) {
+          //console.log("here 1");
           this.$store.commit("setIsNewVersion", false);
         } else {
           // if tabletype 0 author elif 1 review elif 2 sub
           // filter by "AuthorRecord" "ReviewRecord" "SubmissionRecord"
+          //console.log("here 2");
           var verList;
           switch (this.$store.state.dataMapping.data.tableType) {
             case 0:
@@ -272,7 +450,7 @@
               break;
             default:
           }
-          this.$store.commit("setIsNewVersion", 
+          this.$store.commit("setIsNewVersion",
                             !verList.includes(this.$store.state.dataMapping.data.versionId));
         }
 
@@ -485,6 +663,10 @@
   
   .clearfix:after {
     clear: both
+  }
+
+  .el-input {
+    width: 207px;
   }
 
   .box-card {

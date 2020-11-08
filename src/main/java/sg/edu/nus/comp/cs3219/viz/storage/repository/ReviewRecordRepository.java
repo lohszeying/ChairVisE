@@ -2,15 +2,10 @@ package sg.edu.nus.comp.cs3219.viz.storage.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import sg.edu.nus.comp.cs3219.viz.common.entity.record.ReviewRecord;
-import sg.edu.nus.comp.cs3219.viz.common.entity.record.Version;
-
-import java.util.List;
 
 public interface ReviewRecordRepository extends JpaRepository<ReviewRecord, Long> {
 
-    //List<ReviewRecord> findByDataSetEquals(String dataSet);
-    List<ReviewRecord> findByVersionEquals(Version version);
+    boolean existsByVersionId(Long versionId);
 
-    //void deleteAllByDataSetEquals(String dataSet);
-    void deleteAllByVersionEquals(Version version);
+    void deleteAllByVersionId(Long versionId);
 }

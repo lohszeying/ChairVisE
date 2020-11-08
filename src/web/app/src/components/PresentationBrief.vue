@@ -198,7 +198,7 @@
                       }
                       // redirect to the newly added presentation
                       this.$router.push({
-                        name: 'analyze',
+                        name: 'manage',
                         params: {
                           id: this.$store.state.presentation.presentationForm.id
                         }
@@ -223,7 +223,7 @@
                     return
                   }
                   this.$router.replace({
-                    name: 'analyze',
+                    name: 'manage',
                     params: {
                       id: ID_NEW_PRESENTATION
                     }
@@ -246,8 +246,8 @@
                               let accessControlList = this.$store.state.accessControl.accessControlList;
                               let isPresentationEditable =
                                       currentUser === this.presentationFormCreatorIdentifier
-                                      || accessControlList.some(acl => acl.userIdentifier === currentUser && acl.accessLevel === AccessLevel.CAN_WRITE)
-                                      || accessControlList.some(acl => acl.userIdentifier === SPECIAL_IDENTIFIER_PUBLIC && acl.accessLevel === AccessLevel.CAN_WRITE);
+                                      || accessControlList.some(acl => acl.userIdentifier === currentUser && acl.permission === AccessLevel.CAN_WRITE)
+                                      || accessControlList.some(acl => acl.userIdentifier === SPECIAL_IDENTIFIER_PUBLIC && acl.permission === AccessLevel.CAN_WRITE);
                               this.$store.commit('setIsPresentationEditable', isPresentationEditable)
                             })
                   })

@@ -157,8 +157,8 @@
                                     let accessControlList = this.$store.state.accessControl.accessControlList;
                                     let isPresentationEditable =
                                         currentUser === this.presentationFormCreatorIdentifier
-                                        || accessControlList.some(acl => acl.userIdentifier === currentUser && acl.accessLevel === AccessLevel.CAN_WRITE)
-                                        || accessControlList.some(acl => acl.userIdentifier === SPECIAL_IDENTIFIER_PUBLIC && acl.accessLevel === AccessLevel.CAN_WRITE);
+                                        || accessControlList.some(acl => acl.userIdentifier === currentUser && acl.permission === AccessLevel.CAN_WRITE)
+                                        || accessControlList.some(acl => acl.userIdentifier === SPECIAL_IDENTIFIER_PUBLIC && acl.permission === AccessLevel.CAN_WRITE);
                                     this.$store.commit('setIsPresentationEditable', isPresentationEditable)
                                 })
                         })
@@ -184,7 +184,7 @@
             closeSuccess() {
                 this.$store.commit("setSaveSuccess", false);
                 this.$router.push({
-                    name: 'analyze'
+                    name: 'manage'
                 });
             }
         },

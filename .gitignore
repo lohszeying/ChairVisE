@@ -33,3 +33,5 @@ gradle/wrapper/gradle-wrapper.properties
 package-lock.json
 
 src/main/webapp/WEB-INF/appengine-web.xml
+
+src/main/resources/application-local.properties

@@ -115,7 +115,8 @@ export default {
         })
     },
 
-    async getVersionList({commit}) {
+    //CLASH
+    /*async getVersionList({commit}) {
       commit('setPresentationListLoading', true);
       axios.get('/api/version')
           .then(response => {
@@ -127,7 +128,7 @@ export default {
           .finally(() => {
             commit('setPresentationListLoading', false);
           })
-    },
+    },*/
 
     async getPresentation({commit}, presentationId) {
       commit('setPresentationFormLoading', true);

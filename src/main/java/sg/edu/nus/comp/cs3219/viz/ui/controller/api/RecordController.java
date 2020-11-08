@@ -1,56 +1,70 @@
 package sg.edu.nus.comp.cs3219.viz.ui.controller.api;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import sg.edu.nus.comp.cs3219.viz.common.datatransfer.UserInfo;
+import org.springframework.web.bind.annotation.*;
 import sg.edu.nus.comp.cs3219.viz.common.entity.record.AuthorRecord;
 import sg.edu.nus.comp.cs3219.viz.common.entity.record.ReviewRecord;
 import sg.edu.nus.comp.cs3219.viz.common.entity.record.SubmissionRecord;
-import sg.edu.nus.comp.cs3219.viz.logic.GateKeeper;
-import sg.edu.nus.comp.cs3219.viz.logic.RecordLogic;
+import sg.edu.nus.comp.cs3219.viz.service.RecordService;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-public class RecordController extends BaseRestController {
+@RequestMapping("/api/versions/{versionId}")
+public class RecordController {
 
-    private GateKeeper gateKeeper;
+    private final RecordService recordService;
 
-    private RecordLogic recordLogic;
-
-    public RecordController(GateKeeper gateKeeper, RecordLogic recordLogic) {
-        this.gateKeeper = gateKeeper;
-        this.recordLogic = recordLogic;
+    public RecordController(RecordService recordService) {
+        this.recordService = recordService;
     }
 
-    @PostMapping("/record/author")
-    public ResponseEntity<?> importAuthorRecord(@RequestBody List<AuthorRecord> authorRecordList) throws URISyntaxException {
-        UserInfo userInfo = gateKeeper.verifyLoginAccess();
+    @GetMapping
+    public Map<String, Boolean> checkRecords(@PathVariable Long versionId) {
 
-        this.recordLogic.removeAndPersistAuthorRecordForDataSet(userInfo.getUserEmail(), authorRecordList);
-
-        return ResponseEntity.created(new URI("/record/author")).build();
+        return recordService.checkRecords(versionId);
     }
 
-    @PostMapping("/record/review")
-    public ResponseEntity<?> importReviewRecord(@RequestBody List<ReviewRecord> reviewRecordList) throws URISyntaxException {
-        UserInfo userInfo = gateKeeper.verifyLoginAccess();
+    @PostMapping("/authorRecord")
+    public ResponseEntity<?> replaceAuthorRecordList(
+            @PathVariable Long versionId,
+            @RequestBody List<AuthorRecord> authorRecordList
+    ) throws URISyntaxException {
 
-        this.recordLogic.removeAndPersistReviewRecordForDataSet(userInfo.getUserEmail(), reviewRecordList);
+        List<AuthorRecord> authorRecords = this.recordService.replaceAuthorRecordList(versionId, authorRecordList);
 
-        return ResponseEntity.created(new URI("/record/review")).build();
+        return ResponseEntity
+                .created(new URI("/versions/" + versionId + "/authorRecord"))
+                .body(authorRecords);
     }
 
-    @PostMapping("/record/submission")
-    public ResponseEntity<?> importSubmissionRecord(@RequestBody List<SubmissionRecord> submissionRecords) throws URISyntaxException {
-        UserInfo userInfo = gateKeeper.verifyLoginAccess();
+    @PostMapping("/submissionRecord")
+    public ResponseEntity<?> replaceSubmissionRecordList(
+            @PathVariable Long versionId,
+            @RequestBody List<SubmissionRecord> submissionRecordList
+    ) throws URISyntaxException {
 
-        this.recordLogic.removeAndPersistSubmissionRecordForDataSet(userInfo.getUserEmail(), submissionRecords);
+        List<SubmissionRecord> submissionRecords = this.recordService.replaceSubmissionRecordList(versionId, submissionRecordList);
 
-        return ResponseEntity.created(new URI("/record/review")).build();
+        return ResponseEntity
+                .created(new URI("/versions/" + versionId + "/submissionRecord"))
+                .body(submissionRecords);
     }
+
+    @PostMapping("/reviewRecord")
+    public ResponseEntity<?> replaceReviewRecordList(
+            @PathVariable Long versionId,
+            @RequestBody List<ReviewRecord> reviewRecordList
+    ) throws URISyntaxException {
+
+        List<ReviewRecord> reviewRecords = this.recordService.replaceReviewRecordList(versionId, reviewRecordList);
+
+        return ResponseEntity
+                .created(new URI("/versions/" + versionId + "/reviewRecord"))
+                .body(reviewRecords);
+    }
+
 }

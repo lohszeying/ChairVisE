@@ -25,7 +25,7 @@
 export default {
     methods: {
         createPresentation() {
-            this.$router.push("/analyze/create");
+            this.$router.push("/manage/create");
         },
     }    
 }

@@ -197,12 +197,18 @@
         this.$store.commit("clearUploadedFile");
         this.$store.commit("clearFormatType");
         this.$store.commit("clearTableType");
-        this.$store.commit("clearHasHeader");
         this.$store.commit("clearMapping");
+        this.$store.commit("clearError");
         this.$store.commit("clearPredefinedMapping");
-        this.$store.commit("clearVersionId");
         this.$store.commit("clearPredefinedSwitch");
+
+        this.$store.commit("clearConferenceTitle");
+        this.$store.commit("clearIsNewConference");
+        this.$store.commit("resetConferenceForm");
+        
+        this.$store.commit("clearVersionDate");
         this.$store.commit("clearIsNewVersion");
+        this.$store.commit("resetVersionForm");
       },
       uploadClicked: function () {
         let map = deepCopy(this.mappedPairs);
@@ -225,14 +231,19 @@
         this.$store.commit("clearUploadedFile");
         this.$store.commit("clearFormatType");
         this.$store.commit("clearTableType");
-        this.$store.commit("clearHasHeader");
         this.$store.commit("clearMapping");
         this.$store.commit("clearError");
         this.$store.commit("clearPredefinedMapping");
-        this.$store.commit("clearVersionId");
         this.$store.commit("clearPredefinedSwitch");
+        this.$store.commit("clearIsNewConference");
         this.$store.commit("clearIsNewVersion");
-        this.$store.dispatch('getVersionList');
+        this.$store.commit("resetVersionForm");
+        this.$store.commit("clearVersionDate");
+        this.$store.commit("clearConferenceTitle");
+        this.$store.commit("resetConferenceForm");
+        this.$router.push({
+                    name: 'manage'
+                });
       }
     },
     mounted() {

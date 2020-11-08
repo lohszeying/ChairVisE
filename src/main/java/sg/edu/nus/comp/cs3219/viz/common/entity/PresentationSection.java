@@ -1,15 +1,10 @@
 package sg.edu.nus.comp.cs3219.viz.common.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import sg.edu.nus.comp.cs3219.viz.logic.AnalysisLogic;
+import lombok.Data;
+import sg.edu.nus.comp.cs3219.viz.service.AnalysisService;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -19,24 +14,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+@Data
 @Entity
 public class PresentationSection {
 
-    private static final Logger log = Logger.getLogger(AnalysisLogic.class.getSimpleName());
+    private static final Logger log = Logger.getLogger(AnalysisService.class.getSimpleName());
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Id
-    @GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "sg.edu.nus.comp.cs3219.viz.common.entity.UseExistingIdOtherwiseGenerateUsingIdentity")
-    @GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
-    @JsonSerialize(using = ToStringSerializer.class)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "presentation_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Presentation presentation;
+    @Column(name = "version_id")
+    private Long versionId;
 
     private String title;
 
@@ -47,35 +38,32 @@ public class PresentationSection {
 
     private String dataSet;
 
+
     // The following field does not worth to be stored as relation in RDBMS
     // we store them as serialized json string
 
     @Column(columnDefinition = "TEXT")
     private String selections;
-    //private List<Selection> selections = new ArrayList<>();
 
     @Column(columnDefinition = "TEXT")
     private String involvedRecords;
-    //private List<Record> involvedRecords = new ArrayList<>();
 
     @Column(columnDefinition = "TEXT")
     private String filters;
-    //private List<Filter> filters = new ArrayList<>();
 
     @Column(columnDefinition = "TEXT")
     private String joiners;
-    //private List<Joiner> joiners = new ArrayList<>();
 
     @Column(columnDefinition = "TEXT")
     private String groupers;
-    //private List<Grouper> joiners = new ArrayList<>();
 
     @Column(columnDefinition = "TEXT")
     private String sorters;
-    //private List<Sorter> joiners = new ArrayList<>();
 
     @Column(columnDefinition = "TEXT")
     private String extraData;
+
+
 
     public static class Selection {
         private String expression;
@@ -214,13 +202,6 @@ public class PresentationSection {
         this.id = id;
     }
 
-    public Presentation getPresentation() {
-        return presentation;
-    }
-
-    public void setPresentation(Presentation presentation) {
-        this.presentation = presentation;
-    }
 
     public String getTitle() {
         return title;
@@ -252,6 +233,24 @@ public class PresentationSection {
 
     public void setDataSet(String dataSet) {
         this.dataSet = dataSet;
+    }
+
+
+    public Map<String, Object> getExtraData() {
+        try {
+            return objectMapper.readValue(extraData, new TypeReference<Map<String, Object>>() {});
+        } catch (IOException e) {
+            log.severe(e.getMessage());
+            return new HashMap<>();
+        }
+    }
+
+    public void setExtraData(Map<String, Object> extraData) {
+        try {
+            this.extraData = objectMapper.writeValueAsString(extraData);
+        } catch (JsonProcessingException e) {
+            log.severe(e.getMessage());
+        }
     }
 
     public List<Selection> getSelections() {
@@ -357,24 +356,6 @@ public class PresentationSection {
     public void setSorters(List<Sorter> sorters) {
         try {
             this.sorters = objectMapper.writeValueAsString(sorters);
-        } catch (JsonProcessingException e) {
-            log.severe(e.getMessage());
-        }
-    }
-
-    public Map<String, Object> getExtraData() {
-        try {
-            return objectMapper.readValue(extraData, new TypeReference<Map<String, Object>>() {
-            });
-        } catch (IOException e) {
-            log.severe(e.getMessage());
-            return new HashMap<>();
-        }
-    }
-
-    public void setExtraData(Map<String, Object> extraData) {
-        try {
-            this.extraData = objectMapper.writeValueAsString(extraData);
         } catch (JsonProcessingException e) {
             log.severe(e.getMessage());
         }

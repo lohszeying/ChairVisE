@@ -1,6 +1,5 @@
 <template>
-  <basic-section-detail :section-detail="sectionDetail" :presentation-id="presentationId" :has-data="hasData"
-                        :version="version"
+  <basic-section-detail :section-detail="sectionDetail" :version-id="versionId" :has-data="hasData"
                         :extraFormItemsRules="{}"
                         @update-visualisation="updateVisualisation">
     <el-table
@@ -62,14 +61,10 @@
         type: Object,
         required: true
       },
-      presentationId: {
+      versionId: {
         type: String,
         required: true
       },
-      version: {
-        type: String,
-        required: true
-      }
     },
 
     data() {
