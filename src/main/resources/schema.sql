@@ -1,6 +1,6 @@
 
 
-CREATE TABLE conference (
+CREATE TABLE IF NOT EXISTS conference (
     id int NOT NULL AUTO_INCREMENT,
     title varchar(255),
     description varchar(255),
@@ -8,7 +8,7 @@ CREATE TABLE conference (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE version (
+CREATE TABLE IF NOT EXISTS version (
     id int NOT NULL AUTO_INCREMENT,
     ver_date date,
     conference_id int,
@@ -17,7 +17,7 @@ CREATE TABLE version (
     CONSTRAINT UC_Version UNIQUE (ver_date, conference_id)
 );
 
-CREATE TABLE author_record (
+CREATE TABLE IF NOT EXISTS author_record (
     a_id int NOT NULL AUTO_INCREMENT,
     a_submission_id int,
     a_first_name varchar(255),
@@ -34,7 +34,7 @@ CREATE TABLE author_record (
     FOREIGN KEY (version_id) REFERENCES version (id) ON DELETE CASCADE
 );
 
-CREATE TABLE submission_record (
+CREATE TABLE IF NOT EXISTS submission_record (
     s_id int NOT NULL AUTO_INCREMENT,
     s_submission_id int,
     s_track_id int,
@@ -53,7 +53,7 @@ CREATE TABLE submission_record (
     FOREIGN KEY (version_id) REFERENCES version (id) ON DELETE CASCADE
 );
 
-CREATE TABLE review_record (
+CREATE TABLE IF NOT EXISTS review_record (
     r_id int NOT NULL AUTO_INCREMENT,
     r_review_id int,
     r_submission_id int,
@@ -70,7 +70,7 @@ CREATE TABLE review_record (
     FOREIGN KEY (version_id) REFERENCES version (id) ON DELETE CASCADE
 );
 
-CREATE TABLE presentation_permission (
+CREATE TABLE IF NOT EXISTS presentation_permission (
     id int NOT NULL AUTO_INCREMENT,
     user_email varchar(255),
     version_id int,
@@ -80,7 +80,7 @@ CREATE TABLE presentation_permission (
     CONSTRAINT UC_Permission UNIQUE (user_email, version_id)
 );
 
-CREATE TABLE presentation_section (
+CREATE TABLE IF NOT EXISTS presentation_section (
     id int NOT NULL AUTO_INCREMENT,
     version_id int,
     title varchar(255),
