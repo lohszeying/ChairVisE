@@ -24,14 +24,9 @@ src/web/app/node_modules/*
 
 # Additional files to ignore
 viz*.json
-src/main/resources/application-prod.properties
 .settings/*
 .project
 
 gradle/wrapper/gradle-wrapper.properties
 
 package-lock.json
-
-src/main/webapp/WEB-INF/appengine-web.xml
-
-src/main/resources/application-local.properties
